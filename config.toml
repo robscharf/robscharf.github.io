@@ -1,4 +1,4 @@
-baseURL = "/"
+baseURL = "https://robscharf.github.io/"
 title   = "Hi, I'm Rob."
 languageCode = "en-us"
 theme = "hello-friend-ng-master"
@@ -17,7 +17,7 @@ archetypeDir = "archetypes"
 contentDir   = "content"
 dataDir      = "data"
 layoutDir    = "layouts"
-publishDir   = "public"
+publishDir   = "docs"
 
 buildDrafts  = false
 buildFuture  = false
