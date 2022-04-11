@@ -152,41 +152,34 @@ disableHugoGeneratorInject = false
 
   # Uncomment this if you want a portrait on your start page
   #
-  # [params.portrait]
-  #   path     = "/img/image.jpg"
-  #   alt      = "Portrait"
-  #   maxWidth = "50px"
+  [params.portrait]
+    path     = "/images/rob.jpg"
+    alt      = "Portrait"
+    maxWidth = "150px"
 
   # Social icons
-  [[params.social]]
-    name = "twitter"
-    url  = "https://twitter.com/"
 
   [[params.social]]
     name = "email"
-    url  = "mailto:nobody@example.com"
+    url  = "mailto:hi@robinscharf.me"
+
+  [[params.social]]
+    name = "twitter"
+    url  = "https://twitter.com/robscharf"
 
   [[params.social]]
     name = "github"
-    url  = "https://github.com/"
+    url  = "https://github.com/robinscharf"
 
   [[params.social]]
     name = "linkedin"
-    url  = "https://www.linkedin.com/"
+    url  = "https://www.linkedin.com/in/robinscharf/"
 
-  [[params.social]]
-    name = "stackoverflow"
-    url  = "https://www.stackoverflow.com/"
 
 [languages]
   [languages.en]
     subtitle  = "Hello Friend NG Theme"
     weight    = 1
-    copyright = '<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>'
-
-  [languages.fr]
-    subtitle  = "Hello Friend NG Theme"
-    weight    = 2
     copyright = '<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>'
 
 [menu]
@@ -198,7 +191,4 @@ disableHugoGeneratorInject = false
     identifier = "posts"
     name       = "posts"
     url        = "posts/"
-  [[menu.main]]
-    identifier = "colophon"
-    name       = "colophon"
-    url        = "colophon/"
+
