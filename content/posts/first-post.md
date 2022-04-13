@@ -10,7 +10,8 @@ tags = [
 ]
 date = "2022-04-11"
 categories = [
-    "Meta (not the company)",
+    "Meta",
+    "(not the company)",
 ]
 [ author ]
   name = "Rob"
@@ -18,4 +19,4 @@ categories = [
 
 ## Welcome to my new GitHub blog!
 
-It's powered by [Hugo](https://github.com/spf13/hugo/releases) and is based on the excellent [hello-friend-ng theme](https://github.com/rhazdon/hugo-theme-hello-friend-ng#how-to-start) by [Djordje Atlialp](https://github.com/rhazdon)!
+It's powered by [Hugo](https://github.com/spf13/hugo/releases) and is based on the excellent [hello-friend-ng theme](https://github.com/rhazdon/hugo-theme-hello-friend-ng#how-to-start) by [Djordje Atlialp](https://github.com/rhazdon).

@@ -4,8 +4,7 @@
         <div class="footer__content">
             {{ if .Site.Params.footer.trademark }}<span style="color:#34e5eb;font-size:20px;">&rsaquo;</span><span>&copy; {{ now.Format "2006" }}</span>{{ end }}
             <a href="{{ .Site.BaseURL }}/colophon">colophon</a>
-            &nbsp;•
-            
+            {{ range .Site.Params.footer.topText }}<span>{{ . | safeHTML}}</span>{{ end }}
         </div>
     </div>
     {{ end }}
