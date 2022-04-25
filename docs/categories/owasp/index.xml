@@ -15,7 +15,7 @@
       
       <guid>https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop/</guid>
       <description>Finishing up my intro to the Juice Shop Today I finished up the OWASP Juice Shop Room on THM, after leaving the final Cross-site Scripting (XSS) modules unfinished last week. This involved quick introductory examples of three XSS modalities:
-   DOM (Special) Persistent (Server-side) Reflected (Client-side)     DOM XSS (Document Object Model-based Cross-site Scripting) uses the HTML environment to execute malicious javascript. This type of attack commonly uses the &amp;lt; script &amp;gt;&amp;lt;/ script &amp;gt; HTML tag.</description>
+   DOM (Special) Persistent (Server-side) Reflected (Client-side)     DOM XSS uses the HTML environment to execute malicious javascript. This type of attack commonly uses the &amp;lt; script &amp;gt;&amp;lt;/ script &amp;gt; HTML tag.</description>
     </item>
     
   </channel>
