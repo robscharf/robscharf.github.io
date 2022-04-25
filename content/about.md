@@ -1,19 +1,14 @@
 +++
-title = "About"
+title = "Hi, I'm Rob."
 date = "2014-04-09"
 aliases = ["about-us","about-hugo","contact"]
 [ author ]
   name = "Rob"
 +++
 
-Hugo is the **world’s fastest framework for building websites**. It is written in Go.
 
-It makes use of a variety of open source projects including:
+I'm interested in the intersection of technology and human rights. After 7 years working with governments around the world to prevent genocide, I'm looking to expand my technical skills and experience in the digital world.
 
-* https://github.com/russross/blackfriday
-* https://github.com/alecthomas/chroma
-* https://github.com/muesli/smartcrop
-* https://github.com/spf13/cobra
-* https://github.com/spf13/viper
+This blog will document my path learning more about cybersecurity topics. If you're interested in saying hi, [send me an email](mailto:hi@robinscharf.me)!
 
-Learn more and contribute on [GitHub](https://github.com/gohugoio).
+&nbsp;
