@@ -198,7 +198,3 @@ disableHugoGeneratorInject = false
     identifier = "posts"
     name       = "Posts"
     url        = "posts/"
-  [[menu.main]]
-    identifier = "colophon"
-    name       = "colophon"
-    url        = "colophon/"    
