@@ -42,6 +42,9 @@ disableHugoGeneratorInject = false
 [blackfriday]
   hrefTargetBlank = true
 
+[markup.goldmark.renderer]
+  unsafe = true  
+
 [taxonomies]
   tag      = "tags"
   category = "categories"
