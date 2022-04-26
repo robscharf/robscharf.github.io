@@ -1,5 +1,5 @@
 +++
-title = "Now live on GitHub Pages"
+title = "On GitHub Pages"
 description = ""
 type = ["posts","post"]
 tags = [
@@ -17,6 +17,6 @@ categories = [
   name = "Rob"
 +++
 
-## Welcome to my new GitHub blog!
+## Welcome to my new GitHub blog
 
 It's powered by [Hugo](https://github.com/spf13/hugo/releases) and is based on the excellent [hello-friend-ng theme](https://github.com/rhazdon/hugo-theme-hello-friend-ng#how-to-start) by [Djordje Atlialp](https://github.com/rhazdon).
