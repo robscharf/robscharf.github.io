@@ -14,8 +14,8 @@
       <pubDate>Mon, 25 Apr 2022 00:00:00 +0000</pubDate>
       
       <guid>https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop/</guid>
-      <description>Finishing up my intro to the Juice Shop Today I finished up the OWASP Juice Shop Room on THM, after leaving the final Cross-site Scripting (XSS) modules unfinished last week. This involved quick introductory examples of three XSS modalities:
-   DOM (Special) Persistent (Server-side) Reflected (Client-side)     DOM XSS uses the HTML environment to execute malicious javascript. This type of attack commonly uses the &amp;lt; script &amp;gt;&amp;lt;/ script &amp;gt; HTML tag.</description>
+      <description>Wrapping up my intro to the Juice Shop Today I finished up the OWASP Juice Shop Room on THM, after leaving the final Cross-site Scripting (XSS) modules unfinished last week. This involved quick introductory examples of three XSS modalities:
+   DOM Persistent (Server-side) Reflected (Client-side)     DOM XSS uses the HTML environment to execute malicious JavaScript. This type of attack commonly uses the &amp;lt;script&amp;gt; HTML tag.</description>
     </item>
     
     <item>
@@ -24,30 +24,29 @@
       <pubDate>Mon, 11 Apr 2022 00:00:00 +0000</pubDate>
       
       <guid>https://robscharf.github.io/colophon/</guid>
-      <description>This blog is powered by Hugo and is based on the excellent hello-friend-ng theme by Djordje Atlialp!
+      <description>This blog stands on the shoulders of giants and is powered by Hugo, based on the excellent hello-friend-ng theme by Djordje Atlialp!
 Hugo is the world’s fastest framework for building websites. It is written in Go.
 It makes use of a variety of open source projects including:
  https://github.com/russross/blackfriday https://github.com/alecthomas/chroma https://github.com/muesli/smartcrop https://github.com/spf13/cobra https://github.com/spf13/viper  Learn more and contribute on GitHub.</description>
     </item>
     
     <item>
-      <title>Now live on GitHub Pages</title>
-      <link>https://robscharf.github.io/posts/2022/04/now-live-on-github-pages/</link>
+      <title>On GitHub Pages</title>
+      <link>https://robscharf.github.io/posts/2022/04/on-github-pages/</link>
       <pubDate>Mon, 11 Apr 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://robscharf.github.io/posts/2022/04/now-live-on-github-pages/</guid>
-      <description>Welcome to my new GitHub blog! It&amp;rsquo;s powered by Hugo and is based on the excellent hello-friend-ng theme by Djordje Atlialp.</description>
+      <guid>https://robscharf.github.io/posts/2022/04/on-github-pages/</guid>
+      <description>Welcome to my new GitHub blog It&amp;rsquo;s powered by Hugo and is based on the excellent hello-friend-ng theme by Djordje Atlialp.</description>
     </item>
     
     <item>
-      <title>Hi, I&#39;m Rob.</title>
+      <title>about.md</title>
       <link>https://robscharf.github.io/about/</link>
       <pubDate>Wed, 09 Apr 2014 00:00:00 +0000</pubDate>
       
       <guid>https://robscharf.github.io/about/</guid>
-      <description>I&amp;rsquo;m interested in the intersection of technology and human rights. After 7 years working with governments around the world to prevent genocide, I&amp;rsquo;m looking to expand my technical skills and experience in the digital world.
-This blog will document my path learning more about cybersecurity topics. If you&amp;rsquo;re interested in saying hi, send me an email!
- </description>
+      <description>I&amp;rsquo;m interested in a lot of topics, such as the intersection of technology and human rights, open-soruce, home automation, and data ownership, and diplomacy, conflict, and internet freedoms. After 7 years working with governments around the world to prevent genocide, I&amp;rsquo;m looking to expand my skills and experience in the digital world.
+This blog will document my activities, principally learning more about cybersecurity topics. If you&amp;rsquo;re interested in saying hi, send me an email!</description>
     </item>
     
   </channel>

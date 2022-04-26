@@ -14,17 +14,17 @@
       <pubDate>Mon, 25 Apr 2022 00:00:00 +0000</pubDate>
       
       <guid>https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop/</guid>
-      <description>Finishing up my intro to the Juice Shop Today I finished up the OWASP Juice Shop Room on THM, after leaving the final Cross-site Scripting (XSS) modules unfinished last week. This involved quick introductory examples of three XSS modalities:
-   DOM (Special) Persistent (Server-side) Reflected (Client-side)     DOM XSS uses the HTML environment to execute malicious javascript. This type of attack commonly uses the &amp;lt; script &amp;gt;&amp;lt;/ script &amp;gt; HTML tag.</description>
+      <description>Wrapping up my intro to the Juice Shop Today I finished up the OWASP Juice Shop Room on THM, after leaving the final Cross-site Scripting (XSS) modules unfinished last week. This involved quick introductory examples of three XSS modalities:
+   DOM Persistent (Server-side) Reflected (Client-side)     DOM XSS uses the HTML environment to execute malicious JavaScript. This type of attack commonly uses the &amp;lt;script&amp;gt; HTML tag.</description>
     </item>
     
     <item>
-      <title>Now live on GitHub Pages</title>
-      <link>https://robscharf.github.io/posts/2022/04/now-live-on-github-pages/</link>
+      <title>On GitHub Pages</title>
+      <link>https://robscharf.github.io/posts/2022/04/on-github-pages/</link>
       <pubDate>Mon, 11 Apr 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://robscharf.github.io/posts/2022/04/now-live-on-github-pages/</guid>
-      <description>Welcome to my new GitHub blog! It&amp;rsquo;s powered by Hugo and is based on the excellent hello-friend-ng theme by Djordje Atlialp.</description>
+      <guid>https://robscharf.github.io/posts/2022/04/on-github-pages/</guid>
+      <description>Welcome to my new GitHub blog It&amp;rsquo;s powered by Hugo and is based on the excellent hello-friend-ng theme by Djordje Atlialp.</description>
     </item>
     
   </channel>
