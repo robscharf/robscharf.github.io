@@ -58,8 +58,8 @@ disableHugoGeneratorInject = false
 
   # Metadata mostly used in document's head
   # 
-  description = "Nice theme for homepages and blogs"
-  keywords = ""
+  description = "Rob Scharf has a cybersecurity blog."
+  keywords = "cybersecurity, hacking, tryhackme, blog"
   images = [""]
 
   # Home subtitle of the index page.
@@ -155,10 +155,10 @@ disableHugoGeneratorInject = false
 
   # Uncomment this if you want a portrait on your start page
   #
-  [params.portrait]
-    path     = "/images/rob.jpg"
-    alt      = "Portrait"
-    maxWidth = "150px"
+  # [params.portrait]
+  #  path     = "/images/rob.jpg"
+  #  alt      = "Portrait"
+  #  maxWidth = "150px"
 
   # Social icons
 
