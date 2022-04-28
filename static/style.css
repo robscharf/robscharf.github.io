@@ -1,3 +1,4 @@
 em, i, strong{color: #cccccc;}
-div.content a, footer a{color:#34e5eb;}
+div.content a, footer a, h2, h5{color:#46A69D;}
 hr{display: none;}
+h5{font-size: 16px;}
