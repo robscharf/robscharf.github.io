@@ -7,13 +7,58 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Mon, 25 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 28 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>blog</title>
       <link>https://robscharf.github.io/tags/blog/</link>
-      <pubDate>Mon, 25 Apr 2022 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 28 Apr 2022 00:00:00 +0000</pubDate>
       
       <guid>https://robscharf.github.io/tags/blog/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>burpsuite</title>
+      <link>https://robscharf.github.io/tags/burpsuite/</link>
+      <pubDate>Thu, 28 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/tags/burpsuite/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gobuster</title>
+      <link>https://robscharf.github.io/tags/gobuster/</link>
+      <pubDate>Thu, 28 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/tags/gobuster/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>node.js</title>
+      <link>https://robscharf.github.io/tags/node.js/</link>
+      <pubDate>Thu, 28 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/tags/node.js/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>php</title>
+      <link>https://robscharf.github.io/tags/php/</link>
+      <pubDate>Thu, 28 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/tags/php/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tryhackme</title>
+      <link>https://robscharf.github.io/tags/tryhackme/</link>
+      <pubDate>Thu, 28 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/tags/tryhackme/</guid>
       <description></description>
     </item>
     
@@ -23,15 +68,6 @@
       <pubDate>Mon, 25 Apr 2022 00:00:00 +0000</pubDate>
       
       <guid>https://robscharf.github.io/tags/owasp/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>tryhackme</title>
-      <link>https://robscharf.github.io/tags/tryhackme/</link>
-      <pubDate>Mon, 25 Apr 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://robscharf.github.io/tags/tryhackme/</guid>
       <description></description>
     </item>
     
@@ -59,15 +95,6 @@
       <pubDate>Mon, 11 Apr 2022 00:00:00 +0000</pubDate>
       
       <guid>https://robscharf.github.io/tags/golang/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>hugo</title>
-      <link>https://robscharf.github.io/tags/hugo/</link>
-      <pubDate>Mon, 11 Apr 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://robscharf.github.io/tags/hugo/</guid>
       <description></description>
     </item>
     

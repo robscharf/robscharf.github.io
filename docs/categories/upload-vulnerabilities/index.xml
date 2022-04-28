@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>upload vulnerabilities on Hi, I&#39;m Rob.</title>
+    <link>https://robscharf.github.io/categories/upload-vulnerabilities/</link>
+    <description>Recent content in upload vulnerabilities on Hi, I&#39;m Rob.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+    <lastBuildDate>Thu, 28 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/categories/upload-vulnerabilities/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>THM: Upload Vulnerabilities - Write Up</title>
+      <link>https://robscharf.github.io/posts/2022/04/thm-upload-vulnerabilities-write-up/</link>
+      <pubDate>Thu, 28 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/posts/2022/04/thm-upload-vulnerabilities-write-up/</guid>
+      <description>Write Up Welcome to my write-up of the Upload Vulnerabilities room on TryHackMe, created by MuirlandOracle. Let&amp;rsquo;s jump in.
+Task 1 - Getting Started The room begins with a necessary configuration step. The hosts file of the attacking machine needs to be modified to include the following line:
+&amp;lt;machine-ip&amp;gt; overwrite.uploadvulns.thm shell.uploadvulns.thm java.uploadvulns.thm annex.uploadvulns.thm magic.uploadvulns.thm jewel.uploadvulns.thm demo.uploadvulns.thm
+Note: You will require administrator-level privileges when editing the file. This can be done via sudo on Linux and Run as Administrator on Windows.</description>
+    </item>
+    
+  </channel>
+</rss>
