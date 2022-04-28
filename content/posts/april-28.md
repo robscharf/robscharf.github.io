@@ -158,7 +158,7 @@ Next, we look at some common methods for filtering.
 While file extensions theoretically identify the contents of a file, in reality they are easy to change, thus making them highly unreliable. While Windows still uses them to identify file types, Unix systems usually rely on other methods. Extension filters conventionally operate by blacklisting unwanted extensions or whitelisting allowed extensions.
 
 #### File-Type Filtering
-FTF is a bit more intensive than [[#Extension Validation]], and can be accomplished with the following two approaches, among others.
+FTF is a bit more intensive than simple extension validation, and can be accomplished with the following two approaches, among others.
 
 ##### MIME Validation
 [Multipurpose Internet Mail Extension](https://en.wikipedia.org/wiki/MIME) "is an Internet standard that extends the format of email messages to support text in character sets other than ASCII, as well as attachments of audio, video, images, and application programs."
@@ -177,7 +177,7 @@ and gives us this example:
 
 
 ##### Magic Number Validation
-While not being impossible to forge, magic numbers are a more accurate way to determine the contents of a file than [[#MIME Validation]].  A file's "magic number" appears as a string of bytes at the beginning of a file. The course gives us an example:
+While not being impossible to forge, magic numbers are a more accurate way to determine the contents of a file than MIME Validation.  A file's "magic number" appears as a string of bytes at the beginning of a file. The course gives us an example:
 
  A `PNG` file would have a first line of `89 50 4E 47 0D 0A 1A 0A`.
 
@@ -189,7 +189,7 @@ Filters can be configured to limit the size of files uploaded. This avoid vulner
 In most cases, this will not affect the ability of attackers to upload a webshell/remote shell-sized file, however exceptionally restrictive filters may require a change in approach.
 
 #### File Name Filtering
-Filters related to uploaded file names not only protect against overwritten files, like the rudimentary attack highlighted in [[#Task 4 - Overwriting Existing Files]], but also facilitate the sanitization of file names, which, in turn, mitigates the use of "bad" characters (e.g., null bytes, "control" characters like `;` , and/or the use of UNICODE).
+Filters related to uploaded file names not only protect against overwritten files, like the rudimentary attack highlighted in Task 4 - Overwriting Existing Files, but also facilitate the sanitization of file names, which, in turn, mitigates the use of "bad" characters (e.g., null bytes, "control" characters like `;` , and/or the use of UNICODE).
 
 The room notes that:
 
@@ -221,7 +221,7 @@ The room notes that:
 
 
 ## Task 7 - Bypassing Client-side Filtering
-We now delve into more depth related to [[#Client-side vs Server-side]] binary that we encountered earlier, beginning with the client-side.
+We now delve into more depth related to Client-side vs Server-side binary that we encountered earlier, beginning with the client-side.
 
 **Note:** Client-side filtering is generally weaker than server-side filtering
 
@@ -256,7 +256,7 @@ With `interception` enabled, we find our header request and right-click, selecti
 ### Methodology: Intercepting and modifying file uploads
 Next, we will perform a similar attack, instead intercepting the uploaded file *after* it has passed through the server's filtering function.
 
-We will accomplish this by redeploying the Pentest Monkey [[#Remote Shell]] script that we used to complete Task 5. Here, we will simply rename the file from `ptm-shell.php` to `shell.jpeg`, allowing it to pass through the server's filter. This is due to the fact that the file's inauthentic MIME type of `image/jpeg` is confirmed by its `.jpg` extension.
+We will accomplish this by redeploying the Pentest Monkey remote shell script that we used to complete Task 5. Here, we will simply rename the file from `ptm-shell.php` to `shell.jpeg`, allowing it to pass through the server's filter. This is due to the fact that the file's inauthentic MIME type of `image/jpeg` is confirmed by its `.jpg` extension.
 
 Before initiating the upload, we need to do two things. 
 
@@ -329,7 +329,7 @@ From here we can navigate to the flag!
 
 
 ## Task 8 - Bypassing Server-side Filtering: File Extensions 
-[[#Task 7 - Bypassing Client-side Filtering]] is fairly simple, as local filters can be viewed and analyzed, even if this requires a bit of deobfuscatoin or processing. With Server-side filtering, filters can not be viewed directly, thus requiring more experimentation and testing to determine which payloads are permitted by the server.
+The previous task was fairly simple, as local filters can be viewed and analyzed, even if this requires a bit of deobfuscatoin or processing. With Server-side filtering, filters can not be viewed directly, thus requiring more experimentation and testing to determine which payloads are permitted by the server.
 
 ### Methodology
 #### Evading server-side filters
@@ -602,7 +602,7 @@ We can do this in `BurpSuite` by removing the prohibitive code from  `upload.js`
 
 ![jewel-jsfilter](/images/uv/jewel-jsfilter.png)
 
-After removing the necessary code, which we initially uncovered during the [[#Identifying vulnerabilities]] phase, we forward the new script to our browser. We can then successfully upload our `njs-shell.jpg` file to the server.
+After removing the necessary code, which we initially uncovered during the Identifying Vulnerabilities phase, we forward the new script to our browser. We can then successfully upload our `njs-shell.jpg` file to the server.
 
 In order to confirm our success, we can run another `gobuster` scan, which confirms the existence of `LED.jpg` in the `/content` directory.
 
@@ -614,7 +614,7 @@ To activate our reverse shell and achieve RCE, we'll need to remember to enable 
 nc -lvnp 4444
 ```
 
-Now we can navigate to the secret admin page that we identified at `http://jewel.uploadvulns.thm/admin` and determine how to activate our reverse shell via `http://jewel.uploadvulns.thm/content/LED.jpg`. The placeholder text of the form field tells us that we can input the location of files to execute from the `/modules` directory. From our previous [[#More enumeration]] efforts, we know that the `/content` directory sits adjacent to `/modules`  within the server's filesystem. Thus, unless actively prohibited, we can XXXXXXX. This means that by entering `../content/LED.jpg`, we should be able to activate our reverse shell script.
+Now we can navigate to the secret admin page that we identified at `http://jewel.uploadvulns.thm/admin` and determine how to activate our reverse shell via `http://jewel.uploadvulns.thm/content/LED.jpg`. The placeholder text of the form field tells us that we can input the location of files to execute from the `/modules` directory. From our previous More Enumeration efforts, we know that the `/content` directory sits adjacent to `/modules`  within the server's filesystem. Thus, unless actively prohibited, we can XXXXXXX. This means that by entering `../content/LED.jpg`, we should be able to activate our reverse shell script.
 
 ![jewel-led-rce](/images/uv/jewel-led-rce.png)
 
