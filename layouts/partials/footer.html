@@ -3,7 +3,7 @@
     <div class="footer__inner">
         <div class="footer__content">
             {{ if .Site.Params.footer.trademark }}<span>&copy; {{ now.Format "2006" }}</span>{{ end }}
-            <a href="{{ .Site.BaseURL }}/colophon">colophon</a>
+            <a href="{{ .Site.BaseURL }}/colophon">&#9829;</a>
             {{ range .Site.Params.footer.topText }}<span>{{ . | safeHTML}}</span>{{ end }}
         </div>
     </div>
