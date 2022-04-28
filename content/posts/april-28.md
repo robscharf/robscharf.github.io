@@ -19,8 +19,6 @@ categories = [
   name = "Rob"
 +++
 
-
-# Write Up
 Welcome to my write-up of the [Upload Vulnerabilities](https://tryhackme.com/room/uploadvulns) room on [TryHackMe](https://tryhackme.com/), created by [MuirlandOracle](https://tryhackme.com/p/MuirlandOracle). Let's jump in.
 ## Task 1 - Getting Started
 The room begins with a necessary configuration step. The `hosts` file of the attacking machine needs to be modified to include the following line:
