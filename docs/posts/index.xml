@@ -48,11 +48,9 @@ Note: You will require administrator-level privileges when editing the file. Thi
 <h5 id="what-is-the-name-of-the-image-file-which-can-be-overwritten">What is the name of the image file which can be overwritten?</h5>
 <p>After navigating to <code>overwrite.uploadvulns.thm</code>, we can view the page&rsquo;s source code to learn about the upload destination and image displayed on the page, just like in the example provided.</p>
 <p><img src="/images/uv/uv-task4.png" alt="uv-task4"></p>
-<p><strong>Answer:</strong>  <code>mountains.jpg</code></p>
 <h4 id="question-42">Question 4.2</h4>
 <h5 id="overwrite-the-image-what-is-the-flag-you-receive">Overwrite the image. What is the flag you receive?</h5>
 <p><img src="/images/uv/uv-task4-2.png" alt="uv-task4-2"></p>
-<p><strong>Answer:</strong> <code>THM{OTBiODQ3YmNjYWZhM2UyMmYzZDNiZjI5}</code></p>
 <h2 id="task-5---remote-code-execution">Task 5 - Remote Code Execution</h2>
 <p>There are two primary methods for achieving Remote Code Execution (RCE)</p>
 <ol>
@@ -78,7 +76,6 @@ Note: You will require administrator-level privileges when editing the file. Thi
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -u shell.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
 </span></span></code></pre></div><p>creates the following output:</p>
 <p><img src="/images/uv/uv-gobuster.png" alt="UV - Gobuster"></p>
-<p><strong>Answer:</strong> <code>/resources</code></p>
 <h4 id="question-52">Question 5.2</h4>
 <h5 id="get-either-a-web-shell-or-a-reverse-shell-on-the-machine-whats-the-flag-in-the-varwww-directory-of-the-server">Get either a web shell or a reverse shell on the machine. What&rsquo;s the flag in the /var/www/ directory of the server?</h5>
 <p>After editing and uploading the aforementioned Pentest Monkey PHP script, we instantiate the <code>netcat</code> listener</p>
@@ -89,7 +86,6 @@ Note: You will require administrator-level privileges when editing the file. Thi
 <p><img src="/images/uv/uv-rce.png" alt="uv-rce"></p>
 <p>Then we simply navigate to the <code>/var/www</code> directory to find the flag.</p>
 <p><img src="/images/uv/uv-flag.png" alt="uv-flag"></p>
-<p><strong>Answer:</strong> <code>THM{YWFhY2U3ZGI4N2QxNmQzZjk0YjgzZDZk}</code></p>
 <h2 id="task-6---filtering">Task 6 - Filtering</h2>
 <p>This task introduces the notion that, thus far, we have not encountered any form of security measures that have been implemented by developers to mitigate the effects of would-be file upload vulnerabilities. In this task, we begin to consider the relevant security mechanisms and how to circumvent them.</p>
 <p>Our first focus will be on the concept of <em>filtering</em>, that is, attempts to prevent unintended files from being successfully uploaded to the server. This is accomplished through two primary approaches:</p>
@@ -230,7 +226,6 @@ Note: You will require administrator-level privileges when editing the file. Thi
 <p><img src="/images/uv/uv-java-rce.png" alt="uv-java-rce"></p>
 <p>From here we can navigate to the flag!</p>
 <p><img src="/images/uv/uv-java-flag.png" alt="uv-java-flag"></p>
-<p><strong>Answer:</strong> <code>THM{NDllZDQxNjJjOTE0YWNhZGY3YjljNmE2}</code></p>
 <h2 id="task-8---bypassing-server-side-filtering-file-extensions">Task 8 - Bypassing Server-side Filtering: File Extensions</h2>
 <p>The previous task was fairly simple, as local filters can be viewed and analyzed, even if this requires a bit of deobfuscatoin or processing. With Server-side filtering, filters can not be viewed directly, thus requiring more experimentation and testing to determine which payloads are permitted by the server.</p>
 <h3 id="methodology-1">Methodology</h3>
@@ -288,7 +283,6 @@ Note: You will require administrator-level privileges when editing the file. Thi
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#ae81ff">4444</span>
 </span></span></code></pre></div><p>and then run the script by visiting the file&rsquo;s location in our browser.</p>
 <p><img src="/images/uv/anx-solution.png" alt="anx-solution"></p>
-<p><strong>Answer:</strong> THM{MGEyYzJiYmI3ODIyM2FlNTNkNjZjYjFl}</p>
 <h2 id="task-9---bypassing-server-side-filtering-magic-numbers">Task 9 - Bypassing Server-Side Filtering: Magic Numbers</h2>
 <p>This task builds on the previous one, highlighting the use of &ldquo;magic number checking&rdquo; as an approach to server-side filtering.</p>
 <h3 id="methodology-2">Methodology</h3>
@@ -317,7 +311,6 @@ Note: You will require administrator-level privileges when editing the file. Thi
 <p><img src="/images/uv/magic-disguised-php.png" alt="magic-disguised-php"></p>
 <p>We are then able to successfully upload <code>ptm-shell.php</code> to the server, activate our <code>netcat</code> listener, and execute the script by navigating to <code>http://magic.uploadvulns.thm/graphics/ptm-shell.php</code>. This spawns our reverse shell and gives us access to the flag.</p>
 <p><img src="/images/uv/magic-flag.png" alt="magic-flag"></p>
-<p><strong>Answer:</strong> THM{MWY5ZGU4NzE0ZDlhNjE1NGM4ZThjZDJh}</p>
 <h2 id="task-10---example-methodology">Task 10 - Example Methodology</h2>
 <p>This task gives a useful broken-down overview of the process of auditing and exploiting file upload vulnerabilities on a given target. I will paraphrase the content below, but certainly encourage reading <a href="https://tryhackme.com/room/uploadvulns">the full version</a> in the THM room.</p>
 <h3 id="general-step-by-step-walkthrough">General step-by-step walkthrough</h3>
@@ -432,7 +425,7 @@ we need to figure out how to get our <code>njs-shell.js</code> reverse shell pas
 <p><img src="/images/uv/jewel-jsjpg-upload.png" alt="jewel-jsjpg-upload"></p>
 <p>To activate our reverse shell and achieve RCE, we&rsquo;ll need to remember to enable our <code>netcat</code> listener with:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#ae81ff">4444</span>
-</span></span></code></pre></div><p>Now we can navigate to the secret admin page that we identified at <code>http://jewel.uploadvulns.thm/admin</code> and determine how to activate our reverse shell via <code>http://jewel.uploadvulns.thm/content/LED.jpg</code>. The placeholder text of the form field tells us that we can input the location of files to execute from the <code>/modules</code> directory. From our previous More Enumeration efforts, we know that the <code>/content</code> directory sits adjacent to <code>/modules</code>  within the server&rsquo;s filesystem. Thus, unless actively prohibited, we can XXXXXXX. This means that by entering <code>../content/LED.jpg</code>, we should be able to activate our reverse shell script.</p>
+</span></span></code></pre></div><p>Now we can navigate to the secret admin page that we identified at <code>http://jewel.uploadvulns.thm/admin</code> and determine how to activate our reverse shell via <code>http://jewel.uploadvulns.thm/content/LED.jpg</code>. The placeholder text of the form field tells us that we can input the location of files to execute from the <code>/modules</code> directory. From our previous More Enumeration efforts, we know that the <code>/content</code> directory sits adjacent to <code>/modules</code> under the root level of the server&rsquo;s filesystem. Thus, unless actively prohibited, we can use <code>.../</code> to traverse directories. This means that by entering <code>../content/LED.jpg</code>, we should be able to activate our reverse shell script.</p>
 <p><img src="/images/uv/jewel-led-rce.png" alt="jewel-led-rce"></p>
 <p><em>et voilà!</em></p>
 <p>Thanks to <a href="https://tryhackme.com/p/MuirlandOracle">MuirlandOracle</a> for the informative room!</p>

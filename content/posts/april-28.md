@@ -58,15 +58,10 @@ After navigating to `overwrite.uploadvulns.thm`, we can view the page's source c
 
 ![uv-task4](/images/uv/uv-task4.png)
 
-**Answer:**  `mountains.jpg`
-
 #### Question 4.2
 ##### Overwrite the image. What is the flag you receive?
 
 ![uv-task4-2](/images/uv/uv-task4-2.png)
-
-
-**Answer:** `THM{OTBiODQ3YmNjYWZhM2UyMmYzZDNiZjI5}`
 
 ## Task 5 - Remote Code Execution
 There are two primary methods for achieving Remote Code Execution (RCE)
@@ -113,8 +108,6 @@ creates the following output:
 
 ![UV - Gobuster](/images/uv/uv-gobuster.png)
 
-**Answer:** `/resources`
-
 #### Question 5.2
 ##### Get either a web shell or a reverse shell on the machine. What's the flag in the /var/www/ directory of the server?
 
@@ -133,8 +126,6 @@ However, our `netcat` listener has picked up the reverse shell!
 Then we simply navigate to the ``/var/www`` directory to find the flag. 
 
 ![uv-flag](/images/uv/uv-flag.png)
-
-**Answer:** `THM{YWFhY2U3ZGI4N2QxNmQzZjk0YjgzZDZk}`
 
 ## Task 6 - Filtering
 This task introduces the notion that, thus far, we have not encountered any form of security measures that have been implemented by developers to mitigate the effects of would-be file upload vulnerabilities. In this task, we begin to consider the relevant security mechanisms and how to circumvent them.
@@ -174,7 +165,6 @@ The room text explains that:
 and gives us this example:
 
 ![mime-example](/images/uv/mime-example.png)
-
 
 ##### Magic Number Validation
 While not being impossible to forge, magic numbers are a more accurate way to determine the contents of a file than MIME Validation.  A file's "magic number" appears as a string of bytes at the beginning of a file. The course gives us an example:
@@ -325,9 +315,6 @@ From here we can navigate to the flag!
 
 ![uv-java-flag](/images/uv/uv-java-flag.png)
 
-**Answer:** `THM{NDllZDQxNjJjOTE0YWNhZGY3YjljNmE2}`
-
-
 ## Task 8 - Bypassing Server-side Filtering: File Extensions 
 The previous task was fairly simple, as local filters can be viewed and analyzed, even if this requires a bit of deobfuscatoin or processing. With Server-side filtering, filters can not be viewed directly, thus requiring more experimentation and testing to determine which payloads are permitted by the server.
 
@@ -424,8 +411,6 @@ and then run the script by visiting the file's location in our browser.
 
 ![anx-solution](/images/uv/anx-solution.png)
 
-**Answer:** THM{MGEyYzJiYmI3ODIyM2FlNTNkNjZjYjFl}
-
 ## Task 9 - Bypassing Server-Side Filtering: Magic Numbers 
 This task builds on the previous one, highlighting the use of "magic number checking" as an approach to server-side filtering.
 
@@ -478,8 +463,6 @@ This results in our file being recognized as a `.gif` :
 We are then able to successfully upload `ptm-shell.php` to the server, activate our `netcat` listener, and execute the script by navigating to `http://magic.uploadvulns.thm/graphics/ptm-shell.php`. This spawns our reverse shell and gives us access to the flag.
 
 ![magic-flag](/images/uv/magic-flag.png)
-
-**Answer:** THM{MWY5ZGU4NzE0ZDlhNjE1NGM4ZThjZDJh}
 
 ## Task 10 - Example Methodology
 This task gives a useful broken-down overview of the process of auditing and exploiting file upload vulnerabilities on a given target. I will paraphrase the content below, but certainly encourage reading [the full version](https://tryhackme.com/room/uploadvulns) in the THM room.
@@ -614,7 +597,7 @@ To activate our reverse shell and achieve RCE, we'll need to remember to enable 
 nc -lvnp 4444
 ```
 
-Now we can navigate to the secret admin page that we identified at `http://jewel.uploadvulns.thm/admin` and determine how to activate our reverse shell via `http://jewel.uploadvulns.thm/content/LED.jpg`. The placeholder text of the form field tells us that we can input the location of files to execute from the `/modules` directory. From our previous More Enumeration efforts, we know that the `/content` directory sits adjacent to `/modules`  within the server's filesystem. Thus, unless actively prohibited, we can XXXXXXX. This means that by entering `../content/LED.jpg`, we should be able to activate our reverse shell script.
+Now we can navigate to the secret admin page that we identified at `http://jewel.uploadvulns.thm/admin` and determine how to activate our reverse shell via `http://jewel.uploadvulns.thm/content/LED.jpg`. The placeholder text of the form field tells us that we can input the location of files to execute from the `/modules` directory. From our previous More Enumeration efforts, we know that the `/content` directory sits adjacent to `/modules` under the root level of the server's filesystem. Thus, unless actively prohibited, we can use `.../` to traverse directories. This means that by entering `../content/LED.jpg`, we should be able to activate our reverse shell script.
 
 ![jewel-led-rce](/images/uv/jewel-led-rce.png)
 
