@@ -36,8 +36,8 @@ This includes:
 
 * Overwriting existing files on a server
 * Uploading and Executing Shells on a server
-* Bypassing Client-Side filtering
-* Bypassing various kinds of Server-Side filtering
+* Bypassing Client-side filtering
+* Bypassing various kinds of Server-side filtering
 * Fooling content type validation checks 
 
 ## Task 3 - General Methodology
@@ -597,7 +597,7 @@ To activate our reverse shell and achieve RCE, we'll need to remember to enable 
 nc -lvnp 4444
 ```
 
-Now we can navigate to the secret admin page that we identified at `http://jewel.uploadvulns.thm/admin` and determine how to activate our reverse shell via `http://jewel.uploadvulns.thm/content/LED.jpg`. The placeholder text of the form field tells us that we can input the location of files to execute from the `/modules` directory. From our previous More Enumeration efforts, we know that the `/content` directory sits adjacent to `/modules` under the root level of the server's filesystem. Thus, unless actively prohibited, we can use `.../` to traverse directories. This means that by entering `../content/LED.jpg`, we should be able to activate our reverse shell script.
+Now we can navigate to the secret admin page that we identified at `http://jewel.uploadvulns.thm/admin` and determine how to activate our reverse shell via `http://jewel.uploadvulns.thm/content/LED.jpg`. The placeholder text of the form field tells us that we can input the location of files to execute from the `/modules` directory. From our previous More Enumeration efforts, we know that the `/content` directory sits adjacent to `/modules` under the root level of the server's filesystem. Thus, unless actively prohibited, we can use `../` to traverse directories. This means that by entering `../content/LED.jpg`, we should be able to activate our reverse shell script.
 
 ![jewel-led-rce](/images/uv/jewel-led-rce.png)
 

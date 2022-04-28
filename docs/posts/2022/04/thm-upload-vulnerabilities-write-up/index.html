@@ -176,8 +176,8 @@ Note: You will require administrator-level privileges when editing the file. Thi
 <ul>
 <li>Overwriting existing files on a server</li>
 <li>Uploading and Executing Shells on a server</li>
-<li>Bypassing Client-Side filtering</li>
-<li>Bypassing various kinds of Server-Side filtering</li>
+<li>Bypassing Client-side filtering</li>
+<li>Bypassing various kinds of Server-side filtering</li>
 <li>Fooling content type validation checks</li>
 </ul>
 <h2 id="task-3---general-methodology">Task 3 - General Methodology</h2>
@@ -570,7 +570,7 @@ we need to figure out how to get our <code>njs-shell.js</code> reverse shell pas
 <p><img src="https://robscharf.github.io/images/uv/jewel-jsjpg-upload.png" alt="jewel-jsjpg-upload"></p>
 <p>To activate our reverse shell and achieve RCE, we&rsquo;ll need to remember to enable our <code>netcat</code> listener with:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#ae81ff">4444</span>
-</span></span></code></pre></div><p>Now we can navigate to the secret admin page that we identified at <code>http://jewel.uploadvulns.thm/admin</code> and determine how to activate our reverse shell via <code>http://jewel.uploadvulns.thm/content/LED.jpg</code>. The placeholder text of the form field tells us that we can input the location of files to execute from the <code>/modules</code> directory. From our previous More Enumeration efforts, we know that the <code>/content</code> directory sits adjacent to <code>/modules</code> under the root level of the server&rsquo;s filesystem. Thus, unless actively prohibited, we can use <code>.../</code> to traverse directories. This means that by entering <code>../content/LED.jpg</code>, we should be able to activate our reverse shell script.</p>
+</span></span></code></pre></div><p>Now we can navigate to the secret admin page that we identified at <code>http://jewel.uploadvulns.thm/admin</code> and determine how to activate our reverse shell via <code>http://jewel.uploadvulns.thm/content/LED.jpg</code>. The placeholder text of the form field tells us that we can input the location of files to execute from the <code>/modules</code> directory. From our previous More Enumeration efforts, we know that the <code>/content</code> directory sits adjacent to <code>/modules</code> under the root level of the server&rsquo;s filesystem. Thus, unless actively prohibited, we can use <code>../</code> to traverse directories. This means that by entering <code>../content/LED.jpg</code>, we should be able to activate our reverse shell script.</p>
 <p><img src="https://robscharf.github.io/images/uv/jewel-led-rce.png" alt="jewel-led-rce"></p>
 <p><em>et voilà!</em></p>
 <p>Thanks to <a href="https://tryhackme.com/p/MuirlandOracle">MuirlandOracle</a> for the informative room!</p>
