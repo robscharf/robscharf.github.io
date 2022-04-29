@@ -393,7 +393,7 @@ From here, we try to upload our reverse shell script directly, but are given thi
 
 ![anx-invalid](/images/uv/anx-invalid.png)
 
-From our guided walkthrough earlier, we learned that there are multiple valid and server-executable `PHP` file extensions, including `.php3`, `.php4`, `.php5`, `.php7`, `.phps`, `.php-s`, `.pht` and `.phar`. With this knowledge, we can iterate through file extensions for our venerable `ptm-shell.php` script.
+From our guided walkthrough earlier, we learned that there are multiple valid and server-executable `PHP` file extensions, including `.php3`, `.php4`, `.php5`, `.php7`, `.phps`, `.php-s`, `.pht` and `.phar`. With this knowledge, we can iterate through file extensions for our handy `ptm-shell.php` script.
 
 ![anx-ext](/images/uv/anx-ext.png)
 
