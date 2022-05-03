@@ -420,7 +420,7 @@ Note: You will require administrator-level privileges when editing the file. Thi
 <p><img src="https://robscharf.github.io/images/uv/anx-assets.png" alt="anx-assets"></p>
 <p>From here, we try to upload our reverse shell script directly, but are given this error message, as our payload was filtered by the server.</p>
 <p><img src="https://robscharf.github.io/images/uv/anx-invalid.png" alt="anx-invalid"></p>
-<p>From our guided walkthrough earlier, we learned that there are multiple valid and server-executable <code>PHP</code> file extensions, including <code>.php3</code>, <code>.php4</code>, <code>.php5</code>, <code>.php7</code>, <code>.phps</code>, <code>.php-s</code>, <code>.pht</code> and <code>.phar</code>. With this knowledge, we can iterate through file extensions for our venerable <code>ptm-shell.php</code> script.</p>
+<p>From our guided walkthrough earlier, we learned that there are multiple valid and server-executable <code>PHP</code> file extensions, including <code>.php3</code>, <code>.php4</code>, <code>.php5</code>, <code>.php7</code>, <code>.phps</code>, <code>.php-s</code>, <code>.pht</code> and <code>.phar</code>. With this knowledge, we can iterate through file extensions for our handy <code>ptm-shell.php</code> script.</p>
 <p><img src="https://robscharf.github.io/images/uv/anx-ext.png" alt="anx-ext"></p>
 <p>While we receive <code>File type is invalid</code> responses for 8 of the 9 files listed above, <code>ptm-shell.php5</code> makes it through the server&rsquo;s filter and into the <code>/privacy</code> directory.</p>
 <p><img src="https://robscharf.github.io/images/uv/anx-php5.png" alt="anx-php5"></p>
@@ -738,6 +738,13 @@ we need to figure out how to get our <code>njs-shell.js</code> reverse shell pas
         
 
         <div class="pagination__buttons">
+            
+            <span class="button previous">
+                <a href="https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows/">
+                    <span class="button__icon">←</span>
+                    <span class="button__text">How to add a backtick hotkey to Windows</span>
+                </a>
+            </span>
             
 
             

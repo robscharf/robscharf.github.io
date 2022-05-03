@@ -6,8 +6,28 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-        <lastBuildDate>Thu, 28 Apr 2022 00:00:00 +0000</lastBuildDate>
+        <lastBuildDate>Tue, 03 May 2022 00:00:00 +0000</lastBuildDate>
         <atom:link href="https://robscharf.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>How to add a backtick hotkey to Windows</title>
+            <link>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows/</link>
+            <pubDate>Tue, 03 May 2022 00:00:00 +0000</pubDate>
+            
+            <guid>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows/</guid>
+            <description>Lately I have been really enjoying Obsidian as a personal knowledge base. It uses simple Markdown files, which makes maintaining synchronized cross-platform access easy and low impact.
+The problem I recently ran into a small problem when I decided to change my workflow to run Obsidian on my Windows PC host machine, instead of inside my Kali or Ubuntu virtual machines. Until now, I have largely been running Obsidian on my Macbook and inside my working machines on my PC.</description>
+            <content type="html"><![CDATA[<p>Lately I have been really enjoying <a href="https://obsidian.md/">Obsidian</a> as a personal knowledge base. It uses simple <code>Markdown</code> files, which makes maintaining synchronized cross-platform access easy and low impact.</p>
+<h3 id="the-problem">The problem</h3>
+<p>I recently ran into a small problem when I decided to change my workflow to run Obsidian on my Windows PC host machine, instead of inside my Kali or Ubuntu virtual machines. Until now, I have largely been running Obsidian on my Macbook and inside my working machines on my PC. However, when I went to start my first <code>.md</code> in Windows, I quickly realized that my 65% keyboard lacks a <code>`</code> / <code>~</code> key. Not being able to type backticks, and thus write <code>code</code> blocks, would make my markdown adventures a lot less convenient.</p>
+<h3 id="the-solution">The Solution</h3>
+<p>Adding a hotkey mapping in Windows 10 is surprisngly easy, thanks to <a href="https://www.autohotkey.com/">AutoHotkey</a>. The AutoHotkey software is fully open-source and <a href="https://autohotkey.com/foundation/history.html">maintained by a non-profit foundation</a>.</p>
+<p>To add a backtick hotkey, simply create an <code>.ahk</code> file and fill it with the following line:</p>
+<pre tabindex="0"><code>^&#39;::Send ```
+</code></pre><p><strong>Note:</strong> three <code>```</code> characters are needed, as the backtick ( <code>`</code> ) is the primary escape character in AutoHotkey scripts.</p>
+<p>You now have an executable AutoHotkey script. If you place this file in the <code>C:\Users\&lt;your-username&gt;\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</code> directory, it will execute whenever Windows is started.</p>
+]]></content>
+        </item>
         
         <item>
             <title>THM: Upload Vulnerabilities - Write Up</title>
@@ -275,7 +295,7 @@ Note: You will require administrator-level privileges when editing the file. Thi
 <p><img src="/images/uv/anx-assets.png" alt="anx-assets"></p>
 <p>From here, we try to upload our reverse shell script directly, but are given this error message, as our payload was filtered by the server.</p>
 <p><img src="/images/uv/anx-invalid.png" alt="anx-invalid"></p>
-<p>From our guided walkthrough earlier, we learned that there are multiple valid and server-executable <code>PHP</code> file extensions, including <code>.php3</code>, <code>.php4</code>, <code>.php5</code>, <code>.php7</code>, <code>.phps</code>, <code>.php-s</code>, <code>.pht</code> and <code>.phar</code>. With this knowledge, we can iterate through file extensions for our venerable <code>ptm-shell.php</code> script.</p>
+<p>From our guided walkthrough earlier, we learned that there are multiple valid and server-executable <code>PHP</code> file extensions, including <code>.php3</code>, <code>.php4</code>, <code>.php5</code>, <code>.php7</code>, <code>.phps</code>, <code>.php-s</code>, <code>.pht</code> and <code>.phar</code>. With this knowledge, we can iterate through file extensions for our handy <code>ptm-shell.php</code> script.</p>
 <p><img src="/images/uv/anx-ext.png" alt="anx-ext"></p>
 <p>While we receive <code>File type is invalid</code> responses for 8 of the 9 files listed above, <code>ptm-shell.php5</code> makes it through the server&rsquo;s filter and into the <code>/privacy</code> directory.</p>
 <p><img src="/images/uv/anx-php5.png" alt="anx-php5"></p>

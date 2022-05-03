@@ -2,13 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://robscharf.github.io/tags/blog/</loc>
-    <lastmod>2022-04-28T00:00:00+00:00</lastmod>
+    <loc>https://robscharf.github.io/tags/autohotkey/</loc>
+    <lastmod>2022-05-03T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://robscharf.github.io/tags/burpsuite/</loc>
-    <lastmod>2022-04-28T00:00:00+00:00</lastmod>
+    <loc>https://robscharf.github.io/tags/backtick/</loc>
+    <lastmod>2022-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/blog/</loc>
+    <lastmod>2022-05-03T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/categories/</loc>
+    <lastmod>2022-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/</loc>
+    <lastmod>2022-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows/</loc>
+    <lastmod>2022-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/markdown/</loc>
+    <lastmod>2022-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/categories/obsidian/</loc>
+    <lastmod>2022-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/obsidian/</loc>
+    <lastmod>2022-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/posts/</loc>
+    <lastmod>2022-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/</loc>
+    <lastmod>2022-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/categories/windows/</loc>
+    <lastmod>2022-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/burpsuite/</loc>
     <lastmod>2022-04-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/gobuster/</loc>
@@ -17,19 +47,10 @@
     <loc>https://robscharf.github.io/categories/hacks/</loc>
     <lastmod>2022-04-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://robscharf.github.io/</loc>
-    <lastmod>2022-04-28T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://robscharf.github.io/tags/node.js/</loc>
     <lastmod>2022-04-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/php/</loc>
-    <lastmod>2022-04-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/posts/</loc>
-    <lastmod>2022-04-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/tags/</loc>
     <lastmod>2022-04-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/posts/2022/04/thm-upload-vulnerabilities-write-up/</loc>
