@@ -1,5 +1,5 @@
 +++
-title = "How to add a backtick hotkey to Windows"
+title = "How to: Add a backtick hotkey to Windows 10"
 description = "Installing AutoHotkey to add custom key mapping in Windows 10"
 type = ["posts","post"]
 tags = [

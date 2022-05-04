@@ -10,11 +10,11 @@
         <atom:link href="https://robscharf.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
         
         <item>
-            <title>How to add a backtick hotkey to Windows</title>
-            <link>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows/</link>
+            <title>How to: Add a backtick hotkey to Windows 10</title>
+            <link>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/</link>
             <pubDate>Tue, 03 May 2022 00:00:00 +0000</pubDate>
             
-            <guid>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows/</guid>
+            <guid>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/</guid>
             <description>Lately I have been really enjoying Obsidian as a personal knowledge base. It uses simple Markdown files, which makes maintaining synchronized cross-platform access easy and low impact.
 The problem I recently ran into a small problem when I decided to change my workflow to run Obsidian on my Windows PC host machine, instead of inside my Kali or Ubuntu virtual machines. Until now, I have largely been running Obsidian on my Macbook and inside my working machines on my PC.</description>
             <content type="html"><![CDATA[<p>Lately I have been really enjoying <a href="https://obsidian.md/">Obsidian</a> as a personal knowledge base. It uses simple <code>Markdown</code> files, which makes maintaining synchronized cross-platform access easy and low impact.</p>
