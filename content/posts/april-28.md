@@ -20,6 +20,9 @@ categories = [
 +++
 
 Welcome to my write-up of the [Upload Vulnerabilities](https://tryhackme.com/room/uploadvulns) room on [TryHackMe](https://tryhackme.com/), created by [MuirlandOracle](https://tryhackme.com/p/MuirlandOracle). Let's jump in.
+
+**Note:** The [Complete Beginner](https://tryhackme.com/paths) THM skill path is now considered *depricated* in favor of the [Jr Penetration Tester](https://tryhackme.com/path-action/jrpenetrationtester/join) path. 
+
 ## Task 1 - Getting Started
 The room begins with a necessary configuration step. The `hosts` file of the attacking machine needs to be modified to include the following line:
 

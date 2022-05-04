@@ -36,10 +36,11 @@ The problem I recently ran into a small problem when I decided to change my work
             
             <guid>https://robscharf.github.io/posts/2022/04/thm-upload-vulnerabilities-write-up/</guid>
             <description>Welcome to my write-up of the Upload Vulnerabilities room on TryHackMe, created by MuirlandOracle. Let&amp;rsquo;s jump in.
+Note: The Complete Beginner THM skill path is now considered depricated in favor of the Jr Penetration Tester path.
 Task 1 - Getting Started The room begins with a necessary configuration step. The hosts file of the attacking machine needs to be modified to include the following line:
-&amp;lt;machine-ip&amp;gt; overwrite.uploadvulns.thm shell.uploadvulns.thm java.uploadvulns.thm annex.uploadvulns.thm magic.uploadvulns.thm jewel.uploadvulns.thm demo.uploadvulns.thm
-Note: You will require administrator-level privileges when editing the file. This can be done via sudo on Linux and Run as Administrator on Windows.</description>
+&amp;lt;machine-ip&amp;gt; overwrite.uploadvulns.thm shell.uploadvulns.thm java.uploadvulns.thm annex.uploadvulns.thm magic.</description>
             <content type="html"><![CDATA[<p>Welcome to my write-up of the <a href="https://tryhackme.com/room/uploadvulns">Upload Vulnerabilities</a> room on <a href="https://tryhackme.com/">TryHackMe</a>, created by <a href="https://tryhackme.com/p/MuirlandOracle">MuirlandOracle</a>. Let&rsquo;s jump in.</p>
+<p><strong>Note:</strong> The <a href="https://tryhackme.com/paths">Complete Beginner</a> THM skill path is now considered <em>depricated</em> in favor of the <a href="https://tryhackme.com/path-action/jrpenetrationtester/join">Jr Penetration Tester</a> path.</p>
 <h2 id="task-1---getting-started">Task 1 - Getting Started</h2>
 <p>The room begins with a necessary configuration step. The <code>hosts</code> file of the attacking machine needs to be modified to include the following line:</p>
 <p><code>&lt;machine-ip&gt;    overwrite.uploadvulns.thm shell.uploadvulns.thm java.uploadvulns.thm annex.uploadvulns.thm magic.uploadvulns.thm jewel.uploadvulns.thm demo.uploadvulns.thm</code></p>
