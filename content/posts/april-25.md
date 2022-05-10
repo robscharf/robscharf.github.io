@@ -8,7 +8,7 @@ tags = [
     "OWASP",
     "XSS",
 ]
-date = "2022-04-25"
+date = "2022-04-25T14:20:00"
 categories = [
     "TryHackMe",
 ]

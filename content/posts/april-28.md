@@ -1,5 +1,5 @@
 +++
-title = "THM: Upload Vulnerabilities - Write Up"
+title = "THM: Upload Vulnerabilities -- Write-Up"
 description = ""
 type = ["posts","post"]
 tags = [
@@ -10,10 +10,9 @@ tags = [
     "php",
     "node.js",
 ]
-date = "2022-04-28"
+date = "2022-04-28T11:30:00"
 categories = [
-    "upload vulnerabilities",
-    "hacks",
+    "TryHackMe",
 ]
 [ author ]
   name = "Rob"

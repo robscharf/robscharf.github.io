@@ -10,7 +10,7 @@ tags = [
     "wordpress",
     "php",
 ]
-date = "2022-05-10"
+date = "2022-05-10T23:14:00"
 categories = [
     "ctf",
     "TryHackMe",
