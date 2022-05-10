@@ -6,33 +6,13 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-        <lastBuildDate>Tue, 03 May 2022 00:00:00 +0000</lastBuildDate>
+        <lastBuildDate>Tue, 10 May 2022 00:00:00 +0000</lastBuildDate>
         <atom:link href="https://robscharf.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
-        
-        <item>
-            <title>How to: Add a backtick hotkey to Windows 10</title>
-            <link>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/</link>
-            <pubDate>Tue, 03 May 2022 00:00:00 +0000</pubDate>
-            
-            <guid>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/</guid>
-            <description>Lately I have been really enjoying Obsidian as a personal knowledge base. It uses simple Markdown files, which makes maintaining synchronized cross-platform access easy and low impact.
-The problem I recently ran into a small problem when I decided to change my workflow to run Obsidian on my Windows PC host machine, instead of inside my Kali or Ubuntu virtual machines. Until now, I have largely been running Obsidian on my Macbook and inside my working machines on my PC.</description>
-            <content type="html"><![CDATA[<p>Lately I have been really enjoying <a href="https://obsidian.md/">Obsidian</a> as a personal knowledge base. It uses simple <code>Markdown</code> files, which makes maintaining synchronized cross-platform access easy and low impact.</p>
-<h3 id="the-problem">The problem</h3>
-<p>I recently ran into a small problem when I decided to change my workflow to run Obsidian on my Windows PC host machine, instead of inside my Kali or Ubuntu virtual machines. Until now, I have largely been running Obsidian on my Macbook and inside my working machines on my PC. However, when I went to start my first <code>.md</code> in Windows, I quickly realized that my 65% keyboard lacks a <code>`</code> / <code>~</code> key. Not being able to type backticks, and thus write <code>code</code> blocks, would make my markdown adventures a lot less convenient.</p>
-<h3 id="the-solution">The Solution</h3>
-<p>Adding a hotkey mapping in Windows 10 is surprisngly easy, thanks to <a href="https://www.autohotkey.com/">AutoHotkey</a>. The AutoHotkey software is fully open-source and <a href="https://autohotkey.com/foundation/history.html">maintained by a non-profit foundation</a>.</p>
-<p>To add a backtick hotkey, simply create an <code>.ahk</code> file and fill it with the following line:</p>
-<pre tabindex="0"><code>^&#39;::Send ```
-</code></pre><p><strong>Note:</strong> three <code>```</code> characters are needed, as the backtick ( <code>`</code> ) is the primary escape character in AutoHotkey scripts.</p>
-<p>You now have an executable AutoHotkey script. If you place this file in the <code>C:\Users\&lt;your-username&gt;\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</code> directory, it will execute whenever Windows is started.</p>
-]]></content>
-        </item>
         
         <item>
             <title>THM: Mr Robot CTF -- Write-Up</title>
             <link>https://robscharf.github.io/posts/2022/05/thm-mr-robot-ctf--write-up/</link>
-            <pubDate>Tue, 03 May 2022 00:00:00 +0000</pubDate>
+            <pubDate>Tue, 10 May 2022 00:00:00 +0000</pubDate>
             
             <guid>https://robscharf.github.io/posts/2022/05/thm-mr-robot-ctf--write-up/</guid>
             <description>About TryHackMe.com&amp;rsquo;s Mr Robot CTF (MRCTF) is a beginner-friendly capture-the-flag virtual machine by Leon Johnson. MRCTF is named after, and inspired by, the Mr. Robot television show and challenges users to capture three flags by finding vulnerabilities in the target server and exploiting them to gain root access.
@@ -271,6 +251,26 @@ Note My instance of MRCTF was at IP address &amp;lt;target-ip&amp;gt;, though yo
 <h3 id="notes">Notes</h3>
 <p>In retrospect, I would&rsquo;ve checked my Wappalyzer browser plug-in earlier, which is a good practice to prioritize. It would have spotted that WordPress is installed on the server before the lengthy <code>gobuster</code> scan, potentially saving time.</p>
 <p>Otherwise, this was an enjoyable CTF machine, especially for fans of the show.</p>
+]]></content>
+        </item>
+        
+        <item>
+            <title>How to: Add a backtick hotkey to Windows 10</title>
+            <link>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/</link>
+            <pubDate>Tue, 03 May 2022 00:00:00 +0000</pubDate>
+            
+            <guid>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/</guid>
+            <description>Lately I have been really enjoying Obsidian as a personal knowledge base. It uses simple Markdown files, which makes maintaining synchronized cross-platform access easy and low impact.
+The problem I recently ran into a small problem when I decided to change my workflow to run Obsidian on my Windows PC host machine, instead of inside my Kali or Ubuntu virtual machines. Until now, I have largely been running Obsidian on my Macbook and inside my working machines on my PC.</description>
+            <content type="html"><![CDATA[<p>Lately I have been really enjoying <a href="https://obsidian.md/">Obsidian</a> as a personal knowledge base. It uses simple <code>Markdown</code> files, which makes maintaining synchronized cross-platform access easy and low impact.</p>
+<h3 id="the-problem">The problem</h3>
+<p>I recently ran into a small problem when I decided to change my workflow to run Obsidian on my Windows PC host machine, instead of inside my Kali or Ubuntu virtual machines. Until now, I have largely been running Obsidian on my Macbook and inside my working machines on my PC. However, when I went to start my first <code>.md</code> in Windows, I quickly realized that my 65% keyboard lacks a <code>`</code> / <code>~</code> key. Not being able to type backticks, and thus write <code>code</code> blocks, would make my markdown adventures a lot less convenient.</p>
+<h3 id="the-solution">The Solution</h3>
+<p>Adding a hotkey mapping in Windows 10 is surprisngly easy, thanks to <a href="https://www.autohotkey.com/">AutoHotkey</a>. The AutoHotkey software is fully open-source and <a href="https://autohotkey.com/foundation/history.html">maintained by a non-profit foundation</a>.</p>
+<p>To add a backtick hotkey, simply create an <code>.ahk</code> file and fill it with the following line:</p>
+<pre tabindex="0"><code>^&#39;::Send ```
+</code></pre><p><strong>Note:</strong> three <code>```</code> characters are needed, as the backtick ( <code>`</code> ) is the primary escape character in AutoHotkey scripts.</p>
+<p>You now have an executable AutoHotkey script. If you place this file in the <code>C:\Users\&lt;your-username&gt;\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</code> directory, it will execute whenever Windows is started.</p>
 ]]></content>
         </item>
         
