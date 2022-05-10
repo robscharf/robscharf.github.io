@@ -9,11 +9,29 @@
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
     <lastBuildDate>Tue, 03 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>ctf</title>
+      <link>https://robscharf.github.io/categories/ctf/</link>
+      <pubDate>Tue, 03 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/categories/ctf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Obsidian</title>
       <link>https://robscharf.github.io/categories/obsidian/</link>
       <pubDate>Tue, 03 May 2022 00:00:00 +0000</pubDate>
       
       <guid>https://robscharf.github.io/categories/obsidian/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>TryHackMe</title>
+      <link>https://robscharf.github.io/categories/tryhackme/</link>
+      <pubDate>Tue, 03 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/categories/tryhackme/</guid>
       <description></description>
     </item>
     
@@ -41,24 +59,6 @@
       <pubDate>Thu, 28 Apr 2022 00:00:00 +0000</pubDate>
       
       <guid>https://robscharf.github.io/categories/upload-vulnerabilities/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>OWASP</title>
-      <link>https://robscharf.github.io/categories/owasp/</link>
-      <pubDate>Mon, 25 Apr 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://robscharf.github.io/categories/owasp/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>XSS</title>
-      <link>https://robscharf.github.io/categories/xss/</link>
-      <pubDate>Mon, 25 Apr 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://robscharf.github.io/categories/xss/</guid>
       <description></description>
     </item>
     

