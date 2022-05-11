@@ -1,6 +1,6 @@
 +++
 title = "THM: Mr Robot CTF -- Write-Up"
-description = "Walkthrough write-up of the TryHackMe Mr Robot CT"
+description = "Walkthrough write-up of the TryHackMe Mr Robot CTF"
 type = ["posts","post"]
 tags = [
     "blog",
