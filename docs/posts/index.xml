@@ -24,7 +24,7 @@ Note My instance of MRCTF was at IP address &amp;lt;target-ip&amp;gt;, though yo
 <h2 id="methodology">Methodology</h2>
 <p>We begin our enumeration efforts by running an <code>nmap</code> scan on the target machine to understand the ports that are open to network traffic. I usually begin with the TCP SYN &ldquo;Stealth&rdquo; Scan (-sS) with &ldquo;version dection&rdquo; (<code>-V</code>) enabled. Here is a <a href="https://nmap.org/book/port-scanning-options.html">list of general <code>nmap</code> CLI flags</a>.</p>
 <h3 id="nmap">nmap</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nmap sudo nmap -sSV -v &lt;target-ip&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nmap sudo nmap -sV -v &lt;target-ip&gt;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Starting Nmap 7.92 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2022-05-10 12:12 EDT
 </span></span><span style="display:flex;"><span>NSE: Loaded <span style="color:#ae81ff">45</span> scripts <span style="color:#66d9ef">for</span> scanning.

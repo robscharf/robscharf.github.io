@@ -31,7 +31,7 @@ We begin our enumeration efforts by running an `nmap` scan on the target machine
 
 ### nmap
 ```shell
-nmap sudo nmap -sSV -v <target-ip>
+nmap sudo nmap -sV -v <target-ip>
 
 Starting Nmap 7.92 ( https://nmap.org ) at 2022-05-10 12:12 EDT
 NSE: Loaded 45 scripts for scanning.
