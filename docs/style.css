@@ -1,10 +1,14 @@
 /*.highlight pre {
   background-color: #ccc !important;
   }
-.token.tag, .token.boolean, .token.number, .token.deleted{color:#e0287d !important;}*/
+*/
+.token.tag, .token.boolean, .token.number, .token.deleted, .token.keyword, .token.builtin {color:#46A69D !important;}
+.token.attr-name, .token.attr-value, .token.string, .token.char, .token.operator, .token.entity, .token.url, .language-css .token.string, .style .token.string, .token.variable, .token.inserted{color:cornflowerblue;}
+code[class*="language-"], pre[class*="language-"]{text-shadow: none;}
+[data-theme="light"] pre code{color: #777;}
 em, i, strong{color: #cccccc;}
 div.content a, footer a, h2, h5{color:#46A69D;}
-div.content a:hover{color:#e0287d}
+div.content a:hover{color:#6495ed}
 a:hover{color:#ffffff;}
 hr{display: none;}
 h5{font-size: 16px;}
@@ -47,7 +51,7 @@ h2.hero{margin-top: 0;margin-bottom:10px;}
   .layers::before {
     top: 10px;
     left: 15px;
-    color: #e0287d;
+    color: #6495ed;
   }
   
   .layers::after {
@@ -444,7 +448,7 @@ h2.hero{margin-top: 0;margin-bottom:10px;}
   @keyframes font {
     0% {
       font-weight: 100;
-      color: #e0287d;
+      color: #6495ed;
       filter: blur(3px);
     }
   
@@ -468,7 +472,7 @@ h2.hero{margin-top: 0;margin-bottom:10px;}
   
     90% {
       font-weight: 500;
-      color: #e0287d;
+      color: #6495ed;
       filter: blur(6px);
     }
   }
