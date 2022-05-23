@@ -108,7 +108,7 @@ h2.hero{margin-top: 0;margin-bottom:10px;}
   }
   
   .paths {
-    animation: paths 25s step-end infinite;
+    animation: paths 15s step-end infinite;
   }
   
   @keyframes paths {
@@ -366,7 +366,7 @@ h2.hero{margin-top: 0;margin-bottom:10px;}
   .movement {
     /* Normally this position would be absolute & on the layers, set to relative here so we can see it on the div */
     position: relative;
-    animation: movement 25s step-end infinite;
+    animation: movement 15s step-end infinite;
   }
   
   @keyframes movement {
@@ -397,7 +397,7 @@ h2.hero{margin-top: 0;margin-bottom:10px;}
   }
   
   .opacity {
-    animation: opacity 25s step-end infinite;
+    animation: opacity 15s step-end infinite;
   }
   
   @keyframes opacity {
@@ -436,7 +436,7 @@ h2.hero{margin-top: 0;margin-bottom:10px;}
   }
   
   .font {
-    animation: font 25s step-end infinite;
+    animation: font 15s step-end infinite;
   }
   
   @keyframes font {
@@ -472,16 +472,16 @@ h2.hero{margin-top: 0;margin-bottom:10px;}
   }
   
   .glitch span {
-    animation: paths 20s step-end infinite;
+    animation: paths 15s step-end infinite;
   }
   
   .glitch::before {
-    animation: paths 20s step-end infinite, opacity 15s step-end infinite,
+    animation: paths 15s step-end infinite, opacity 15s step-end infinite,
       font 15s step-end infinite, movement 15s step-end infinite;
   }
   
   .glitch::after {
-    animation: paths 20s step-end infinite, opacity 15s step-end infinite,
+    animation: paths 15s step-end infinite, opacity 15s step-end infinite,
       font 15s step-end infinite, movement 15s step-end infinite;
   }
   
