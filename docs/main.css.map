@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "main.css",
-	"sourceRoot": "/Users/rob/Documents/robscharf.github.io",
+	"sourceRoot": "/home/virtualtack/robscharf.github.io",
 	"sources": [
 		"themes/hello-friend-ng-master/assets/scss/main.scss",
 		"themes/hello-friend-ng-master/assets/scss/_normalize.scss",

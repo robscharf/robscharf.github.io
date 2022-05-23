@@ -24,12 +24,11 @@ categories = [
 [TryHackMe.com](https://tryhackme.com/)'s [Mr Robot CTF (MRCTF)](https://tryhackme.com/room/mrrobot) is a beginner-friendly capture-the-flag virtual machine by [Leon Johnson](https://twitter.com/@sho_luv). MRCTF is named after, and inspired by, the [Mr. Robot](https://en.wikipedia.org/wiki/Mr._Robot) television show and challenges users to capture three flags by finding vulnerabilities in the target server and exploiting them to gain root access.
 
 ### Note
-My instance of MRCTF was at IP address `<target-ip>`, though yours will vary. I have replaced all instances of this address with `<target-ip>` in the walkthrough portion of this write-up.
+I have replaced all instances of the virtual machine's ip address with `<target-ip>` throughout this write-up.
 
 ## Methodology
 We begin our enumeration efforts by running an `nmap` scan on the target machine to understand the ports that are open to network traffic. I usually begin with the TCP SYN "Stealth" Scan (-sS) with "version dection" (`-V`) enabled. Here is a [list of general `nmap` CLI flags](https://nmap.org/book/port-scanning-options.html).
 
-### nmap
 ```shell
 nmap sudo nmap -sV -v <target-ip>
 
@@ -71,7 +70,6 @@ From this, we learn that an `Apache` instance is active on the standard ports, w
 
 Next, we use `gobuster`, [a popular tool](https://github.com/OJ/gobuster) that facilitates brute-force enumeration. Here, we use it in directory mode (`dir`) with a popular directory names wordlist (`-w`) against our `<target-ip>` with (`-u`).
 
-### gobuster
 ```shell
 gobuster dir -w /usr/share/wordlists/dirb/common.txt -u <target-ip>
 

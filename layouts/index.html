@@ -4,15 +4,18 @@
 
 {{ define "main" }}
     <main aria-role="main">
-        <div>
-            {{ if .Site.Params.Portrait.Path }}
-               <img src="{{ .Site.Params.Portrait.Path }}" class="circle" alt="{{ .Site.Params.Portrait.Alt }}" style="max-width:{{ .Site.Params.Portrait.MaxWidth }}" />
-            {{ end }}
+        <div class="home-top">
+            <h2 class="hero">Hi, I'm Rob</h2>
+            <div class="hero-container">
+                <div class="environment"></div>
+                <h2 class="hero glitch layers" data-text="virtualtack"><span><small>(VirtualTack)</small></span></h2>
+            </div>
+        </div>
 
-            <h1>Hi,<br/>I'm Rob.</h1>
-            &nbsp;
-            <script src="https://tryhackme.com/badge/262183"></script>
-            <!-- https://www.hackthebox.com/badge/image/1031764 -->
+        <div class="home-bottom">
+        <script src="https://tryhackme.com/badge/262183"></script>
+        <!-- https://www.hackthebox.com/badge/image/1031764 -->
+        </div>
 
             {{ partial "subtitle.html" . }}
             {{- with .Site.Params.social }}
