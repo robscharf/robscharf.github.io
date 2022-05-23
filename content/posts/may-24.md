@@ -409,7 +409,7 @@ Let's log in via `ssh` and find our user flag.
 ```shell
 ┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
 └─$ ssh ----s@10.10.108.206
-----s@10.10.108.206''''s password: 
+----s@10.10.108.206's password: 
 Welcome to Ubuntu 18.04.3 LTS (GNU/Linux 4.15.0-55-generic x86_64)
 
  * Documentation:  https://help.ubuntu.com
