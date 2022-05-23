@@ -77,7 +77,9 @@ Next, we visit the web server in a web browser.
 ```
 We're greeted with a message from Agent R, instructing other agents to change their `user-agent` to thier codename for site access. Here I used [User-Agent Switcher](https://addons.mozilla.org/en-US/firefox/addon/uaswitcher/) to alter my requests. I began by trying to log in as the boss, chaning my user agent to "R". Unfortunately, we're given a hostile response by the administrator (presumably R himself) for this request:
 ```html
-<head></head><body>What are you doing! Are you one of the 25 employees? If not, I going to report this incident
+<head>   
+</head>
+<body>What are you doing! Are you one of the 25 employees? If not, I going to report this incident
 
 
 
@@ -130,7 +132,7 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2022-05-23 10:19:
 ... 🕒 two hours later 🕒 ...
 
 [ATTEMPT] target 10.10.73.189 - login "----s" - pass "cutie" - 243 of 14344401 [child 0] (0/2)
-[ATTEMPT] target 10.10.73.189 - login "----s" - pass "----s" - 244 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login "----s" - pass "james" - 244 of 14344401 [child 0] (0/2)
 [ATTEMPT] target 10.10.73.189 - login "----s" - pass "banana" - 245 of 14344401 [child 0] (0/2)
 [ATTEMPT] target 10.10.73.189 - login "----s" - pass "prince" - 246 of 14344401 [child 0] (0/2)
 [STATUS] 7.94 tries/min, 246 tries in 00:31h, 14344155 to do in 30126:37h, 1 active
@@ -367,8 +369,6 @@ Don't ask me why the password look cheesy, ask agent R who set this password for
 
 Your buddy,
 ----s
-                                                         
-
 ```
 
 Coincidentally, the lethargic StegCracker process also just finished, giving us another route to the message.
@@ -406,7 +406,8 @@ Your buddy,
 ```
 
 Let's log in via `ssh` and find our user flag.
-```shell┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+```shell
+┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
 └─$ ssh ----s@10.10.108.206
 ----s@10.10.108.206''''s password: 
 Welcome to Ubuntu 18.04.3 LTS (GNU/Linux 4.15.0-55-generic x86_64)
