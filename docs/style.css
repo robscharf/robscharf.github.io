@@ -9,8 +9,8 @@ code[class*="language-"], pre[class*="language-"]{text-shadow: none;}
 pre code {white-space: pre-wrap !important;}
 em, i, strong{color: #cccccc;}
 div.content a, footer a, h2, h5{color:#46A69D;}
-div.content a:hover{color:#6495ed}
-a:hover{color:#ffffff;}
+[data-theme="dark"] a:hover, div.content a:hover{color:#6495ed;}
+[data-theme="light"] a:hover, div.content a:hover{color:#6495ed;}
 hr{display: none;}
 h5{font-size: 16px;}
 footer a{text-decoration: none;}
