@@ -6,6 +6,7 @@
 .token.attr-name, .token.attr-value, .token.string, .token.char, .token.operator, .token.entity, .token.url, .language-css .token.string, .style .token.string, .token.variable, .token.inserted{color:cornflowerblue;}
 code[class*="language-"], pre[class*="language-"]{text-shadow: none;}
 [data-theme="light"] pre code{color: #777;}
+pre code {white-space: pre-wrap !important;}
 em, i, strong{color: #cccccc;}
 div.content a, footer a, h2, h5{color:#46A69D;}
 div.content a:hover{color:#6495ed}
@@ -114,7 +115,7 @@ h2.hero{margin-top: 0;margin-bottom:10px;}
   }
   
   .paths {
-    animation: paths 15s step-end infinite;
+    animation: paths 8s step-end infinite;
   }
   
   @keyframes paths {
@@ -372,7 +373,7 @@ h2.hero{margin-top: 0;margin-bottom:10px;}
   .movement {
     /* Normally this position would be absolute & on the layers, set to relative here so we can see it on the div */
     position: relative;
-    animation: movement 15s step-end infinite;
+    animation: movement 8s step-end infinite;
   }
   
   @keyframes movement {
@@ -403,7 +404,7 @@ h2.hero{margin-top: 0;margin-bottom:10px;}
   }
   
   .opacity {
-    animation: opacity 15s step-end infinite;
+    animation: opacity 8s step-end infinite;
   }
   
   @keyframes opacity {
@@ -442,7 +443,7 @@ h2.hero{margin-top: 0;margin-bottom:10px;}
   }
   
   .font {
-    animation: font 15s step-end infinite;
+    animation: font 8s step-end infinite;
   }
   
   @keyframes font {
@@ -478,17 +479,17 @@ h2.hero{margin-top: 0;margin-bottom:10px;}
   }
   
   .glitch span {
-    animation: paths 15s step-end infinite;
+    animation: paths 8s step-end infinite;
   }
   
   .glitch::before {
-    animation: paths 15s step-end infinite, opacity 15s step-end infinite,
-      font 15s step-end infinite, movement 15s step-end infinite;
+    animation: paths 8s step-end infinite, opacity 8s step-end infinite,
+      font 8s step-end infinite, movement 8s step-end infinite;
   }
   
   .glitch::after {
-    animation: paths 15s step-end infinite, opacity 15s step-end infinite,
-      font 15s step-end infinite, movement 15s step-end infinite;
+    animation: paths 8s step-end infinite, opacity 8s step-end infinite,
+      font 8s step-end infinite, movement 8s step-end infinite;
   }
   
   .hero-container {

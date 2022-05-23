@@ -5,7 +5,7 @@ theme = "hello-friend-ng-master"
 
 PygmentsCodeFences = true
 pygmentsStyle = "xcode"
-markup.highlight.noClasses=false
+markup.highlight.noClasses= false
 
 paginate  = 10
 rssLimit  = 10  # Maximum number of items in the RSS feed.
@@ -134,7 +134,7 @@ disableHugoGeneratorInject = false
 
   [params.logo]
     logoMark     = ">"
-    logoText     = "virtualtack@github ~/ $ "
+    logoText     = "(virtualtack@github)-[~] $ "
     logoHomeLink = "/"
     # Set true to remove the logo cursor entirely.
     # logoCursorDisabled = false
