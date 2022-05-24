@@ -31,7 +31,7 @@ I have replaced all instances of the virtual machine's ip address with `<target-
 
 We begin our enumeration efforts by running an `nmap` scan on the target machine to understand the ports that are open to network traffic. I start with the `-V`, `-C`, and `-T4` flags. 
 
-```shell
+```bash
 # Nmap 7.92 scan initiated Mon May 23 09:23:53 2022 as: nmap -sVC -T4 -o initial-svc-nmap.out 10.10.166.253
 Nmap scan report for 10.10.166.253
 Host is up (0.13s latency).

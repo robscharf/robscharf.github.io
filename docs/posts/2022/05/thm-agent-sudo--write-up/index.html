@@ -160,7 +160,7 @@
 <p>I have replaced all instances of the virtual machine&rsquo;s ip address with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
 <h2 id="methodology">Methodology</h2>
 <p>We begin our enumeration efforts by running an <code>nmap</code> scan on the target machine to understand the ports that are open to network traffic. I start with the <code>-V</code>, <code>-C</code>, and <code>-T4</code> flags.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># Nmap 7.92 scan initiated Mon May 23 09:23:53 2022 as: nmap -sVC -T4 -o initial-svc-nmap.out 10.10.166.253</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Nmap 7.92 scan initiated Mon May 23 09:23:53 2022 as: nmap -sVC -T4 -o initial-svc-nmap.out 10.10.166.253</span>
 </span></span><span class="line"><span class="cl">Nmap scan report <span class="k">for</span> 10.10.166.253
 </span></span><span class="line"><span class="cl">Host is up <span class="o">(</span>0.13s latency<span class="o">)</span>.
 </span></span><span class="line"><span class="cl">Not shown: <span class="m">997</span> closed tcp ports <span class="o">(</span>reset<span class="o">)</span>

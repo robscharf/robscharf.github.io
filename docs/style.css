@@ -2,6 +2,7 @@
   background-color: #ccc !important;
   }
 */
+pre[class*="language-"]{box-shadow:none;}
 .token.tag, .token.boolean, .token.number, .token.deleted, .token.keyword, .token.builtin {color:#46A69D !important;}
 .token.attr-name, .token.attr-value, .token.string, .token.char, .token.operator, .token.entity, .token.url, .language-css .token.string, .style .token.string, .token.variable, .token.inserted{color:cornflowerblue;}
 code[class*="language-"], pre[class*="language-"]{text-shadow: none;}
