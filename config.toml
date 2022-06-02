@@ -3,13 +3,11 @@ title   = "Hi, I'm Rob."
 languageCode = "en-us"
 theme = "hello-friend-ng-master"
 
-<<<<<<< HEAD
-
-=======
->>>>>>> master
+pygmentsUseClassic = true
 PygmentsCodeFences = true
 pygmentsUseClasses = false
 pygmentsStyle = "xcode"
+markup.highlight.noClasses= false
 
 paginate  = 10
 rssLimit  = 10  # Maximum number of items in the RSS feed.
@@ -88,7 +86,7 @@ disableHugoGeneratorInject = false
   # Per default, this option is off. 
   # The theme is respecting the prefers-color-scheme of the operating systeme. 
   # With this option on, the page user is able to set the scheme he wants. 
-  enableThemeToggle = false
+  enableThemeToggle = true
 
   # Sharing buttons
   #
@@ -143,9 +141,9 @@ disableHugoGeneratorInject = false
     # Set true to remove the logo cursor entirely.
     # logoCursorDisabled = false
     # Set to a valid CSS color to change the cursor in the logo.
-     logoCursorColor    = "#6495ed"
+     logoCursorColor    = "#46A69D"
     # Set to a valid CSS time value to change the animation duration, "0s" to disable.
-     logoCursorAnimate  = "2s"
+     logoCursorAnimate  = "1.6s"
 
   # Commento is more than just a comments widget you can embed — 
   # it’s a return to the roots of the internet. 

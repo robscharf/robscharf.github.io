@@ -8,11 +8,6 @@ aliases = ["about-us","about-hugo","contact"]
 
 I'm interested in a *lot* of topics, such as **the intersection of technology and human rights**, **open-source, home automation, and data ownership**, and **diplomacy, conflict, and internet freedoms**. I have a B.A. in History from Northeastern University ('11) and an M.A. in The History of Warfare from King's College London. After 7 years working with governments around the world to prevent genocide and other mass atrocities, I'm looking to expand my skills and experience in the digital world.
 
-I do a bit of 3D printing via two Creality FDM printers.
-![r3-d3-and-r3-d4](/static/images/printers.jpg)
-![r3-d3-and-r3-d4-2](/static/images/printers2.jpg)
-![r3-d3-and-r3-d4-3](/static/images/printers3.jpg)
-
 This blog will document my activities, principally learning more about cybersecurity topics. If you're interested in saying hi, [send me an email](mailto:hi@robinscharf.me)!
 
 &nbsp;
