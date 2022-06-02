@@ -69,7 +69,8 @@ div.home-bottom{margin: 40px auto 40px auto;}
     /* Bright things in dark environments usually cast that light, giving off a glow */
     filter: drop-shadow(0 1px 3px);
   }
-h2.hero{margin-top: 0;margin-bottom:10px;}
+.hero-grey{color:#AAAAAA;font-size: 32px;}  
+h2.hero{margin-top: 10px;margin-bottom:10px;}
   
   .layers {
     position: relative;
