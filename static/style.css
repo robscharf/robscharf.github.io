@@ -21,7 +21,40 @@ div.home-bottom{margin: 40px auto 40px auto;}
 @media (min-device-width: 420px){
     .logo__cursor{display:block;}
 }
+#img-container {
+  display: flex;
+  padding: .5rem;
+}
+#img-container p{text-align: center;}
+.box2~.box2 {
+  margin-left: 10%;
+}
 
+.box2 {
+  display: flex;
+  max-width: 25%;
+  height: auto;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media (max-width: 500px) {
+  #img-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: .5rem;
+  }
+  .box2 {
+    display: flex;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .box2 ~ .box2 {
+    margin-top: 1rem;
+  }
+}
 /* glitch text*/
 
 .hero {
