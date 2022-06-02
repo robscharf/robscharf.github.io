@@ -141,9 +141,9 @@ disableHugoGeneratorInject = false
     # Set true to remove the logo cursor entirely.
     # logoCursorDisabled = false
     # Set to a valid CSS color to change the cursor in the logo.
-     logoCursorColor    = "#46A69D"
+     logoCursorColor    = "#6495ed"
     # Set to a valid CSS time value to change the animation duration, "0s" to disable.
-     logoCursorAnimate  = "1.6s"
+     logoCursorAnimate  = "2s"
 
   # Commento is more than just a comments widget you can embed — 
   # it’s a return to the roots of the internet. 
