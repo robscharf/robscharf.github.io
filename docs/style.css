@@ -18,6 +18,9 @@ footer a{text-decoration: none;}
 div.home-top{margin: 10px auto 40px auto;}
 div.home-bottom{margin: 40px auto 40px auto;}
 .logo__cursor{display:hidden;}
+span.logo__text {
+  font-size: 0.9rem !important;
+}
 @media (min-device-width: 420px){
     .logo__cursor{display:block;}
 }

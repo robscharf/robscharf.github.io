@@ -7,7 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Mon, 23 May 2022 14:14:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 20 Jun 2022 11:14:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>I passed my eJPT!</title>
+      <link>https://robscharf.github.io/posts/2022/06/i-passed-my-ejpt/</link>
+      <pubDate>Mon, 20 Jun 2022 11:14:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/posts/2022/06/i-passed-my-ejpt/</guid>
+      <description>I am pleased to share that I recently passed the eLearnSecurity Junior Penetration Tester certification exam on June 16!
+The Exam According to INE&amp;rsquo;s website:
+The eJPT is a three day, 20 question exam, that focuses on challenging you to prove your skillset in penetration testing foundations including programming, networking vulnerabilities, web attack vectors, and a host of other entry level skills&amp;hellip; Covering a host of skills which include entry level web penetration techniques, the eJPT provides you with the confidence and knowledge to begin training for more advanced penetration techniques and specialities.</description>
+    </item>
+    
     <item>
       <title>THM: Agent Sudo -- Write-Up</title>
       <link>https://robscharf.github.io/posts/2022/05/thm-agent-sudo--write-up/</link>
@@ -59,7 +70,7 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
       
       <guid>https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop/</guid>
       <description>Wrapping up my intro to the Juice Shop Today I finished up the OWASP Juice Shop Room on THM, after leaving the final Cross-site Scripting (XSS) modules unfinished last week. This involved quick introductory examples of three XSS modalities:
-   DOM Persistent (Server-side) Reflected (Client-side)     DOM XSS uses the HTML environment to execute malicious JavaScript. This type of attack commonly uses the &amp;lt;script&amp;gt; HTML tag.</description>
+DOM Persistent (Server-side) Reflected (Client-side) DOM XSS uses the HTML environment to execute malicious JavaScript. This type of attack commonly uses the &amp;lt;script&amp;gt; HTML tag. Persistent XSS is JavaScript that is run when the server loads the page containing it.</description>
     </item>
     
     <item>
