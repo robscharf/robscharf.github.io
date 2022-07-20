@@ -7,7 +7,6 @@ pygmentsUseClassic = true
 PygmentsCodeFences = true
 pygmentsUseClasses = false
 pygmentsStyle = "xcode"
-markup.highlight.noClasses= false
 
 paginate  = 10
 rssLimit  = 10  # Maximum number of items in the RSS feed.
