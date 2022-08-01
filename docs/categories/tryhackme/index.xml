@@ -7,7 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Mon, 23 May 2022 14:14:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/categories/tryhackme/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 08 Jul 2022 13:04:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/categories/tryhackme/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>THM: Biblioteca -- Write-Up</title>
+      <link>https://robscharf.github.io/posts/2022/07/thm-biblioteca--write-up/</link>
+      <pubDate>Fri, 08 Jul 2022 13:04:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/posts/2022/07/thm-biblioteca--write-up/</guid>
+      <description>About Biblioteca is a medium rated CTF room on TryHackMe. Rooting this box involves carrying out a successful SQL injection to obtain a foothold, identifying an opportunity for a &amp;ldquo;lateral privilege escalation&amp;rdquo; via brute-force attack, and further escalation to root via Python library hijacking.
+Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
+Enumeration nmap I began by running a standard nmap scan against the target host.</description>
+    </item>
+    
     <item>
       <title>THM: Agent Sudo -- Write-Up</title>
       <link>https://robscharf.github.io/posts/2022/05/thm-agent-sudo--write-up/</link>

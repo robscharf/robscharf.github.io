@@ -7,7 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Mon, 20 Jun 2022 11:14:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 08 Jul 2022 13:04:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ctf</title>
+      <link>https://robscharf.github.io/categories/ctf/</link>
+      <pubDate>Fri, 08 Jul 2022 13:04:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/categories/ctf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>TryHackMe</title>
+      <link>https://robscharf.github.io/categories/tryhackme/</link>
+      <pubDate>Fri, 08 Jul 2022 13:04:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/categories/tryhackme/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>certifications</title>
       <link>https://robscharf.github.io/categories/certifications/</link>
@@ -23,24 +41,6 @@
       <pubDate>Mon, 20 Jun 2022 11:14:00 +0000</pubDate>
       
       <guid>https://robscharf.github.io/categories/ejpt/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>ctf</title>
-      <link>https://robscharf.github.io/categories/ctf/</link>
-      <pubDate>Mon, 23 May 2022 14:14:00 +0000</pubDate>
-      
-      <guid>https://robscharf.github.io/categories/ctf/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>TryHackMe</title>
-      <link>https://robscharf.github.io/categories/tryhackme/</link>
-      <pubDate>Mon, 23 May 2022 14:14:00 +0000</pubDate>
-      
-      <guid>https://robscharf.github.io/categories/tryhackme/</guid>
       <description></description>
     </item>
     

