@@ -21,7 +21,7 @@ categories = [
 +++
 
 ## About 
-Biblioteca is a *hard* rated CTF room on [TryHackMe](https://tryhackme.com/room/dailybugle). Rooting this box involves carrying out a successful CMS enumeration, SQLi, hash cracking, and binary-based privilege escalation. 
+Daily Bugle is a *hard* rated CTF room on [TryHackMe](https://tryhackme.com/room/dailybugle). Rooting this box involves carrying out a successful CMS enumeration, SQLi, hash cracking, and binary-based privilege escalation. 
 
 **Note:** I have replaced all instances of the virtual machine's ip address with `<target-ip>` throughout this write-up.
 
