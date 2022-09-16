@@ -19,7 +19,7 @@
 
     <article>
       <h1 class="post-title">
-        <a href="{{ .Permalink }}">{{ .Title | markdownify }}</a>
+        {{ .Title | markdownify }}
       </h1>
 
       {{ with .Params.Description }}

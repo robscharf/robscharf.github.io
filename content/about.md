@@ -1,7 +1,7 @@
 +++
-title = "about.md"
-date = "2014-04-09"
-aliases = ["about-us","about-hugo","contact"]
+title = "About Me"
+date = "2022-04-09"
+aliases = ["about-me","contact"]
 [ author ]
   name = "Rob"
 +++

@@ -85,7 +85,7 @@ disableHugoGeneratorInject = false
   # Per default, this option is off. 
   # The theme is respecting the prefers-color-scheme of the operating systeme. 
   # With this option on, the page user is able to set the scheme he wants. 
-  enableThemeToggle = true
+  enableThemeToggle = false
 
   # Sharing buttons
   #
@@ -183,17 +183,21 @@ disableHugoGeneratorInject = false
 
 [languages]
   [languages.en]
-    subtitle  = "Hello Friend NG Theme"
+    subtitle  = "Hi"
     weight    = 1
     copyright = '<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>'
 
 [menu]
   [[menu.main]]
-    identifier = "about"
-    name       = "about"
-    url        = "about/"
-  [[menu.main]]
     identifier = "posts"
     name       = "posts"
     url        = "posts/"
+  [[menu.main]]
+    identifier = "resume"
+    name       = "resume"
+    url        = "resume/"    
+  [[menu.main]]
+    identifier = "about"
+    name       = "about"
+    url        = "about/"
 
