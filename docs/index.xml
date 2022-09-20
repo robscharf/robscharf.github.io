@@ -14,7 +14,7 @@
       <pubDate>Wed, 10 Aug 2022 15:32:00 +0000</pubDate>
       
       <guid>https://robscharf.github.io/posts/2022/08/thm-daily-bugle--write-up/</guid>
-      <description>About Biblioteca is a hard rated CTF room on TryHackMe. Rooting this box involves carrying out a successful CMS enumeration, SQLi, hash cracking, and binary-based privilege escalation.
+      <description>About Daily Bugle is a hard rated CTF room on TryHackMe. Rooting this box involves carrying out a successful CMS enumeration, SQLi, hash cracking, and binary-based privilege escalation.
 Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
 Enumeration nmap Nmap scan report for &amp;lt;target-ip&amp;gt; Host is up, received user-set (0.10s latency). Scanned at 2022-06-16 15:11:23 EDT for 549s Not shown: 65521 closed tcp ports (conn-refused) PORT STATE SERVICE REASON VERSION 22/tcp open ssh syn-ack OpenSSH 7.</description>
     </item>
@@ -64,7 +64,7 @@ Methodology We begin our enumeration efforts by running an nmap scan on the targ
     </item>
     
     <item>
-      <title>How to: Add a backtick hotkey to Windows 10</title>
+      <title>How-to: Add a backtick hotkey to Windows 10</title>
       <link>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/</link>
       <pubDate>Tue, 03 May 2022 13:00:00 +0000</pubDate>
       
@@ -86,12 +86,12 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
     </item>
     
     <item>
-      <title>Finishing the OWASP Juice Shop</title>
-      <link>https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop/</link>
+      <title>Finishing the OWASP Juice Shop XSS</title>
+      <link>https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop-xss/</link>
       <pubDate>Mon, 25 Apr 2022 14:20:00 +0000</pubDate>
       
-      <guid>https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop/</guid>
-      <description>Wrapping up my intro to the Juice Shop Today I finished up the OWASP Juice Shop Room on THM, after leaving the final Cross-site Scripting (XSS) modules unfinished last week. This involved quick introductory examples of three XSS modalities:
+      <guid>https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop-xss/</guid>
+      <description>Today I finished up the OWASP Juice Shop Room on THM, after leaving the final Cross-site Scripting (XSS) modules unfinished last week. This involved quick introductory examples of three XSS modalities:
 DOM Persistent (Server-side) Reflected (Client-side) DOM XSS uses the HTML environment to execute malicious JavaScript. This type of attack commonly uses the &amp;lt;script&amp;gt; HTML tag. Persistent XSS is JavaScript that is run when the server loads the page containing it.</description>
     </item>
     
