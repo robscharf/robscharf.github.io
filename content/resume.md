@@ -14,9 +14,9 @@ Credential ID 6021800 ([verify](https://www.elearnsecurity.com/certification/ver
 ## Training Courses and Learning Paths
 ### TCM Security
 #### Practical Ethical Hacking
-Completed: TBD
-#### Python 101 for Hackers
 Completed: September, 2022
+#### Python 101 for Hackers
+Completed: August, 2022
 
 ### TryHackMe <span class="small-grey"> Learning Paths</span>
 #### Red Teaming
@@ -31,6 +31,18 @@ Completed: May, 2022
 ### eLearnSecurity
 #### Penetration Testing Student
 Completed: June, 2022
+
+## Virtual Homelab
+* Virtualization
+  * VMWare Workstation
+* Routing and Firewall
+  * PfSense 
+* Windows Active Directory
+  * Windows Server 2019 Domain Controller
+  * Windows 10 Workstations
+* Web Application Testing
+  * OWASP Juice Lab
+* Array of standalone Linux-based and Windows-based machines
 
 ## Publications
 ### Genocide Studies and Prevention: An International Journal

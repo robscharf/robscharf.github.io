@@ -3,18 +3,48 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://robscharf.github.io/categories/</loc>
-    <lastmod>2022-08-10T15:32:00+00:00</lastmod>
+    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/cronjob/</loc>
+    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/categories/ctf/</loc>
+    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/</loc>
+    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/johntheripper/</loc>
+    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/logpoisoning/</loc>
+    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/mariadb/</loc>
+    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/mysql/</loc>
+    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/nmap/</loc>
+    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/posts/</loc>
+    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/</loc>
+    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/posts/2022/09/thm-brute--write-up/</loc>
+    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/categories/tryhackme/</loc>
+    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/cmseek/</loc>
     <lastmod>2022-08-10T15:32:00+00:00</lastmod>
   </url><url>
-    <loc>https://robscharf.github.io/categories/ctf/</loc>
-    <lastmod>2022-08-10T15:32:00+00:00</lastmod>
-  </url><url>
     <loc>https://robscharf.github.io/tags/gtfobins/</loc>
-    <lastmod>2022-08-10T15:32:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/</loc>
     <lastmod>2022-08-10T15:32:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/hydra/</loc>
@@ -23,22 +53,13 @@
     <loc>https://robscharf.github.io/tags/joomla/</loc>
     <lastmod>2022-08-10T15:32:00+00:00</lastmod>
   </url><url>
-    <loc>https://robscharf.github.io/posts/</loc>
-    <lastmod>2022-08-10T15:32:00+00:00</lastmod>
-  </url><url>
     <loc>https://robscharf.github.io/tags/searchsploit/</loc>
     <lastmod>2022-08-10T15:32:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/sqlmap/</loc>
     <lastmod>2022-08-10T15:32:00+00:00</lastmod>
   </url><url>
-    <loc>https://robscharf.github.io/tags/</loc>
-    <lastmod>2022-08-10T15:32:00+00:00</lastmod>
-  </url><url>
     <loc>https://robscharf.github.io/posts/2022/08/thm-daily-bugle--write-up/</loc>
-    <lastmod>2022-08-10T15:32:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/categories/tryhackme/</loc>
     <lastmod>2022-08-10T15:32:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/yum/</loc>
@@ -48,9 +69,6 @@
     <lastmod>2022-07-08T13:04:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/library-hijacking/</loc>
-    <lastmod>2022-07-08T13:04:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/tags/nmap/</loc>
     <lastmod>2022-07-08T13:04:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/python/</loc>
@@ -81,9 +99,6 @@
     <lastmod>2022-05-23T14:14:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/gobuster/</loc>
-    <lastmod>2022-05-23T14:14:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/tags/johntheripper/</loc>
     <lastmod>2022-05-23T14:14:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/stegcracker/</loc>
