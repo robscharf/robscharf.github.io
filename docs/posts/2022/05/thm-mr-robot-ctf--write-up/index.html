@@ -155,157 +155,157 @@
 <p>I have replaced all instances of the virtual machine&rsquo;s ip address with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
 <h2 id="methodology">Methodology</h2>
 <p>We begin our enumeration efforts by running an <code>nmap</code> scan on the target machine to understand the ports that are open to network traffic. I usually begin with the TCP SYN &ldquo;Stealth&rdquo; Scan (-sS) with &ldquo;version dection&rdquo; (<code>-V</code>) enabled. Here is a <a href="https://nmap.org/book/port-scanning-options.html">list of general <code>nmap</code> CLI flags</a>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nmap sudo nmap -sV -v &lt;target-ip&gt;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Starting Nmap 7.92 <span style="color:#000">(</span> https://nmap.org <span style="color:#000">)</span> at 2022-05-10 12:12 EDT
-</span></span><span style="display:flex;"><span>NSE: Loaded <span style="color:#1c01ce">45</span> scripts <span style="color:#a90d91">for</span> scanning.
-</span></span><span style="display:flex;"><span>Initiating Ping Scan at 12:12
-</span></span><span style="display:flex;"><span>Scanning &lt;target-ip&gt; <span style="color:#000">[</span><span style="color:#1c01ce">4</span> ports<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>Completed Ping Scan at 12:12, 0.19s elapsed <span style="color:#000">(</span><span style="color:#1c01ce">1</span> total hosts<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>Initiating Parallel DNS resolution of <span style="color:#1c01ce">1</span> host. at 12:12
-</span></span><span style="display:flex;"><span>Completed Parallel DNS resolution of <span style="color:#1c01ce">1</span> host. at 12:12, 0.01s elapsed
-</span></span><span style="display:flex;"><span>Initiating SYN Stealth Scan at 12:12
-</span></span><span style="display:flex;"><span>Scanning &lt;target-ip&gt; <span style="color:#000">[</span><span style="color:#1c01ce">1000</span> ports<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>Discovered open port 443/tcp on &lt;target-ip&gt;
-</span></span><span style="display:flex;"><span>Discovered open port 80/tcp on &lt;target-ip&gt;
-</span></span><span style="display:flex;"><span>Completed SYN Stealth Scan at 12:12, 9.83s elapsed <span style="color:#000">(</span><span style="color:#1c01ce">1000</span> total ports<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>Initiating Service scan at 12:12
-</span></span><span style="display:flex;"><span>Scanning <span style="color:#1c01ce">2</span> services on &lt;target-ip&gt;
-</span></span><span style="display:flex;"><span>Completed Service scan at 12:13, 12.92s elapsed <span style="color:#000">(</span><span style="color:#1c01ce">2</span> services on <span style="color:#1c01ce">1</span> host<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>NSE: Script scanning &lt;target-ip&gt;.
-</span></span><span style="display:flex;"><span>Initiating NSE at 12:13
-</span></span><span style="display:flex;"><span>Completed NSE at 12:13, 2.82s elapsed
-</span></span><span style="display:flex;"><span>Initiating NSE at 12:13
-</span></span><span style="display:flex;"><span>Completed NSE at 12:13, 1.27s elapsed
-</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#a90d91">for</span> &lt;target-ip&gt;
-</span></span><span style="display:flex;"><span>Host is up <span style="color:#000">(</span>0.15s latency<span style="color:#000">)</span>.
-</span></span><span style="display:flex;"><span>Not shown: <span style="color:#1c01ce">997</span> filtered tcp ports <span style="color:#000">(</span>no-response<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>PORT    STATE  SERVICE  VERSION
-</span></span><span style="display:flex;"><span>22/tcp  closed ssh
-</span></span><span style="display:flex;"><span>80/tcp  open   http     Apache httpd
-</span></span><span style="display:flex;"><span>443/tcp open   ssl/http Apache httpd
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Read data files from: /usr/bin/../share/nmap
-</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-</span></span><span style="display:flex;"><span>Nmap <span style="color:#a90d91">done</span>: <span style="color:#1c01ce">1</span> IP address <span style="color:#000">(</span><span style="color:#1c01ce">1</span> host up<span style="color:#000">)</span> scanned in 27.44 seconds
-</span></span><span style="display:flex;"><span>           Raw packets sent: <span style="color:#1c01ce">2007</span> <span style="color:#000">(</span>88.284KB<span style="color:#000">)</span> | Rcvd: <span style="color:#1c01ce">10</span> <span style="color:#000">(</span>416B<span style="color:#000">)</span>
-</span></span></code></pre></div><p>From this, we learn that an <code>Apache</code> instance is active on the standard ports, while an ssh server is running on port 22 - though it is closed to network traffic.</p>
+<pre tabindex="0"><code>nmap sudo nmap -sV -v &lt;target-ip&gt;
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-05-10 12:12 EDT
+NSE: Loaded 45 scripts for scanning.
+Initiating Ping Scan at 12:12
+Scanning &lt;target-ip&gt; [4 ports]
+Completed Ping Scan at 12:12, 0.19s elapsed (1 total hosts)
+Initiating Parallel DNS resolution of 1 host. at 12:12
+Completed Parallel DNS resolution of 1 host. at 12:12, 0.01s elapsed
+Initiating SYN Stealth Scan at 12:12
+Scanning &lt;target-ip&gt; [1000 ports]
+Discovered open port 443/tcp on &lt;target-ip&gt;
+Discovered open port 80/tcp on &lt;target-ip&gt;
+Completed SYN Stealth Scan at 12:12, 9.83s elapsed (1000 total ports)
+Initiating Service scan at 12:12
+Scanning 2 services on &lt;target-ip&gt;
+Completed Service scan at 12:13, 12.92s elapsed (2 services on 1 host)
+NSE: Script scanning &lt;target-ip&gt;.
+Initiating NSE at 12:13
+Completed NSE at 12:13, 2.82s elapsed
+Initiating NSE at 12:13
+Completed NSE at 12:13, 1.27s elapsed
+Nmap scan report for &lt;target-ip&gt;
+Host is up (0.15s latency).
+Not shown: 997 filtered tcp ports (no-response)
+PORT    STATE  SERVICE  VERSION
+22/tcp  closed ssh
+80/tcp  open   http     Apache httpd
+443/tcp open   ssl/http Apache httpd
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 27.44 seconds
+           Raw packets sent: 2007 (88.284KB) | Rcvd: 10 (416B)
+</code></pre><p>From this, we learn that an <code>Apache</code> instance is active on the standard ports, while an ssh server is running on port 22 - though it is closed to network traffic.</p>
 <p>Next, we use <code>gobuster</code>, <a href="https://github.com/OJ/gobuster">a popular tool</a> that facilitates brute-force enumeration. Here, we use it in directory mode (<code>dir</code>) with a popular directory names wordlist (<code>-w</code>) against our <code>&lt;target-ip&gt;</code> with (<code>-u</code>).</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>gobuster dir -w /usr/share/wordlists/dirb/common.txt -u &lt;target-ip&gt;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
-</span></span><span style="display:flex;"><span>Gobuster v3.1.0
-</span></span><span style="display:flex;"><span>by OJ Reeves <span style="color:#000">(</span>@TheColonial<span style="color:#000">)</span> &amp; Christian Mehlmauer <span style="color:#000">(</span>@firefart<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Url:                     http://&lt;target-ip&gt;
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Method:                  GET
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Threads:                 <span style="color:#1c01ce">10</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Wordlist:                /usr/share/wordlists/dirb/common.txt
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Negative Status codes:   <span style="color:#1c01ce">404</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> User Agent:              gobuster/3.1.0
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>+<span style="color:#000">]</span> Timeout:                 <span style="color:#000">10s</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
-</span></span><span style="display:flex;"><span>2022/05/10 12:13:27 Starting gobuster in directory enumeration <span style="color:#000">mode</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/.hta                 <span style="color:#000">(</span>Status: 403<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 213<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/.htaccess            <span style="color:#000">(</span>Status: 403<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 218<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/.htpasswd            <span style="color:#000">(</span>Status: 403<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 218<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/0                    <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/0/<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/admin                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 235<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/admin/<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/atom                 <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/feed/atom/<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/audio                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 235<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/audio/<span style="color:#000">]</span>  
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/blog                 <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 234<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/blog/<span style="color:#000">]</span>   
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/css                  <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 233<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/css/<span style="color:#000">]</span>    
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/dashboard            <span style="color:#000">(</span>Status: 302<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-admin/<span style="color:#000">]</span> 
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/favicon.ico          <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                      
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/feed                 <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/feed/<span style="color:#000">]</span>     
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/image                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/image/<span style="color:#000">]</span>    
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/Image                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/Image/<span style="color:#000">]</span>    
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/images               <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 236<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/images/<span style="color:#000">]</span> 
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/index.html           <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 1188<span style="color:#000">]</span>                                   
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/index.php            <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/<span style="color:#000">]</span>          
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/intro                <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 516314<span style="color:#000">]</span>                                 
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/js                   <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 232<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/js/<span style="color:#000">]</span>     
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/license              <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 309<span style="color:#000">]</span>                                    
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/login                <span style="color:#000">(</span>Status: 302<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-login.php<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/page1                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/<span style="color:#000">]</span>            
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/phpmyadmin           <span style="color:#000">(</span>Status: 403<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 94<span style="color:#000">]</span>                                       
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/readme               <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 64<span style="color:#000">]</span>                                       
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/rdf                  <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/feed/rdf/<span style="color:#000">]</span>   
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/robots               <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 41<span style="color:#000">]</span>                                       
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/robots.txt           <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 41<span style="color:#000">]</span>                                       
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/rss                  <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/feed/<span style="color:#000">]</span>       
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/rss2                 <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/feed/<span style="color:#000">]</span>       
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/sitemap              <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                        
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/sitemap.xml          <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                        
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/video                <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 235<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/video/<span style="color:#000">]</span>    
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-admin             <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 238<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-admin/<span style="color:#000">]</span> 
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-content           <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 240<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-content/<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-includes          <span style="color:#000">(</span>Status: 301<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 241<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-includes/<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-cron              <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                          
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-config            <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                          
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-links-opml        <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 227<span style="color:#000">]</span>                                        
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-load              <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                          
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-login             <span style="color:#000">(</span>Status: 200<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 2613<span style="color:#000">]</span>                                       
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-mail              <span style="color:#000">(</span>Status: 500<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 3064<span style="color:#000">]</span>                                       
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-settings          <span style="color:#000">(</span>Status: 500<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span>                                          
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/wp-signup            <span style="color:#000">(</span>Status: 302<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 0<span style="color:#000">]</span> <span style="color:#000">[</span>--&gt; http://&lt;target-ip&gt;/wp-login.php?action<span style="color:#000">=</span>register<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/xmlrpc               <span style="color:#000">(</span>Status: 405<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 42<span style="color:#000">]</span>                                                       
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>/xmlrpc.php           <span style="color:#000">(</span>Status: 405<span style="color:#000">)</span> <span style="color:#000">[</span>Size: 42<span style="color:#000">]</span>                                                       
-</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
-</span></span><span style="display:flex;"><span>2022/05/10 12:24:21 <span style="color:#000">Finished</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">===============================================================</span>
-</span></span></code></pre></div><p>From this, we can be confident that WordPress is installed. This also mirrors what <a href="">Wappalyzer</a> tells us about the server&rsquo;s WordPress installation. Let&rsquo;s investigate some of the more interesting results from our <code>gobuster</code> scan.</p>
+<pre tabindex="0"><code>gobuster dir -w /usr/share/wordlists/dirb/common.txt -u &lt;target-ip&gt;
+
+===============================================================
+Gobuster v3.1.0
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://&lt;target-ip&gt;
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirb/common.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.1.0
+[+] Timeout:                 10s
+===============================================================
+2022/05/10 12:13:27 Starting gobuster in directory enumeration mode
+===============================================================
+
+/.hta                 (Status: 403) [Size: 213]
+
+/.htaccess            (Status: 403) [Size: 218]
+
+/.htpasswd            (Status: 403) [Size: 218]
+
+/0                    (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/0/]
+
+/admin                (Status: 301) [Size: 235] [--&gt; http://&lt;target-ip&gt;/admin/]
+
+/atom                 (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/feed/atom/]
+
+/audio                (Status: 301) [Size: 235] [--&gt; http://&lt;target-ip&gt;/audio/]  
+
+/blog                 (Status: 301) [Size: 234] [--&gt; http://&lt;target-ip&gt;/blog/]   
+
+/css                  (Status: 301) [Size: 233] [--&gt; http://&lt;target-ip&gt;/css/]    
+
+/dashboard            (Status: 302) [Size: 0] [--&gt; http://&lt;target-ip&gt;/wp-admin/] 
+
+/favicon.ico          (Status: 200) [Size: 0]                                      
+
+/feed                 (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/feed/]     
+
+/image                (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/image/]    
+
+/Image                (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/Image/]    
+
+/images               (Status: 301) [Size: 236] [--&gt; http://&lt;target-ip&gt;/images/] 
+
+/index.html           (Status: 200) [Size: 1188]                                   
+
+/index.php            (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/]          
+
+/intro                (Status: 200) [Size: 516314]                                 
+
+/js                   (Status: 301) [Size: 232] [--&gt; http://&lt;target-ip&gt;/js/]     
+
+/license              (Status: 200) [Size: 309]                                    
+
+/login                (Status: 302) [Size: 0] [--&gt; http://&lt;target-ip&gt;/wp-login.php]
+
+/page1                (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/]            
+
+/phpmyadmin           (Status: 403) [Size: 94]                                       
+
+/readme               (Status: 200) [Size: 64]                                       
+
+/rdf                  (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/feed/rdf/]   
+
+/robots               (Status: 200) [Size: 41]                                       
+
+/robots.txt           (Status: 200) [Size: 41]                                       
+
+/rss                  (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/feed/]       
+
+/rss2                 (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/feed/]       
+
+/sitemap              (Status: 200) [Size: 0]                                        
+
+/sitemap.xml          (Status: 200) [Size: 0]                                        
+
+/video                (Status: 301) [Size: 235] [--&gt; http://&lt;target-ip&gt;/video/]    
+
+/wp-admin             (Status: 301) [Size: 238] [--&gt; http://&lt;target-ip&gt;/wp-admin/] 
+
+/wp-content           (Status: 301) [Size: 240] [--&gt; http://&lt;target-ip&gt;/wp-content/]
+
+/wp-includes          (Status: 301) [Size: 241] [--&gt; http://&lt;target-ip&gt;/wp-includes/]
+
+/wp-cron              (Status: 200) [Size: 0]                                          
+
+/wp-config            (Status: 200) [Size: 0]                                          
+
+/wp-links-opml        (Status: 200) [Size: 227]                                        
+
+/wp-load              (Status: 200) [Size: 0]                                          
+
+/wp-login             (Status: 200) [Size: 2613]                                       
+
+/wp-mail              (Status: 500) [Size: 3064]                                       
+
+/wp-settings          (Status: 500) [Size: 0]                                          
+
+/wp-signup            (Status: 302) [Size: 0] [--&gt; http://&lt;target-ip&gt;/wp-login.php?action=register]
+
+/xmlrpc               (Status: 405) [Size: 42]                                                       
+
+/xmlrpc.php           (Status: 405) [Size: 42]                                                       
+===============================================================
+2022/05/10 12:24:21 Finished
+===============================================================
+</code></pre><p>From this, we can be confident that WordPress is installed. This also mirrors what <a href="">Wappalyzer</a> tells us about the server&rsquo;s WordPress installation. Let&rsquo;s investigate some of the more interesting results from our <code>gobuster</code> scan.</p>
 <p>Visiting <code>http://&lt;target-ip&gt;/robots.txt</code> yields:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>User-agent: *
-</span></span><span style="display:flex;"><span>fsocity.dic
-</span></span><span style="display:flex;"><span>key-1-of-3.txt
-</span></span></code></pre></div><p><code>fsocity.dic</code> is a dictionary wordlist file with many entries. This most likely contains the username and/or password of the WordPress installation.</p>
+<pre tabindex="0"><code>User-agent: *
+fsocity.dic
+key-1-of-3.txt
+</code></pre><p><code>fsocity.dic</code> is a dictionary wordlist file with many entries. This most likely contains the username and/or password of the WordPress installation.</p>
 <p><code>key-1-of-3.txt</code> has our first flag.</p>
 <p><code>http://&lt;target-ip&gt;/license</code> gives us a text file with the following string hidden at the bottom. At first flance, the string looks a lot like <code>base64</code>, so let us try to convert it. This could be done via websites like <a href="https://www.base64decode.org/">www.base64.decode.org</a>, but I already had Burp Suite open. It works:</p>
 <p><img src="https://robscharf.github.io/images/mr-robot/mr-robot-burp-decode.png" alt="mr-robot-burp-decode"></p>

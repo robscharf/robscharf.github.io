@@ -29,7 +29,7 @@ I have replaced all instances of the virtual machine's ip address with `<target-
 ## Methodology
 We begin our enumeration efforts by running an `nmap` scan on the target machine to understand the ports that are open to network traffic. I usually begin with the TCP SYN "Stealth" Scan (-sS) with "version dection" (`-V`) enabled. Here is a [list of general `nmap` CLI flags](https://nmap.org/book/port-scanning-options.html).
 
-```shell
+```
 nmap sudo nmap -sV -v <target-ip>
 
 Starting Nmap 7.92 ( https://nmap.org ) at 2022-05-10 12:12 EDT
@@ -70,7 +70,7 @@ From this, we learn that an `Apache` instance is active on the standard ports, w
 
 Next, we use `gobuster`, [a popular tool](https://github.com/OJ/gobuster) that facilitates brute-force enumeration. Here, we use it in directory mode (`dir`) with a popular directory names wordlist (`-w`) against our `<target-ip>` with (`-u`).
 
-```shell
+```
 gobuster dir -w /usr/share/wordlists/dirb/common.txt -u <target-ip>
 
 ===============================================================
@@ -185,7 +185,7 @@ From this, we can be confident that WordPress is installed. This also mirrors wh
 
 Visiting `http://<target-ip>/robots.txt` yields:
 
-```text
+```
 User-agent: *
 fsocity.dic
 key-1-of-3.txt

