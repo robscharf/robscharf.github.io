@@ -126,8 +126,8 @@ Session completed.
 <p><code>adrian:t----r</code></p>
 <h3 id="web-login">Web login</h3>
 <p>After logging in to the homepage with our discovered credentials&hellip;</p>
-<p><code>http://10.10.46.5/welcome.php</code>
-<img src="/images/brutus/brutus-welcome.png" alt=""></p>
+<p><code>http://10.10.46.5/welcome.php</code></p>
+<p><img src="/images/brute/brutus-welcome.png" alt=""></p>
 <p>We are greeted by this page. The <code>log</code> button gives us convenient access to a service log right on the page. After some brief consideration, we identify this log as being produced by the FTP server running on port 21 of the box. Our initial attempts at enumeration/access have already populated the log!
  
 <code>view-source:http://&lt;target-ip&gt;/welcome.php</code></p>
