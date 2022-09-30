@@ -168,7 +168,8 @@ Our friend John made short work of this, despite Blowfish being a relatively unc
 After logging in to the homepage with our discovered credentials...
 
 `http://10.10.46.5/welcome.php`
-![](/images/brutus/brutus-welcome.png)
+
+![](/images/brute/brutus-welcome.png)
 
 We are greeted by this page. The `log` button gives us convenient access to a service log right on the page. After some brief consideration, we identify this log as being produced by the FTP server running on port 21 of the box. Our initial attempts at enumeration/access have already populated the log!
 &nbsp;
