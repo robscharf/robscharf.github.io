@@ -28,8 +28,9 @@ h3, h3 a {color:#F26B6B;}
 h4, h4 a {color: #CB7E74;}
 h5{}
 
-a{color: #BDA6B5;}
+
 header a, footer a, pre{color:#F2D785}
+a{color: #BDA6B5;}
 a:hover,.post-item a:hover{text-decoration: underline !important;}
 
 

@@ -21,7 +21,7 @@ categories = [
 
 ## About 
 Brute is a *medium* rated CTF room on [TryHackMe](https://tryhackme.com/room/ettubrute). Rooting this box - which centers around brute-force attacks, as its name implies - involves carrying out a successful dictionary attacks, database enumeration, log poisoning, hash cracking, and cronjob-based privilege escalation.
-
+&nbsp;
 **Note:** I have replaced all instances of the virtual machine's ip address with `<target-ip>` throughout this write-up.
 
 ## Enumeration
@@ -135,8 +135,6 @@ MySQL [website]> show tables;
 
 `select * from users;`
 ```
-
-
 MySQL [website]> select * from users;
 +----+----------+--------------------------------------------------------------+---------------------+
 | id | username | password                                                     | created_at          |
@@ -173,7 +171,7 @@ After logging in to the homepage with our discovered credentials...
 ![](/images/brutus/brutus-welcome.png)
 
 We are greeted by this page. The `log` button gives us convenient access to a service log right on the page. After some brief consideration, we identify this log as being produced by the FTP server running on port 21 of the box. Our initial attempts at enumeration/access have already populated the log!
-
+&nbsp;
 `view-source:http://<target-ip>/welcome.php`
 ```
  

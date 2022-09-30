@@ -14,8 +14,7 @@
       <pubDate>Thu, 22 Sep 2022 11:15:00 +0000</pubDate>
       
       <guid>https://robscharf.github.io/posts/2022/09/thm-brute--write-up/</guid>
-      <description>About Brute is a medium rated CTF room on TryHackMe. Rooting this box - which centers around brute-force attacks, as its name implies - involves carrying out a successful dictionary attacks, database enumeration, log poisoning, hash cracking, and cronjob-based privilege escalation.
-Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
+      <description>About Brute is a medium rated CTF room on TryHackMe. Rooting this box - which centers around brute-force attacks, as its name implies - involves carrying out a successful dictionary attacks, database enumeration, log poisoning, hash cracking, and cronjob-based privilege escalation. Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
 Enumeration nmap 21/tcp open ftp syn-ack ttl 61 vsftpd 3.0.3 22/tcp open ssh syn-ack ttl 61 OpenSSH 8.</description>
     </item>
     

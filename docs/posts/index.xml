@@ -15,12 +15,12 @@
             <pubDate>Thu, 22 Sep 2022 11:15:00 +0000</pubDate>
             
             <guid>https://robscharf.github.io/posts/2022/09/thm-brute--write-up/</guid>
-            <description>About Brute is a medium rated CTF room on TryHackMe. Rooting this box - which centers around brute-force attacks, as its name implies - involves carrying out a successful dictionary attacks, database enumeration, log poisoning, hash cracking, and cronjob-based privilege escalation.
-Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
+            <description>About Brute is a medium rated CTF room on TryHackMe. Rooting this box - which centers around brute-force attacks, as its name implies - involves carrying out a successful dictionary attacks, database enumeration, log poisoning, hash cracking, and cronjob-based privilege escalation. Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
 Enumeration nmap 21/tcp open ftp syn-ack ttl 61 vsftpd 3.0.3 22/tcp open ssh syn-ack ttl 61 OpenSSH 8.</description>
             <content type="html"><![CDATA[<h2 id="about">About</h2>
-<p>Brute is a <em>medium</em> rated CTF room on <a href="https://tryhackme.com/room/ettubrute">TryHackMe</a>. Rooting this box - which centers around brute-force attacks, as its name implies - involves carrying out a successful dictionary attacks, database enumeration, log poisoning, hash cracking, and cronjob-based privilege escalation.</p>
-<p><strong>Note:</strong> I have replaced all instances of the virtual machine&rsquo;s ip address with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
+<p>Brute is a <em>medium</em> rated CTF room on <a href="https://tryhackme.com/room/ettubrute">TryHackMe</a>. Rooting this box - which centers around brute-force attacks, as its name implies - involves carrying out a successful dictionary attacks, database enumeration, log poisoning, hash cracking, and cronjob-based privilege escalation.
+ 
+<strong>Note:</strong> I have replaced all instances of the virtual machine&rsquo;s ip address with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
 <h2 id="enumeration">Enumeration</h2>
 <h3 id="nmap">nmap</h3>
 <pre tabindex="0"><code>21/tcp   open  ftp     syn-ack ttl 61 vsftpd 3.0.3
@@ -103,9 +103,7 @@ Database changed
 +-------------------+
 1 row in set (0.090 sec)
 </code></pre><p><code>select * from users;</code></p>
-<pre tabindex="0"><code>
-
-MySQL [website]&gt; select * from users;
+<pre tabindex="0"><code>MySQL [website]&gt; select * from users;
 +----+----------+--------------------------------------------------------------+---------------------+
 | id | username | password                                                     | created_at          |
 +----+----------+--------------------------------------------------------------+---------------------+
@@ -130,8 +128,9 @@ Session completed.
 <p>After logging in to the homepage with our discovered credentials&hellip;</p>
 <p><code>http://10.10.46.5/welcome.php</code>
 <img src="/images/brutus/brutus-welcome.png" alt=""></p>
-<p>We are greeted by this page. The <code>log</code> button gives us convenient access to a service log right on the page. After some brief consideration, we identify this log as being produced by the FTP server running on port 21 of the box. Our initial attempts at enumeration/access have already populated the log!</p>
-<p><code>view-source:http://&lt;target-ip&gt;/welcome.php</code></p>
+<p>We are greeted by this page. The <code>log</code> button gives us convenient access to a service log right on the page. After some brief consideration, we identify this log as being produced by the FTP server running on port 21 of the box. Our initial attempts at enumeration/access have already populated the log!
+ 
+<code>view-source:http://&lt;target-ip&gt;/welcome.php</code></p>
 <pre tabindex="0"><code> 
 &lt;!DOCTYPE html&gt;
 &lt;html lang=&#34;en&#34;&gt;
