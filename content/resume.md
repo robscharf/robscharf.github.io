@@ -13,6 +13,10 @@ Credential ID 6021800 ([verify](https://www.elearnsecurity.com/certification/ver
 
 ## Training Courses and Learning Paths
 ### TCM Security
+#### Open-Source Intelligence (OSINT) Fundamentals
+Completed: October, 2022
+#### Movement, Pivoting, and Persistence for Pentesters and Ethical Hackers
+Completed: October, 2022
 #### Practical Ethical Hacking
 Completed: September, 2022
 #### Python 101 for Hackers
@@ -36,7 +40,8 @@ Completed: June, 2022
 * Virtualization
   * VMWare Workstation
 * Routing and Firewall
-  * PfSense 
+  * PfSense
+  * VMWare Virtual Networks
 * Windows Active Directory
   * Windows Server 2019 Domain Controller
   * Windows 10 Workstations
@@ -47,6 +52,9 @@ Completed: June, 2022
 ## Publications
 ### Genocide Studies and Prevention: An International Journal
 Capicotto, Samantha and Scharf, Rob (2018) "[National Mechanisms for the Prevention of Atrocity Crimes](https://digitalcommons.usf.edu/gsp/vol11/iss3/5/)," *Genocide Studies and Prevention: An International Journal*: Vol. 11: Iss. 3: 6-19.
+
+### Medium.com
+[The Lexical Challenge of Cyber-War: The Renewed Importance of Language in Thinking About 21st Century Defence](https://medium.com/@robscharf/the-lexical-challenge-of-cyber-war-9ba10c60a815#d196-e49f1748a1f4), Medium Editor's Pick, August 2013
 
 ## Previous Experience
 ### Auschwitz Institute for the Prevention of Genocide and Mass Atrocities
