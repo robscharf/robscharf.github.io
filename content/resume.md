@@ -30,7 +30,7 @@ Completed: TBD
 #### Offensive Pentesting
 Completed: TBD
 #### Junior Penetration Tester
-Completed: May, 2022
+Completed: June, 2022
 #### CompTIA Pentest+
 Completed: May, 2022
 
