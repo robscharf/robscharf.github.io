@@ -23,7 +23,7 @@ categories = [
 +++
 
 ## About 
-Instead of a single box write-up, I am including walkthroughs for three *easy* rated, retired Windows HackTheBox machines here to kick off my pursuit of completing the infamous TJNull list of OSCP prep-relevant machines across the popular CTF and training platforms. The [recently updated](https://twitter.com/TJ_Null/status/1580174678555230209) list can be found [here](https://docs.google.com/spreadsheets/d/1dwSMIAPIam0PuRBkCiDI88pU3yzrqqHkDtBngUHNCw8/edit?usp=sharing). Due to the simplicity of the machines, these writeups presented with concision in mind, unlike the majority of my other walkthroughs.
+Instead of a single box write-up, I am including walkthroughs for three *easy* rated, retired Windows HackTheBox machines here to kick off my pursuit of completing the infamous TJNull list of OSCP prep-relevant machines across the popular CTF and training platforms. The [recently updated](https://twitter.com/TJ_Null/status/1580174678555230209) list can be found [here](https://docs.google.com/spreadsheets/d/1dwSMIAPIam0PuRBkCiDI88pU3yzrqqHkDtBngUHNCw8/edit?usp=sharing). Due to the simplicity of the machines, these writeups are presented with concision in mind, unlike the majority of my other walkthroughs.
 <br/><br/>
 **Note:** I have replaced all instances of the virtual machines' ip addresses with `<target-ip>` throughout this write-up.
 
