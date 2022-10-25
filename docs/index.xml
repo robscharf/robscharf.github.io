@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Thu, 22 Sep 2022 11:15:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 25 Oct 2022 13:15:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB Round-Up (Part 1): Blue, Devel, Jerry -- Write-Ups</title>
+      <link>https://robscharf.github.io/posts/2022/10/htb-round-up-part-1-blue-devel-jerry--write-ups/</link>
+      <pubDate>Tue, 25 Oct 2022 13:15:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/posts/2022/10/htb-round-up-part-1-blue-devel-jerry--write-ups/</guid>
+      <description>About Instead of a single box write-up, I am including walkthroughs for three easy rated, retired Windows HackTheBox machines here to kick off my pursuit of completing the infamous TJNull list of OSCP prep-relevant machines across the popular CTF and training platforms. The recently updated list can be found here. Due to the simplicity of the machines, these writeups presented with concision in mind, unlike the majority of my other walkthroughs.</description>
+    </item>
+    
     <item>
       <title>THM: Brute -- Write-Up</title>
       <link>https://robscharf.github.io/posts/2022/09/thm-brute--write-up/</link>
@@ -103,15 +112,6 @@ Task 1 - Getting Started The room begins with a necessary configuration step. Th
       <guid>https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop-xss/</guid>
       <description>Today I finished up the OWASP Juice Shop Room on THM, after leaving the final Cross-site Scripting (XSS) modules unfinished last week. This involved quick introductory examples of three XSS modalities:
 DOM Persistent (Server-side) Reflected (Client-side) DOM XSS uses the HTML environment to execute malicious JavaScript. This type of attack commonly uses the &amp;lt;script&amp;gt; HTML tag. Persistent XSS is JavaScript that is run when the server loads the page containing it.</description>
-    </item>
-    
-    <item>
-      <title>Colophon</title>
-      <link>https://robscharf.github.io/colophon/</link>
-      <pubDate>Mon, 11 Apr 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://robscharf.github.io/colophon/</guid>
-      <description>This blog stands on the shoulders of giants, powered by Hugo, based on the excellent hello-friend-ng theme by Djordje Atlialp. Matt Gross made the &amp;ldquo;Cyberpunk-Style Glitch&amp;rdquo; CSS effect on my homepage.</description>
     </item>
     
   </channel>

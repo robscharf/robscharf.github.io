@@ -1,6 +1,6 @@
 +++
 title = "Resume"
-date = "2014-04-09"
+date = "2022-04-09"
 aliases = ["about-me","contact"]
 [ author ]
   name = "Rob"
@@ -13,6 +13,8 @@ Credential ID 6021800 ([verify](https://www.elearnsecurity.com/certification/ver
 
 ## Training Courses and Learning Paths
 ### TCM Security
+#### External Pentest Playbook
+Completed: October, 2022
 #### Open-Source Intelligence (OSINT) Fundamentals
 Completed: October, 2022
 #### Movement, Pivoting, and Persistence for Pentesters and Ethical Hackers
@@ -47,14 +49,14 @@ Completed: June, 2022
   * Windows 10 Workstations
 * Web Application Testing
   * OWASP Juice Lab
-* Array of standalone Linux-based and Windows-based machines
+* Array of standalone Linux-based and Windows-based CTF machines
 
 ## Publications
 ### Genocide Studies and Prevention: An International Journal
 Capicotto, Samantha and Scharf, Rob (2018) "[National Mechanisms for the Prevention of Atrocity Crimes](https://digitalcommons.usf.edu/gsp/vol11/iss3/5/)," *Genocide Studies and Prevention: An International Journal*: Vol. 11: Iss. 3: 6-19.
 
 ### Medium.com
-[The Lexical Challenge of Cyber-War: The Renewed Importance of Language in Thinking About 21st Century Defence](https://medium.com/@robscharf/the-lexical-challenge-of-cyber-war-9ba10c60a815#d196-e49f1748a1f4), Medium Editor's Pick, August 2013
+[The Lexical Challenge of Cyber-War: The Renewed Importance of Language in Thinking About 21st Century Defence](https://medium.com/@robscharf/the-lexical-challenge-of-cyber-war-9ba10c60a815#d196-e49f1748a1f4), **Medium Editor's Pick**, August 2013
 
 ## Previous Experience
 ### Auschwitz Institute for the Prevention of Genocide and Mass Atrocities
