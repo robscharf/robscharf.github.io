@@ -1,5 +1,5 @@
 +++
-title = "Resume"
+title = "Résumé"
 date = "2022-04-09"
 aliases = ["about-me","contact"]
 [ author ]
@@ -7,9 +7,13 @@ aliases = ["about-me","contact"]
 +++
 
 ## Certifications
+### PNPT - Practical Network Penetration Tester
+Issued: November, 2022<br/>
+Credential ID: 61516777 ([verify](https://www.credential.net/85c04676-97e9-4abf-95f8-4e5445886c9e#gs.i2p4xk))
+
 ### eJPT - eLearnSecurity Junior Penetration Tester
 Issued: June, 2022<br/>
-Credential ID 6021800 ([verify](https://www.elearnsecurity.com/certification/verify?c=c39650b8-befc-4d54-a493-d5c98fad57b4))
+Credential ID: 6021800 ([verify](https://www.elearnsecurity.com/certification/verify?c=c39650b8-befc-4d54-a493-d5c98fad57b4))
 
 ## Training Courses and Learning Paths
 ### TCM Security
@@ -24,7 +28,7 @@ Completed: September, 2022
 #### Python 101 for Hackers
 Completed: August, 2022
 
-### TryHackMe <span class="small-grey"> Learning Paths</span>
+### TryHackMe <span class="small-grey">&nbsp;Learning Paths</span>
 #### Red Teaming
 Completed: TBD
 #### Offensive Pentesting

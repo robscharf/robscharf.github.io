@@ -92,7 +92,7 @@
             <span class="logo__text">(virtualtack@github)-[~] $ </span>
             <span class="logo__cursor" style=
                   "
-                   background-color:#46A69D;
+                   background-color:white;
                    animation-duration:1.6s;">
             </span>
         
@@ -103,7 +103,7 @@
         <span class="header__right">
             
                 <nav class="menu">
-    <ul class="menu__inner"><li><a href="https://robscharf.github.io/posts/">posts</a></li><li><a href="https://robscharf.github.io/resume/">resume</a></li>
+    <ul class="menu__inner"><li><a href="https://robscharf.github.io/posts/">posts</a></li><li><a href="https://robscharf.github.io/resume/">résumé</a></li>
     </ul>
 </nav>
 
@@ -114,6 +114,11 @@
                     </svg>
                 </span>
             
+                <span class="theme-toggle not-selectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+   <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+   3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+   13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+ </svg></span>
         </span>
     </span>
 </header>
@@ -176,45 +181,45 @@ Service detection performed. Please report any incorrect results at https://nmap
 </code></pre><p>Now we know that the target is running <code>vsftpd 3.0.3</code> on <code>port 21</code>, <code>OpenSSH 7.6p1</code> on <code>port 22</code>, and an <code>Apache httpd 2.4.29</code> web server on <code>port 80</code> with the <code>http-title</code> of <code>announcement</code> - all open to <code>tcp</code> traffic.</p>
 <p>Next, we visit the web server in a web browser.</p>
 <p><code>/index.html</code></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#633820">&lt;!DocType html&gt;</span>
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#000">html</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#000">head</span>&gt;
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#000">title</span>&gt;Annoucement&lt;/<span style="color:#000">title</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000">head</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#75715e">&lt;!DocType html&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">title</span>&gt;Annoucement&lt;/<span style="color:#f92672">title</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">head</span>&gt;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#000">body</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#000">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;
 </span></span><span style="display:flex;"><span>	Dear agents,
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#000">br</span>&gt;&lt;<span style="color:#000">br</span>&gt;
-</span></span><span style="display:flex;"><span>	Use your own &lt;<span style="color:#000">b</span>&gt;codename&lt;/<span style="color:#000">b</span>&gt; as user-agent to access the site.
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#000">br</span>&gt;&lt;<span style="color:#000">br</span>&gt;
-</span></span><span style="display:flex;"><span>	From,&lt;<span style="color:#000">br</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">br</span>&gt;&lt;<span style="color:#f92672">br</span>&gt;
+</span></span><span style="display:flex;"><span>	Use your own &lt;<span style="color:#f92672">b</span>&gt;codename&lt;/<span style="color:#f92672">b</span>&gt; as user-agent to access the site.
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">br</span>&gt;&lt;<span style="color:#f92672">br</span>&gt;
+</span></span><span style="display:flex;"><span>	From,&lt;<span style="color:#f92672">br</span>&gt;
 </span></span><span style="display:flex;"><span>	Agent R
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000">p</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000">body</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000">html</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
 </span></span></code></pre></div><p>We&rsquo;re greeted with a message from Agent R, instructing other agents to change their <code>user-agent</code> to thier codename for site access. Here I used <a href="https://addons.mozilla.org/en-US/firefox/addon/uaswitcher/">User-Agent Switcher</a> to alter my requests. I began by trying to log in as the boss, chaning my user agent to &ldquo;R&rdquo;. Unfortunately, we&rsquo;re given a hostile response by the administrator (presumably R himself) for this request:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#000">head</span>&gt;   
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000">head</span>&gt;
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#000">body</span>&gt;What are you doing! Are you one of the 25 employees? If not, I going to report this incident
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">head</span>&gt;   
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">body</span>&gt;What are you doing! Are you one of the 25 employees? If not, I going to report this incident
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#000">title</span>&gt;Annoucement&lt;/<span style="color:#000">title</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">title</span>&gt;Annoucement&lt;/<span style="color:#f92672">title</span>&gt;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#000">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;
 </span></span><span style="display:flex;"><span>	Dear agents,
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#000">br</span>&gt;&lt;<span style="color:#000">br</span>&gt;
-</span></span><span style="display:flex;"><span>	Use your own &lt;<span style="color:#000">b</span>&gt;codename&lt;/<span style="color:#000">b</span>&gt; as user-agent to access the site.
-</span></span><span style="display:flex;"><span>	&lt;<span style="color:#000">br</span>&gt;&lt;<span style="color:#000">br</span>&gt;
-</span></span><span style="display:flex;"><span>	From,&lt;<span style="color:#000">br</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">br</span>&gt;&lt;<span style="color:#f92672">br</span>&gt;
+</span></span><span style="display:flex;"><span>	Use your own &lt;<span style="color:#f92672">b</span>&gt;codename&lt;/<span style="color:#f92672">b</span>&gt; as user-agent to access the site.
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">br</span>&gt;&lt;<span style="color:#f92672">br</span>&gt;
+</span></span><span style="display:flex;"><span>	From,&lt;<span style="color:#f92672">br</span>&gt;
 </span></span><span style="display:flex;"><span>	Agent R
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">p</span>&gt;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
 </span></span></code></pre></div><p>Likewise, user-agents <code>A</code> and <code>B</code> do not work, but <code>C</code> redirects us to <code>/agent_C_attention.php</code> on the web site:</p>
 <pre tabindex="0"><code>Attention ----s, &lt;br&gt;&lt;br&gt;
 
@@ -742,7 +747,7 @@ By,
 
 
 
-<script type="text/javascript" src="https://robscharf.github.io/bundle.min.a2c5b062c87998f04d1b5dfb6a89a1b2d79786c21d0cb63a05e8a2082984b64b77d80955e3b97eab17273775162ba372511b711fea2f7608f216e68a67bb22d6.js" integrity="sha512-osWwYsh5mPBNG137aomhsteXhsIdDLY6BeiiCCmEtkt32AlV47l&#43;qxcnN3UWK6NyURtxH&#43;ovdgjyFuaKZ7si1g=="></script>
+<script type="text/javascript" src="https://robscharf.github.io/bundle.min.cf7fb2a9e24608a783e05e4472da2fdf008293289de1ad88d1cba5c143e7e414496dd33b6a228e92f8461ce0c8cbad3c9f9847e73e46dfbce0463393ddd1733a.js" integrity="sha512-z3&#43;yqeJGCKeD4F5Ectov3wCCkyid4a2I0culwUPn5BRJbdM7aiKOkvhGHODIy608n5hH5z5G37zgRjOT3dFzOg=="></script>
 <script></script>  
 
 
