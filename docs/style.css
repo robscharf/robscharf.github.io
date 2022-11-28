@@ -7,6 +7,9 @@
 
 /* Colors and Styles*/
 [data-theme="dark"] {
+    --background-color: #232425;
+    --header-color:#1b1c1d;    
+
     --accent: #9FB3BF;
     --accent-two: #F2D785;
     --inline-code: #F2D785;
@@ -20,8 +23,11 @@
 }
 
 [data-theme="light"] {
-    --accent: #9FB3BF;
-    --accent-two: #F2D785;
+    --background-color: #ddd;
+    --header-color:#ccc;
+
+    --accent: #69828C;
+    --accent-two: #F2762E;
     --inline-code: #F2762E;
     --links: #4EA696;
 
@@ -31,6 +37,9 @@
     --heading-four: #2E4D59;
     --heading-five: #1A3540;
 }
+
+body{ background-color: var(--background-color) !important;}
+header.header, nav.menu{ background-color: var(--header-color) !important;}
 
 pre code{color:var(--accent) !important;}
 code{color:var(--inline-code) !important;}

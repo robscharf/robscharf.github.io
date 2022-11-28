@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Obsidian on Hi, I&#39;m Rob.</title>
+    <link>https://robscharf.github.io/categories/obsidian/</link>
+    <description>Recent content in Obsidian on Hi, I&#39;m Rob.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+    <lastBuildDate>Tue, 03 May 2022 13:00:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/categories/obsidian/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How-to: Add a backtick hotkey to Windows 10</title>
+      <link>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/</link>
+      <pubDate>Tue, 03 May 2022 13:00:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/</guid>
+      <description>Lately I have been really enjoying Obsidian as a personal knowledge base. It uses simple Markdown files, which makes maintaining synchronized cross-platform access easy and low impact.
+The problem I recently ran into a small problem when I decided to change my workflow to run Obsidian on my Windows PC host machine, instead of inside my Kali or Ubuntu virtual machines. Until now, I have largely been running Obsidian on my Macbook and inside my working machines on my PC.</description>
+    </item>
+    
+  </channel>
+</rss>

