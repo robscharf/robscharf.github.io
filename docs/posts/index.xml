@@ -52,11 +52,11 @@ The PNPT certification exam is a one-of-a-kind ethical hacking certification exa
         </item>
         
         <item>
-            <title>HTB Round-Up (Part 1): Blue, Devel, Jerry -- Write-Ups</title>
-            <link>https://robscharf.github.io/posts/2022/10/htb-round-up-part-1-blue-devel-jerry--write-ups/</link>
+            <title>HTB Easy Round-Up (Part 1): Blue, Devel, Jerry -- Write-Ups</title>
+            <link>https://robscharf.github.io/posts/2022/10/htb-easy-round-up-part-1-blue-devel-jerry--write-ups/</link>
             <pubDate>Tue, 25 Oct 2022 13:15:00 +0000</pubDate>
             
-            <guid>https://robscharf.github.io/posts/2022/10/htb-round-up-part-1-blue-devel-jerry--write-ups/</guid>
+            <guid>https://robscharf.github.io/posts/2022/10/htb-easy-round-up-part-1-blue-devel-jerry--write-ups/</guid>
             <description>About Instead of a single box write-up, I am including walkthroughs for three easy rated, retired Windows HackTheBox machines here to kick off my pursuit of completing the infamous TJNull list of OSCP prep-relevant machines across the popular CTF and training platforms. The recently updated list can be found here. Due to the simplicity of the machines, these writeups are presented with concision in mind, unlike the majority of my other walkthroughs.</description>
             <content type="html"><![CDATA[<h2 id="about">About</h2>
 <p>Instead of a single box write-up, I am including walkthroughs for three <em>easy</em> rated, retired Windows HackTheBox machines here to kick off my pursuit of completing the infamous TJNull list of OSCP prep-relevant machines across the popular CTF and training platforms. The <a href="https://twitter.com/TJ_Null/status/1580174678555230209">recently updated</a> list can be found <a href="https://docs.google.com/spreadsheets/d/1dwSMIAPIam0PuRBkCiDI88pU3yzrqqHkDtBngUHNCw8/edit?usp=sharing">here</a>. Due to the simplicity of the machines, these writeups are presented with concision in mind, unlike the majority of my other walkthroughs.

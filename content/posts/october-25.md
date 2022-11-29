@@ -1,5 +1,5 @@
 +++
-title = "HTB Round-Up (Part 1): Blue, Devel, Jerry -- Write-Ups"
+title = "HTB Easy Round-Up (Part 1): Blue, Devel, Jerry -- Write-Ups"
 description = "Walkthrough write-up of the Blue, Devel, and Jerry HackTheBox CTFs"
 type = ["posts","post"]
 tags = [
