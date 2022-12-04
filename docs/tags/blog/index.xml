@@ -42,16 +42,6 @@ Methodology We begin our enumeration efforts by running an nmap scan on the targ
     </item>
     
     <item>
-      <title>How-to: Add a backtick hotkey to Windows 10</title>
-      <link>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/</link>
-      <pubDate>Tue, 03 May 2022 13:00:00 +0000</pubDate>
-      
-      <guid>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/</guid>
-      <description>Lately I have been really enjoying Obsidian as a personal knowledge base. It uses simple Markdown files, which makes maintaining synchronized cross-platform access easy and low impact.
-The problem I recently ran into a small problem when I decided to change my workflow to run Obsidian on my Windows PC host machine, instead of inside my Kali or Ubuntu virtual machines. Until now, I have largely been running Obsidian on my Macbook and inside my working machines on my PC.</description>
-    </item>
-    
-    <item>
       <title>THM: Upload Vulnerabilities -- Write-Up</title>
       <link>https://robscharf.github.io/posts/2022/04/thm-upload-vulnerabilities--write-up/</link>
       <pubDate>Thu, 28 Apr 2022 11:30:00 +0000</pubDate>

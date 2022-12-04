@@ -94,16 +94,6 @@ Methodology We begin our enumeration efforts by running an nmap scan on the targ
     </item>
     
     <item>
-      <title>How-to: Add a backtick hotkey to Windows 10</title>
-      <link>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/</link>
-      <pubDate>Tue, 03 May 2022 13:00:00 +0000</pubDate>
-      
-      <guid>https://robscharf.github.io/posts/2022/05/how-to-add-a-backtick-hotkey-to-windows-10/</guid>
-      <description>Lately I have been really enjoying Obsidian as a personal knowledge base. It uses simple Markdown files, which makes maintaining synchronized cross-platform access easy and low impact.
-The problem I recently ran into a small problem when I decided to change my workflow to run Obsidian on my Windows PC host machine, instead of inside my Kali or Ubuntu virtual machines. Until now, I have largely been running Obsidian on my Macbook and inside my working machines on my PC.</description>
-    </item>
-    
-    <item>
       <title>THM: Upload Vulnerabilities -- Write-Up</title>
       <link>https://robscharf.github.io/posts/2022/04/thm-upload-vulnerabilities--write-up/</link>
       <pubDate>Thu, 28 Apr 2022 11:30:00 +0000</pubDate>
@@ -113,6 +103,16 @@ The problem I recently ran into a small problem when I decided to change my work
 Note: The Complete Beginner THM skill path is now considered depricated in favor of the Jr Penetration Tester path.
 Task 1 - Getting Started The room begins with a necessary configuration step. The hosts file of the attacking machine needs to be modified to include the following line:
 &amp;lt;machine-ip&amp;gt; overwrite.uploadvulns.thm shell.uploadvulns.thm java.uploadvulns.thm annex.uploadvulns.thm magic.</description>
+    </item>
+    
+    <item>
+      <title>Finishing the OWASP Juice Shop XSS</title>
+      <link>https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop-xss/</link>
+      <pubDate>Mon, 25 Apr 2022 14:20:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/posts/2022/04/finishing-the-owasp-juice-shop-xss/</guid>
+      <description>Today I finished up the OWASP Juice Shop Room on THM, after leaving the final Cross-site Scripting (XSS) modules unfinished last week. This involved quick introductory examples of three XSS modalities:
+DOM Persistent (Server-side) Reflected (Client-side) DOM XSS uses the HTML environment to execute malicious JavaScript. This type of attack commonly uses the &amp;lt;script&amp;gt; HTML tag. Persistent XSS is JavaScript that is run when the server loads the page containing it.</description>
     </item>
     
   </channel>

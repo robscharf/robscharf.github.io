@@ -72,29 +72,20 @@
     </item>
     
     <item>
-      <title>Obsidian</title>
-      <link>https://robscharf.github.io/categories/obsidian/</link>
-      <pubDate>Tue, 03 May 2022 13:00:00 +0000</pubDate>
-      
-      <guid>https://robscharf.github.io/categories/obsidian/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Windows</title>
-      <link>https://robscharf.github.io/categories/windows/</link>
-      <pubDate>Tue, 03 May 2022 13:00:00 +0000</pubDate>
-      
-      <guid>https://robscharf.github.io/categories/windows/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>(not the company)</title>
       <link>https://robscharf.github.io/categories/not-the-company/</link>
       <pubDate>Mon, 11 Apr 2022 00:00:00 +0000</pubDate>
       
       <guid>https://robscharf.github.io/categories/not-the-company/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Meta</title>
+      <link>https://robscharf.github.io/categories/meta/</link>
+      <pubDate>Mon, 11 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/categories/meta/</guid>
       <description></description>
     </item>
     

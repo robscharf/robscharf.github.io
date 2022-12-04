@@ -18,6 +18,8 @@ Credential ID: 6021800 ([verify](https://www.elearnsecurity.com/certification/ve
 ## Training Courses and Learning Paths
 ### TCM Security
 #### Windows Privilege Escalation for Beginners
+Completed: December, 2022
+#### Windows Privilege Escalation for Beginners
 Completed: November, 2022
 #### External Pentest Playbook
 Completed: October, 2022
