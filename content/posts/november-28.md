@@ -13,7 +13,7 @@ categories = [
     "PNPT",
 ]
 [ author ]
-  name = "Rob"
+  name = "virtualtack"
 +++
 
 I am happy to share that I recently passed the Practical Network Penetration Tester certification exam on November 6!

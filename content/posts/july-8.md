@@ -17,7 +17,7 @@ categories = [
     "TryHackMe",
 ]
 [ author ]
-  name = "Rob"
+  name = "virtualtack"
 +++
 
 ## About 

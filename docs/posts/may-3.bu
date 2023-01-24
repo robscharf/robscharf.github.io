@@ -15,7 +15,7 @@ categories = [
     "Obsidian",
 ]
 [ author ]
-  name = "Rob"
+  name = "virtualtack"
 +++
 
 Lately I have been really enjoying [Obsidian](https://obsidian.md/) as a personal knowledge base. It uses simple `Markdown` files, which makes maintaining synchronized cross-platform access easy and low impact. 

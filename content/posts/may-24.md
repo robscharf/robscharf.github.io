@@ -19,7 +19,7 @@ categories = [
     "TryHackMe",
 ]
 [ author ]
-  name = "Rob"
+  name = "virtualtack"
 +++
 ## About 
 [TryHackMe.com](https://tryhackme.com/)'s [Agent Sudo](https://tryhackme.com/room/agentsudoctf) is a beginner-friendly capture-the-flag virtual machine by [DesKel](https://tryhackme.com/p/DesKel). Agent Sudo has a secret agent theme and challenges users to capture two flags and gain root access by locating and decrypting a series of confidential communications. 

@@ -12,7 +12,7 @@ categories = [
     "eJPT"
 ]
 [ author ]
-  name = "Rob"
+  name = "virtualtack"
 +++
 
 I am pleased to share that I recently passed the [eLearnSecurity Junior Penetration Tester](https://elearnsecurity.com/product/ejpt-certification/) certification exam on June 16!

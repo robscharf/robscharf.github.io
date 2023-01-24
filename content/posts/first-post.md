@@ -14,7 +14,7 @@ categories = [
     "(not the company)",
 ]
 [ author ]
-  name = "Rob"
+  name = "virtualtack"
 +++
 
 ## Welcome to my new GitHub blog

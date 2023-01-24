@@ -15,7 +15,7 @@ categories = [
     "TryHackMe",
 ]
 [ author ]
-  name = "Rob"
+  name = "virtualtack"
 +++
 
 Welcome to my write-up of the [Upload Vulnerabilities](https://tryhackme.com/room/uploadvulns) room on [TryHackMe](https://tryhackme.com/), created by [MuirlandOracle](https://tryhackme.com/p/MuirlandOracle). Let's jump in.
