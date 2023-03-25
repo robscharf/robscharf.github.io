@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Mon, 28 Nov 2022 11:35:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 23 Jan 2023 10:25:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB Easy Round-Up (Part 2): Lame, Optimum, Shocker -- Write-Ups</title>
+      <link>https://robscharf.github.io/posts/2023/01/htb-easy-round-up-part-2-lame-optimum-shocker--write-ups/</link>
+      <pubDate>Mon, 23 Jan 2023 10:25:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/posts/2023/01/htb-easy-round-up-part-2-lame-optimum-shocker--write-ups/</guid>
+      <description>About This is the second installment of walkthroughs for three easy rated, retired HackTheBox machines. I am currently making my way through Offensive Security&amp;rsquo;s PEN-200 course, with plans to take the OSCP exam later this year. As part of my preparations, I am working on the infamous TJNull list of OSCP prep-relevant machines across the popular CTF and training platforms. The list can be found here.
+At this moment, I have completed 17 HTB machines from the TJNull list and I am approximately 30% of the way through PEN-200, with all course exercises finished for the first 10 sections of the course.</description>
+    </item>
+    
     <item>
       <title>I passed the PNPT!</title>
       <link>https://robscharf.github.io/posts/2022/11/i-passed-the-pnpt/</link>
@@ -26,16 +36,6 @@ The PNPT certification exam is a one-of-a-kind ethical hacking certification exa
       
       <guid>https://robscharf.github.io/posts/2022/10/htb-easy-round-up-part-1-blue-devel-jerry--write-ups/</guid>
       <description>About Instead of a single box write-up, I am including walkthroughs for three easy rated, retired Windows HackTheBox machines here to kick off my pursuit of completing the infamous TJNull list of OSCP prep-relevant machines across the popular CTF and training platforms. The recently updated list can be found here. Due to the simplicity of the machines, these writeups are presented with concision in mind, unlike the majority of my other walkthroughs.</description>
-    </item>
-    
-    <item>
-      <title>THM: Brute -- Write-Up</title>
-      <link>https://robscharf.github.io/posts/2022/09/thm-brute--write-up/</link>
-      <pubDate>Thu, 22 Sep 2022 11:15:00 +0000</pubDate>
-      
-      <guid>https://robscharf.github.io/posts/2022/09/thm-brute--write-up/</guid>
-      <description>About Brute is a medium rated CTF room on TryHackMe. Rooting this box - which centers around brute-force attacks, as its name implies - involves carrying out a successful dictionary attacks, database enumeration, log poisoning, hash cracking, and cronjob-based privilege escalation. Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
-Enumeration nmap 21/tcp open ftp syn-ack ttl 61 vsftpd 3.0.3 22/tcp open ssh syn-ack ttl 61 OpenSSH 8.</description>
     </item>
     
     <item>

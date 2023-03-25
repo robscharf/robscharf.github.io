@@ -2,16 +2,61 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://robscharf.github.io/tags/bash/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
     <loc>https://robscharf.github.io/categories/</loc>
-    <lastmod>2022-11-28T11:35:00+00:00</lastmod>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/categories/ctf/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/cve-2007-2447/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/categories/hackthebox/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/hfs/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/posts/2023/01/htb-easy-round-up-part-2-lame-optimum-shocker--write-ups/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/nishang/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/perl/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/posts/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/rejetto/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/shellshock/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/sherlock/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/smb/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/categories/tjnull-list/</loc>
+    <lastmod>2023-01-23T10:25:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/certification/</loc>
     <lastmod>2022-11-28T11:35:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/categories/certifications/</loc>
-    <lastmod>2022-11-28T11:35:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/</loc>
     <lastmod>2022-11-28T11:35:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/posts/2022/11/i-passed-the-pnpt/</loc>
@@ -23,12 +68,6 @@
     <loc>https://robscharf.github.io/categories/pnpt/</loc>
     <lastmod>2022-11-28T11:35:00+00:00</lastmod>
   </url><url>
-    <loc>https://robscharf.github.io/posts/</loc>
-    <lastmod>2022-11-28T11:35:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/tags/</loc>
-    <lastmod>2022-11-28T11:35:00+00:00</lastmod>
-  </url><url>
     <loc>https://robscharf.github.io/tags/tcm/</loc>
     <lastmod>2022-11-28T11:35:00+00:00</lastmod>
   </url><url>
@@ -38,16 +77,10 @@
     <loc>https://robscharf.github.io/tags/certutil/</loc>
     <lastmod>2022-10-25T13:15:00+00:00</lastmod>
   </url><url>
-    <loc>https://robscharf.github.io/categories/ctf/</loc>
-    <lastmod>2022-10-25T13:15:00+00:00</lastmod>
-  </url><url>
     <loc>https://robscharf.github.io/tags/eternalblue/</loc>
     <lastmod>2022-10-25T13:15:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/ftp/</loc>
-    <lastmod>2022-10-25T13:15:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/categories/hackthebox/</loc>
     <lastmod>2022-10-25T13:15:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/posts/2022/10/htb-easy-round-up-part-1-blue-devel-jerry--write-ups/</loc>
@@ -59,38 +92,11 @@
     <loc>https://robscharf.github.io/tags/powershell/</loc>
     <lastmod>2022-10-25T13:15:00+00:00</lastmod>
   </url><url>
-    <loc>https://robscharf.github.io/categories/tjnull-list/</loc>
-    <lastmod>2022-10-25T13:15:00+00:00</lastmod>
-  </url><url>
     <loc>https://robscharf.github.io/tags/tomcat/</loc>
     <lastmod>2022-10-25T13:15:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/windows-exploit-suggester/</loc>
     <lastmod>2022-10-25T13:15:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/tags/cronjob/</loc>
-    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/tags/johntheripper/</loc>
-    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/tags/logpoisoning/</loc>
-    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/tags/mariadb/</loc>
-    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/tags/mysql/</loc>
-    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/tags/nmap/</loc>
-    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/posts/2022/09/thm-brute--write-up/</loc>
-    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
-  </url><url>
-    <loc>https://robscharf.github.io/categories/tryhackme/</loc>
-    <lastmod>2022-09-22T11:15:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/cmseek/</loc>
     <lastmod>2022-08-10T15:32:00+00:00</lastmod>
@@ -113,6 +119,9 @@
     <loc>https://robscharf.github.io/posts/2022/08/thm-daily-bugle--write-up/</loc>
     <lastmod>2022-08-10T15:32:00+00:00</lastmod>
   </url><url>
+    <loc>https://robscharf.github.io/categories/tryhackme/</loc>
+    <lastmod>2022-08-10T15:32:00+00:00</lastmod>
+  </url><url>
     <loc>https://robscharf.github.io/tags/yum/</loc>
     <lastmod>2022-08-10T15:32:00+00:00</lastmod>
   </url><url>
@@ -120,6 +129,9 @@
     <lastmod>2022-07-08T13:04:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/library-hijacking/</loc>
+    <lastmod>2022-07-08T13:04:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/nmap/</loc>
     <lastmod>2022-07-08T13:04:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/python/</loc>
@@ -144,6 +156,9 @@
     <lastmod>2022-05-23T14:14:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/gobuster/</loc>
+    <lastmod>2022-05-23T14:14:00+00:00</lastmod>
+  </url><url>
+    <loc>https://robscharf.github.io/tags/johntheripper/</loc>
     <lastmod>2022-05-23T14:14:00+00:00</lastmod>
   </url><url>
     <loc>https://robscharf.github.io/tags/stegcracker/</loc>

