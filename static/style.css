@@ -59,8 +59,10 @@ h5{color:var(--heading-five);}
 
 
 
-
-
+/* htb badge */
+div.htb-badge a{
+  text-decoration: none;
+}
 
 /* glitch text*/
 
@@ -72,7 +74,6 @@ h5{color:var(--heading-five);}
     letter-spacing: 6px;
     font-weight: bold;
     font-size: 50px;
-    /* Bright things in dark environments usually cast that light, giving off a glow */
     filter: drop-shadow(0 1px 3px);
   }
 .hero-grey{color:#AAAAAA;font-size: 32px;}  
