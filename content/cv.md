@@ -16,10 +16,13 @@ Issued: June, 2022<br/>
 Credential ID: 6021800 ([verify](https://www.elearnsecurity.com/certification/verify?c=c39650b8-befc-4d54-a493-d5c98fad57b4))
 
 ## Training Courses and Learning Paths
+### Offensive Security (OffSec)
+#### PEN-200: Penetration Testing with Kali Linux
+Completed: March, 2023
 ### TCM Security
 #### Windows Privilege Escalation for Beginners
 Completed: December, 2022
-#### Windows Privilege Escalation for Beginners
+#### Linux Privilege Escalation for Beginners
 Completed: November, 2022
 #### External Pentest Playbook
 Completed: October, 2022
@@ -33,10 +36,8 @@ Completed: September, 2022
 Completed: August, 2022
 
 ### TryHackMe <span class="small-grey">&nbsp;Learning Paths</span>
-#### Red Teaming
-Completed: TBD
 #### Offensive Pentesting
-Completed: TBD
+Completed: March, 2023
 #### Junior Penetration Tester
 Completed: June, 2022
 #### CompTIA Pentest+
