@@ -47,6 +47,12 @@ Completed: May, 2022
 #### Penetration Testing Student
 Completed: June, 2022
 
+### Tib3rius Institute for Cybersecurity 
+#### Windows Privilege Escalation for OSCP & Beyond!
+Completed April, 2023
+#### Linux Privilege Escalation for OSCP & Beyond!
+Completed April, 2023
+
 ## Virtual Homelab
 * Virtualization
   * VMWare Workstation
