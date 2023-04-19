@@ -16,9 +16,9 @@
     --links: #4EA696;
 
     --heading-one: #F9BF7D;
-    --heading-two: #769EAA;
+    --heading-four: #769EAA;
     --heading-three: #69828C;
-    --heading-four: #2E4D59;
+    --heading-two: #2E4D59;
     --heading-five: #1A3540;
 }
 
@@ -32,9 +32,9 @@
     --links: #4EA696;
 
     --heading-one: #F93323;
-    --heading-two: #769EAA;
+    --heading-four: #769EAA;
     --heading-three: #69828C;
-    --heading-four: #2E4D59;
+    --heading-two: #2E4D59;
     --heading-five: #1A3540;
 }
 
@@ -47,8 +47,8 @@ a{color:var(--links);}
 .content a{font-weight: 800;}
 
 header a, span.button a, pre{color:var(--accent);}
-.footer__content a, .social-icons a{color:var(--accent-two);}
-span.logo__cursor{background-color:var(--accent-two) !important;}
+.footer__content a, .social-icons a{color:var(--heading-one);}
+span.logo__cursor{background-color:var(--heading-one) !important;}
 
 
 h1{color:var(--heading-one);}
