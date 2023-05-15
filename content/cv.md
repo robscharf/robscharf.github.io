@@ -7,6 +7,11 @@ aliases = ["about-me","contact"]
 +++
 
 ## Certifications
+
+### OSCP - OffSec Certified Professional
+Issued: May, 2023<br/>
+Credential ID: 789640 ([verify](https://www.credential.net/c1754ce3-316d-4b39-977a-c836fb5821a8#gs.y8tann))
+
 ### PNPT - Practical Network Penetration Tester
 Issued: November, 2022<br/>
 Credential ID: 61516777 ([verify](https://www.credential.net/85c04676-97e9-4abf-95f8-4e5445886c9e#gs.i2p4xk))
