@@ -74,7 +74,7 @@ Completed April, 2023
 ## Publications and Presentations
 
 ### International Association of Genocide Scholars
-"Internet Shutdowns: A Growing Mass Atrocity Risk", 15th Biennial Conference of the International Association of Genocide Scholars. Universitat de Barcelona, July 20, 2021. Presentation.  
+"Internet Shutdowns: A Growing Mass Atrocity Risk", *15th Biennial Conference of the International Association of Genocide Scholars*. Universitat de Barcelona, July 20, 2021. Presentation.  
 
 
 ### Genocide Studies and Prevention: An International Journal
