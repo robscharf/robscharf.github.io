@@ -71,7 +71,12 @@ Completed April, 2023
   * OWASP Juice Lab
 * Array of standalone Linux-based and Windows-based CTF machines
 
-## Publications
+## Publications and Presentations
+
+### International Association of Genocide Scholars
+"Internet Shutdowns: A Growing Mass Atrocity Risk", 15th Biennial Conference of the International Association of Genocide Scholars. Universitat de Barcelona, July 20, 2021. Presentation.  
+
+
 ### Genocide Studies and Prevention: An International Journal
 Capicotto, Samantha and Scharf, Rob (2018) "[National Mechanisms for the Prevention of Atrocity Crimes](https://digitalcommons.usf.edu/gsp/vol11/iss3/5/)," *Genocide Studies and Prevention: An International Journal*: Vol. 11: Iss. 3: 6-19.
 
