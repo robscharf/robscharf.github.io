@@ -1,6 +1,6 @@
 +++
-title = "I passed the PNPT - thoughts and experiences"
-description = "I recently obtained my PNPT certification from TCM Security"
+title = "I passed the PNPT!"
+description = "My thoughts and experiences..."
 type = ["posts","post"]
 tags = [
     "certification",

@@ -1,6 +1,6 @@
 +++
-title = "I passed the OSCP - thoughts and experiences"
-description = "I recently obtained my OSCP certification from OffSec"
+title = "I passed the OSCP!"
+description = "My thoughts and experiences..."
 type = ["posts","post"]
 tags = [
     "certification",
@@ -37,7 +37,7 @@ Between [finishing the PNPT](http://localhost:1313/blog/november-28/) and beginn
 
 In addition to the aforementioned boxes, I participated in HTB's Open Beta Season as part of the [DevotedOccultists](https://app.hackthebox.com/teams/overview/5487) team.
 
-### PEN200 - Course
+### PEN200
 Due to the timing of my PEN200 adventure, I had the unique experience of following both the "2022" and "2023" version of the course. In case you are unfamiliar, in mid-March of 2023, OffSec (formerly Offensive Security) [released an updated version of the PEN200 course](https://www.offsec.com/offsec/pen-200-2023/) - the first in approximately three years. 
 
 
@@ -45,10 +45,16 @@ Due to the timing of my PEN200 adventure, I had the unique experience of followi
 <img src="/images/pen200.png" style="height:420px"> 
 </center>
 
-### PEN200 - 2022
+#### PEN200 2022 - Course
 [Coming soon.] 
 
-### PEN200 - Labs
+#### PEN200 2022 - Labs
+[Coming soon.] 
+
+#### PEN200 2023 - Course
+[Coming soon.] 
+
+#### PEN200 2023 - Labs
 [Coming soon.] 
 
 ### Exam Impressions

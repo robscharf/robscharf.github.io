@@ -1,6 +1,6 @@
 +++
-title = "I passed the eJPT - thoughts and experiences"
-description = "I obtained my eJPT certification from eLearnSecurity"
+title = "I passed the eJPT!"
+description = "My thoughts and experiences..."
 type = ["posts","post"]
 tags = [
     "certification",
