@@ -40,8 +40,9 @@
 
 body{ 
   background-color: var(--background-color) !important;
-  margin: 5px auto !important;
 }
+
+
 
 header.header, nav.menu{ background-color: var(--header-color) !important;}
 .post-content p{
@@ -55,7 +56,7 @@ a{color:var(--links);}
 
 header a, span.button a, pre{color:var(--accent);}
 .footer__content a, .social-icons a{color:var(--heading-one);}
-span.logo__cursor{background-color:var(--heading-one) !important;}
+span.logo__cursor{background-color:var(--heading-two) !important;}
 
 
 h1{color:var(--heading-one);}
