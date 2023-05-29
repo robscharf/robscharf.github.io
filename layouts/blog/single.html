@@ -37,12 +37,12 @@
       {{ end }}
 
       {{- if .Params.toc }}
-        <hr />
+
         <aside id="toc">
           <div class="toc-title">{{ i18n "tableOfContents" }}</div>
           {{ .TableOfContents }}
         </aside>
-        <hr />
+
       {{- end }}
 
       {{ if .Params.Audio }}
@@ -58,7 +58,7 @@
       </div>
     </article>
 
-    <hr />
+ <!-- hi lol -->
 
     <div class="post-info">
       {{ partial "tags.html" .Params.tags }}
@@ -112,13 +112,6 @@
         </p>
       {{- end }}
     </div>
-
-    {{- if .Site.Params.EnableSharingButtons }}
-      <hr />
-      <div class="sharing-buttons">
-        {{ partial "sharing-buttons.html" . }}
-      </div>
-    {{- end }}
 
     {{ partial "pagination-single.html" . }}
 

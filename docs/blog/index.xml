@@ -7,7 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Mon, 28 Nov 2022 11:35:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 16 May 2023 12:05:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>I passed the OSCP - thoughts and experiences</title>
+      <link>https://robscharf.github.io/blog/may-10/</link>
+      <pubDate>Tue, 16 May 2023 12:05:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/blog/may-10/</guid>
+      <description>I am happy to share that I recently passed the the Penetration Testing with Kali Linux certification exam on May 10!
+The Exam According to OffSec&amp;rsquo;s website:
+The industry-leading Penetration Testing with Kali Linux (PWK/PEN-200) course introduces penetration testing methodologies, tools and techniques via hands-on experience and is self-paced. Learners who complete the course and pass the exam will earn the OffSec Certified Professional (OSCP) certification which requires holders to successfully attack and penetrate various live machines in a safe lab environment.</description>
+    </item>
+    
     <item>
       <title>I passed the PNPT - thoughts and experiences</title>
       <link>https://robscharf.github.io/blog/november-28/</link>
