@@ -10,10 +10,10 @@
     <lastBuildDate>Thu, 28 Apr 2022 11:30:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/tags/node.js/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>THM: Upload Vulnerabilities -- Write-Up</title>
-      <link>https://robscharf.github.io/posts/2022/04/thm-upload-vulnerabilities--write-up/</link>
+      <link>https://robscharf.github.io/writeups/april-28/</link>
       <pubDate>Thu, 28 Apr 2022 11:30:00 +0000</pubDate>
       
-      <guid>https://robscharf.github.io/posts/2022/04/thm-upload-vulnerabilities--write-up/</guid>
+      <guid>https://robscharf.github.io/writeups/april-28/</guid>
       <description>Welcome to my write-up of the Upload Vulnerabilities room on TryHackMe, created by MuirlandOracle. Let&amp;rsquo;s jump in.
 Note: The Complete Beginner THM skill path is now considered depricated in favor of the Jr Penetration Tester path.
 Task 1 - Getting Started The room begins with a necessary configuration step. The hosts file of the attacking machine needs to be modified to include the following line:

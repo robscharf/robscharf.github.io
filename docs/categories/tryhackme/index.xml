@@ -10,10 +10,10 @@
     <lastBuildDate>Wed, 10 Aug 2022 15:32:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/categories/tryhackme/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>THM: Daily Bugle -- Write-Up</title>
-      <link>https://robscharf.github.io/posts/2022/08/thm-daily-bugle--write-up/</link>
+      <link>https://robscharf.github.io/writeups/august-10/</link>
       <pubDate>Wed, 10 Aug 2022 15:32:00 +0000</pubDate>
       
-      <guid>https://robscharf.github.io/posts/2022/08/thm-daily-bugle--write-up/</guid>
+      <guid>https://robscharf.github.io/writeups/august-10/</guid>
       <description>About Daily Bugle is a hard rated CTF room on TryHackMe. Rooting this box involves carrying out a successful CMS enumeration, SQLi, hash cracking, and binary-based privilege escalation.
 Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
 Enumeration nmap Nmap scan report for &amp;lt;target-ip&amp;gt; Host is up, received user-set (0.10s latency). Scanned at 2022-06-16 15:11:23 EDT for 549s Not shown: 65521 closed tcp ports (conn-refused) PORT STATE SERVICE REASON VERSION 22/tcp open ssh syn-ack OpenSSH 7.</description>
@@ -21,10 +21,10 @@ Enumeration nmap Nmap scan report for &amp;lt;target-ip&amp;gt; Host is up, rece
     
     <item>
       <title>THM: Biblioteca -- Write-Up</title>
-      <link>https://robscharf.github.io/posts/2022/07/thm-biblioteca--write-up/</link>
+      <link>https://robscharf.github.io/writeups/july-8/</link>
       <pubDate>Fri, 08 Jul 2022 13:04:00 +0000</pubDate>
       
-      <guid>https://robscharf.github.io/posts/2022/07/thm-biblioteca--write-up/</guid>
+      <guid>https://robscharf.github.io/writeups/july-8/</guid>
       <description>About Biblioteca is a medium rated CTF room on TryHackMe. Rooting this box involves carrying out a successful SQL injection to obtain a foothold, identifying an opportunity for a &amp;ldquo;lateral privilege escalation&amp;rdquo; via brute-force attack, and further escalation to root via Python library hijacking.
 Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
 Enumeration nmap I began by running a standard nmap scan against the target host.</description>
@@ -32,10 +32,10 @@ Enumeration nmap I began by running a standard nmap scan against the target host
     
     <item>
       <title>THM: Agent Sudo -- Write-Up</title>
-      <link>https://robscharf.github.io/posts/2022/05/thm-agent-sudo--write-up/</link>
+      <link>https://robscharf.github.io/writeups/may-24/</link>
       <pubDate>Mon, 23 May 2022 14:14:00 +0000</pubDate>
       
-      <guid>https://robscharf.github.io/posts/2022/05/thm-agent-sudo--write-up/</guid>
+      <guid>https://robscharf.github.io/writeups/may-24/</guid>
       <description>About TryHackMe.com&amp;rsquo;s Agent Sudo is a beginner-friendly capture-the-flag virtual machine by DesKel. Agent Sudo has a secret agent theme and challenges users to capture two flags and gain root access by locating and decrypting a series of confidential communications.
 Note I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
 Methodology We begin our enumeration efforts by running an nmap scan on the target machine to understand the ports that are open to network traffic.</description>
@@ -43,10 +43,10 @@ Methodology We begin our enumeration efforts by running an nmap scan on the targ
     
     <item>
       <title>THM: Mr Robot CTF -- Write-Up</title>
-      <link>https://robscharf.github.io/posts/2022/05/thm-mr-robot-ctf--write-up/</link>
+      <link>https://robscharf.github.io/writeups/may-10/</link>
       <pubDate>Tue, 10 May 2022 23:14:00 +0000</pubDate>
       
-      <guid>https://robscharf.github.io/posts/2022/05/thm-mr-robot-ctf--write-up/</guid>
+      <guid>https://robscharf.github.io/writeups/may-10/</guid>
       <description>About TryHackMe.com&amp;rsquo;s Mr Robot CTF (MRCTF) is a beginner-friendly capture-the-flag virtual machine by Leon Johnson. MRCTF is named after, and inspired by, the Mr. Robot television show and challenges users to capture three flags by finding vulnerabilities in the target server and exploiting them to gain root access.
 Note I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
 Methodology We begin our enumeration efforts by running an nmap scan on the target machine to understand the ports that are open to network traffic.</description>
@@ -54,10 +54,10 @@ Methodology We begin our enumeration efforts by running an nmap scan on the targ
     
     <item>
       <title>THM: Upload Vulnerabilities -- Write-Up</title>
-      <link>https://robscharf.github.io/posts/2022/04/thm-upload-vulnerabilities--write-up/</link>
+      <link>https://robscharf.github.io/writeups/april-28/</link>
       <pubDate>Thu, 28 Apr 2022 11:30:00 +0000</pubDate>
       
-      <guid>https://robscharf.github.io/posts/2022/04/thm-upload-vulnerabilities--write-up/</guid>
+      <guid>https://robscharf.github.io/writeups/april-28/</guid>
       <description>Welcome to my write-up of the Upload Vulnerabilities room on TryHackMe, created by MuirlandOracle. Let&amp;rsquo;s jump in.
 Note: The Complete Beginner THM skill path is now considered depricated in favor of the Jr Penetration Tester path.
 Task 1 - Getting Started The room begins with a necessary configuration step. The hosts file of the attacking machine needs to be modified to include the following line:

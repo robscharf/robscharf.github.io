@@ -10,10 +10,10 @@
     <lastBuildDate>Wed, 10 Aug 2022 15:32:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/tags/searchsploit/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>THM: Daily Bugle -- Write-Up</title>
-      <link>https://robscharf.github.io/posts/2022/08/thm-daily-bugle--write-up/</link>
+      <link>https://robscharf.github.io/writeups/august-10/</link>
       <pubDate>Wed, 10 Aug 2022 15:32:00 +0000</pubDate>
       
-      <guid>https://robscharf.github.io/posts/2022/08/thm-daily-bugle--write-up/</guid>
+      <guid>https://robscharf.github.io/writeups/august-10/</guid>
       <description>About Daily Bugle is a hard rated CTF room on TryHackMe. Rooting this box involves carrying out a successful CMS enumeration, SQLi, hash cracking, and binary-based privilege escalation.
 Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
 Enumeration nmap Nmap scan report for &amp;lt;target-ip&amp;gt; Host is up, received user-set (0.10s latency). Scanned at 2022-06-16 15:11:23 EDT for 549s Not shown: 65521 closed tcp ports (conn-refused) PORT STATE SERVICE REASON VERSION 22/tcp open ssh syn-ack OpenSSH 7.</description>

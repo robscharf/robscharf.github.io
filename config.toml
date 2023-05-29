@@ -184,11 +184,18 @@ disableHugoGeneratorInject = false
 
 [menu]
   [[menu.main]]
-    identifier = "posts"
-    name       = "posts"
-    url        = "posts/"
+    identifier = "blog"
+    name       = "blog"
+    url        = "blog"
   [[menu.main]]
     identifier = "cv"
     name       = "cv"
-    url        = "cv"    
-
+    url        = "cv"   
+  [[menu.main]]
+    identifier = "lab"
+    name       = "homelab"
+    url        = "lab"        
+  [[menu.main]]
+    identifier = "writeups"
+    name       = "writeups"
+    url        = "writeups"    
