@@ -44,12 +44,23 @@ Due to the timing of my PEN200 adventure, I had the unique experience of followi
 <center>
 <img src="/images/pen200.png" style="height:420px"> 
 </center>
+<br/>
 
 #### PEN200 2022 - Course
-[Coming soon.] 
+Of the "old" course, I found the Bash Scripting, Buffer Overflows, File Transfers, and Port Redirection and Tunneling modules to have contained the most useful content. While none of these topics were new to me (nor should they be to anyone beginning PEN200), the course contents provided insight into new techniques and/or approaches to underlying core concepts. Equally, I found that - while sometimes tedious - the topic exercises provided effective bite-sized practice tasks, as well as the opportunity to glean a bit of insight into OffSec's particular style of testing understanding of a given concept or topic.
+
+As mentioned above, I found a lot of value in completing the course modules devoted to Buffer Overflows (Introduction, Windows, Linux) and their associated exercises. Despite the Buffer Overflow sections being removed from the course and exam (more on that later) *after* I had completed them, I would recommend similar materials for future OSCP-seekers. Coming into the course with little experience related to binary exploitation (nor with lower-level programming, more broadly), the Buffer Overflow sections helped me to deepen my understanding of how applications (and, by extension, computers) work more broadly.
+
+I completed 100% of the 2022 exercises, making me eligible for bonus points with a sufficient number of lab machines rooted.
 
 #### PEN200 2022 - Labs
-[Coming soon.] 
+Before the "old" labs were retired in mid-April, I managed to complete 47 of the 75 available machines (*without* doing any of the guided `sandbox.local` network). Unfortunately, I did not have time to delve into the Development or Administrator subnets.
+
+When compared with competing offerings (see below), the size and scale of the PEN200 labs are quite significant and commonly understood to represent the lion's share of course's value. My experience was largely consistent with this. In addition to the opportunity to practice a wide variety of enumeration and exploitation techniques, the sheer size of the lab required a lot of preliminary scanning and host identification (which is rarely needed for individual CTF machines and/or small networks) - skills that are difficult to practice in a blind lab setting. 
+
+Throughout my lab experience, I benefitted from the accompanying Discord channel. While I did not always find the Community Mentors to be exceedingly helpful in navigating the lab's idiosyncracies, I did find many of the pinned messages to be useful and support from fellow students (especially when delving into archived messages, found via the channel search function) was valuable and plentiful. Equally, I did not engage much with the now-deprecated forums.
+
+> **Note:** I have not yet explored HackTheBox's Academy offerings or the associated CPTS certification, which are relatively new. My understadning is that they are popularly regarded as having similar, if not more profound, substantive depth than PEN200/OSCP.
 
 #### PEN200 2023 - Course
 [Coming soon.] 
