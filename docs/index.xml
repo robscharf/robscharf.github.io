@@ -20,6 +20,16 @@ The industry-leading Penetration Testing with Kali Linux (PWK/PEN-200) course in
     </item>
     
     <item>
+      <title>HTB Easy Round-Up (Part 2): Lame, Optimum, Shocker -- Write-Ups</title>
+      <link>https://robscharf.github.io/writeups/january-23/</link>
+      <pubDate>Mon, 23 Jan 2023 10:25:00 +0000</pubDate>
+      
+      <guid>https://robscharf.github.io/writeups/january-23/</guid>
+      <description>About This is the second installment of walkthroughs for three easy rated, retired HackTheBox machines. I am currently making my way through Offensive Security&amp;rsquo;s PEN-200 course, with plans to take the OSCP exam later this year. As part of my preparations, I am working on the infamous TJNull list of OSCP prep-relevant machines across the popular CTF and training platforms. The list can be found here.
+At this moment, I have completed 17 HTB machines from the TJNull list and I am approximately 30% of the way through PEN-200, with all course exercises finished for the first 10 sections of the course.</description>
+    </item>
+    
+    <item>
       <title>I passed the PNPT!</title>
       <link>https://robscharf.github.io/blog/november-28/</link>
       <pubDate>Mon, 28 Nov 2022 11:35:00 +0000</pubDate>
@@ -104,15 +114,6 @@ Methodology We begin our enumeration efforts by running an nmap scan on the targ
 Note: The Complete Beginner THM skill path is now considered depricated in favor of the Jr Penetration Tester path.
 Task 1 - Getting Started The room begins with a necessary configuration step. The hosts file of the attacking machine needs to be modified to include the following line:
 &amp;lt;machine-ip&amp;gt; overwrite.uploadvulns.thm shell.uploadvulns.thm java.uploadvulns.thm annex.uploadvulns.thm magic.</description>
-    </item>
-    
-    <item>
-      <title>Colophon</title>
-      <link>https://robscharf.github.io/colophon/</link>
-      <pubDate>Mon, 11 Apr 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://robscharf.github.io/colophon/</guid>
-      <description>This blog stands on the shoulders of giants, powered by Hugo, based on the excellent hello-friend-ng theme by Djordje Atlialp. Matt Gross made the &amp;ldquo;Cyberpunk-Style Glitch&amp;rdquo; CSS effect on my homepage.</description>
     </item>
     
   </channel>

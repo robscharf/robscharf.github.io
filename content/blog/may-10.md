@@ -74,7 +74,7 @@ The 2023 update included a reimagining of the OSCP lab environment that had beco
 - Challenges 1-3 (labled "scenarios" by OffSec) are compromised of expansive but self-contained Active Directory-based networks, each with an accompanying narrative and character. 
 - Challenges 4-6 are mock exam networks, each containing a 3-machine Active Directory set and 3 standalone machines.
 
-Of the first three challenges, I obtained domain administrator access in the first and second networks. Interestingly, I was able to do so by compromising 71% of the flags in the first network and only 41% of the second. The third challenge network is presented as being "beyond the scope" of the exam, so I chose to skip it, though I am sure it is worth doing for students looking to maximze their PEN200 experience.
+Of the first three challenges, I obtained domain administrator access in the first and second networks. Interestingly, I was able to do so by compromising 71% of the flags in the first network and only 41% of the second. The third challenge network is presented as being "beyond the scope" of the exam, so I chose to skip it, though I am confident that it is worth doing for students looking to maximze their PEN200 experience.
 
 Unsurprisingly, challenges 4-6 provided the most relelvant practice and preparation for the OSCP exam. As such, I completed each of them. I found both the contents and difficulty of these boxes to closely comparable to those that I encountered on the exam.
 
