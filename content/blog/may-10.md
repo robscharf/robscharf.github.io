@@ -16,7 +16,7 @@ categories = [
   name = "virtualtack"
 +++
 
-I am happy to share that I recently passed the the Penetration Testing with Kali Linux certification exam on May 10!
+I am happy to share that I recently passed the the Penetration Testing with Kali Linux certification exam on May 10 (on my first attempt)!
 
 <br/>
 
@@ -63,10 +63,20 @@ Throughout my lab experience, I benefitted from the accompanying Discord channel
 > **Note:** I have not yet explored HackTheBox's Academy offerings or the associated CPTS certification, which are relatively new. My understadning is that they are popularly regarded as having similar, if not more profound, substantive depth than PEN200/OSCP.
 
 #### PEN200 2023 - Course
-[Coming soon.] 
+The updated "2023" PEN200 course and labs were released about two months before I would ultimately take the OSCP exam. In addition to a reimagined curriculum, each PEN200 learning module was standardized, providing a linear path from introduction to capstone exercises (successfully completing the latter of these ostensibly indicates that a student is proficient with the entire module.)
+
+As part of the updated course curriculum's introductory modules, OffSec has included a variety of practical but non-technical topics. While I personally found the treatment of some of the pedagogical themes introduced in the Effective Learning Strategies to have been a bit superficial, I commend OffSec in its decision to develop this subject area, as I agree that it is underdeveloped in the field when considering its potential benefit to students. I found the report writing section to be informative and well developed, if not groundbreaking - I imagine this section is quite useful to anyone who hasn't written a "professional" penetration test report before taking the course.
+
+The expansion/disagregation of the Web Application Attacks and Active Directory modules in the updated curriculum is a clear improvement and effectively represents the character of most course updatesm, in terms of increasing the breath and depth of material. While I didn't complete 100% of the updated topic exercises before taking my exam, I did fully complete those associated with modules 7-10 (web application attacks) and 21-23 (Active Directory), while finishing over 80% of modules 12-13 (locating and fixing public exploits) and module 18 (port redirection and SSH tunneling).
 
 #### PEN200 2023 - Labs
-[Coming soon.] 
+The 2023 update included a reimagining of the OSCP lab environment that had become notorious in the infosec community. No longer are students be dropped into a network with dozens of hosts, with mysteriously interdependent hosts and Active Directories scattered throughout. Instead, OffSec now provides 6 "challenge" networks divided into two categories: 
+- Challenges 1-3 (labled "scenarios" by OffSec) are compromised of expansive but self-contained Active Directory-based networks, each with an accompanying narrative and character. 
+- Challenges 4-6 are mock exam networks, each containing a 3-machine Active Directory set and 3 standalone machines.
+
+Of the first three challenges, I obtained domain administrator access in the first and second networks. Interestingly, I was able to do so by compromising 71% of the flags in the first network and only 41% of the second. The third challenge network is presented as being "beyond the scope" of the exam, so I chose to skip it, though I am sure it is worth doing for students looking to maximze their PEN200 experience.
+
+Unsurprisingly, challenges 4-6 provided the most relelvant practice and preparation for the OSCP exam. As such, I completed each of them. I found both the contents and difficulty of these boxes to closely comparable to those that I encountered on the exam.
 
 ### Exam Impressions
 [Coming soon.] 
