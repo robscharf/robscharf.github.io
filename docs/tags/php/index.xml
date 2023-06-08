@@ -10,10 +10,10 @@
     <lastBuildDate>Tue, 10 May 2022 23:14:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/tags/php/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>THM: Mr Robot CTF -- Write-Up</title>
-      <link>https://robscharf.github.io/writeups/may-10/</link>
+      <link>https://robscharf.github.io/writeups/may-10-2022/</link>
       <pubDate>Tue, 10 May 2022 23:14:00 +0000</pubDate>
       
-      <guid>https://robscharf.github.io/writeups/may-10/</guid>
+      <guid>https://robscharf.github.io/writeups/may-10-2022/</guid>
       <description>About TryHackMe.com&amp;rsquo;s Mr Robot CTF (MRCTF) is a beginner-friendly capture-the-flag virtual machine by Leon Johnson. MRCTF is named after, and inspired by, the Mr. Robot television show and challenges users to capture three flags by finding vulnerabilities in the target server and exploiting them to gain root access.
 Note I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
 Methodology We begin our enumeration efforts by running an nmap scan on the target machine to understand the ports that are open to network traffic.</description>
@@ -21,10 +21,10 @@ Methodology We begin our enumeration efforts by running an nmap scan on the targ
     
     <item>
       <title>THM: Upload Vulnerabilities -- Write-Up</title>
-      <link>https://robscharf.github.io/writeups/april-28/</link>
+      <link>https://robscharf.github.io/writeups/april-28-2022/</link>
       <pubDate>Thu, 28 Apr 2022 11:30:00 +0000</pubDate>
       
-      <guid>https://robscharf.github.io/writeups/april-28/</guid>
+      <guid>https://robscharf.github.io/writeups/april-28-2022/</guid>
       <description>Welcome to my write-up of the Upload Vulnerabilities room on TryHackMe, created by MuirlandOracle. Let&amp;rsquo;s jump in.
 Note: The Complete Beginner THM skill path is now considered depricated in favor of the Jr Penetration Tester path.
 Task 1 - Getting Started The room begins with a necessary configuration step. The hosts file of the attacking machine needs to be modified to include the following line:

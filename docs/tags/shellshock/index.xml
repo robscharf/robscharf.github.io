@@ -10,10 +10,10 @@
     <lastBuildDate>Mon, 23 Jan 2023 10:25:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/tags/shellshock/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>HTB Easy Round-Up (Part 2): Lame, Optimum, Shocker -- Write-Ups</title>
-      <link>https://robscharf.github.io/writeups/january-23/</link>
+      <link>https://robscharf.github.io/writeups/january-23-2023/</link>
       <pubDate>Mon, 23 Jan 2023 10:25:00 +0000</pubDate>
       
-      <guid>https://robscharf.github.io/writeups/january-23/</guid>
+      <guid>https://robscharf.github.io/writeups/january-23-2023/</guid>
       <description>About This is the second installment of walkthroughs for three easy rated, retired HackTheBox machines. I am currently making my way through Offensive Security&amp;rsquo;s PEN-200 course, with plans to take the OSCP exam later this year. As part of my preparations, I am working on the infamous TJNull list of OSCP prep-relevant machines across the popular CTF and training platforms. The list can be found here.
 At this moment, I have completed 17 HTB machines from the TJNull list and I am approximately 30% of the way through PEN-200, with all course exercises finished for the first 10 sections of the course.</description>
     </item>

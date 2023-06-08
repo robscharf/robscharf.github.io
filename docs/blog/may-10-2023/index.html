@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="map[name:virtualtack]">
+<meta name="description" content="My thoughts and experiences..." />
+<meta name="keywords" content="cybersecurity, hacking, tryhackme, blog, certification, oscp, offsec" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://robscharf.github.io/blog/may-10-2023/" />
+
+    <title>
+        robscharf@github
+    </title>
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+
+<link rel="stylesheet" href="https://robscharf.github.io/main.4e5c639214707eff609bb55fe49e183dee42258a73bc90e4cc7b0a84f900798a.css">
+
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="https://robscharf.github.io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://robscharf.github.io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://robscharf.github.io/favicon-16x16.png">
+    <link rel="manifest" href="https://robscharf.github.io/site.webmanifest">
+    <link rel="mask-icon" href="https://robscharf.github.io/safari-pinned-tab.svg" color="">
+    <link rel="shortcut icon" href="https://robscharf.github.io/favicon.ico">
+    <meta name="msapplication-TileColor" content="">
+
+
+<meta itemprop="name" content="I passed the OSCP!">
+<meta itemprop="description" content="My thoughts and experiences..."><meta itemprop="datePublished" content="2023-05-16T12:05:00+00:00" />
+<meta itemprop="dateModified" content="2023-05-16T12:05:00+00:00" />
+<meta itemprop="wordCount" content="1467"><meta itemprop="image" content="https://robscharf.github.io/"/>
+<meta itemprop="keywords" content="certification,oscp,offsec," />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://robscharf.github.io/"/>
+
+<meta name="twitter:title" content="I passed the OSCP!"/>
+<meta name="twitter:description" content="My thoughts and experiences..."/>
+
+
+
+
+    <meta property="og:title" content="I passed the OSCP!" />
+<meta property="og:description" content="My thoughts and experiences..." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://robscharf.github.io/blog/may-10-2023/" /><meta property="og:image" content="https://robscharf.github.io/"/><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2023-05-16T12:05:00+00:00" />
+<meta property="article:modified_time" content="2023-05-16T12:05:00+00:00" />
+
+
+
+
+    <meta property="article:section" content="certifications" />
+
+    <meta property="article:section" content="OSCP" />
+
+
+
+    <meta property="article:published_time" content="2023-05-16 12:05:00 &#43;0000 UTC" />
+
+
+
+
+
+
+<link rel="stylesheet" href='https://robscharf.github.io/style.css'>
+
+
+
+    </head>
+
+    
+        <body>
+    
+    
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="https://robscharf.github.io/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">&gt;</span>
+            <span class="logo__text">(virtualtack@github)-[~] $ </span>
+            <span class="logo__cursor" style=
+                  "
+                   background-color:white;
+                   animation-duration:1.6s;">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="https://robscharf.github.io/blog">blog</a></li><li><a href="https://robscharf.github.io/cv">cv</a></li><li><a href="https://robscharf.github.io/lab">homelab</a></li><li><a href="https://robscharf.github.io/writeups">writeups</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+                <span class="theme-toggle not-selectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+   <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+   3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+   13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+ </svg></span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        7 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        I passed the OSCP!
+      </h1>
+
+      
+        <div class="post-excerpt">My thoughts and experiences...</div>
+      
+
+      
+
+      
+
+      <div class="post-content">
+        <p>I am happy to share that I recently passed the the Penetration Testing with Kali Linux certification exam on May 10 (on my first attempt)!</p>
+<br/>
+<center>
+<img src="https://robscharf.github.io/images/oscp-cert.png" style="height:420px"> 
+</center>
+<h2 id="the-exam">The Exam</h2>
+<p>According to <a href="https://www.offsec.com/courses/pen-200/">OffSec&rsquo;s website</a>:</p>
+<blockquote>
+<p>The industry-leading Penetration Testing with Kali Linux (PWK/PEN-200) course introduces penetration testing methodologies, tools and techniques via hands-on experience and is self-paced. Learners who complete the course and pass the exam will earn the OffSec Certified Professional (OSCP) certification which requires holders to successfully attack and penetrate various live machines in a safe lab environment. The OSCP is considered to be more technical than other ethical hacking certifications and is one of the few that requires evidence of practical penetration testing skills.</p>
+</blockquote>
+<h2 id="my-experience">My Experience</h2>
+<h3 id="preparation">Preparation</h3>
+<p>Between <a href="https://robscharf.github.io/blog/november-28-2022/">finishing the PNPT</a> and beginning OffSec&rsquo;s PEN200 course, I completed 20 HackTheBox entries from TJNull&rsquo;s famous list. If you find that you&rsquo;re struggling with boxes from the list, I highly recommend taking a look at <a href="https://www.youtube.com/playlist?list=PLidcsTyj9JXK-fnabFLVEvHinQ14Jy5tf">IppSec&rsquo;s OSCP Prep playlist</a>, which covers dozens of boxes included in the list.</p>
+<p>In addition to the aforementioned boxes, I participated in HTB&rsquo;s Open Beta Season as part of the <a href="https://app.hackthebox.com/teams/overview/5487">DevotedOccultists</a> team.</p>
+<h3 id="pen200">PEN200</h3>
+<p>Due to the timing of my PEN200 adventure, I had the unique experience of following both the &ldquo;2022&rdquo; and &ldquo;2023&rdquo; version of the course. In case you are unfamiliar, in mid-March of 2023, OffSec (formerly Offensive Security) <a href="https://www.offsec.com/offsec/pen-200-2023/">released an updated version of the PEN200 course</a> - the first in approximately three years.</p>
+<center>
+<img src="https://robscharf.github.io/images/pen200.png" style="height:420px"> 
+</center>
+<br/>
+<h4 id="pen200-2022---course">PEN200 2022 - Course</h4>
+<p>Of the &ldquo;old&rdquo; course, I found the Bash Scripting, Buffer Overflows, File Transfers, and Port Redirection and Tunneling modules to have contained the most useful content. While none of these topics were new to me (nor should they be to anyone beginning PEN200), the course contents provided insight into new techniques and/or approaches to underlying core concepts. Equally, I found that - while sometimes tedious - the topic exercises provided effective bite-sized practice tasks, as well as the opportunity to glean a bit of insight into OffSec&rsquo;s particular style of testing understanding of a given concept or topic.</p>
+<p>As mentioned above, I found a lot of value in completing the course modules devoted to Buffer Overflows (Introduction, Windows, Linux) and their associated exercises. Despite the Buffer Overflow sections being removed from the course and exam (more on that later) <em>after</em> I had completed them, I would recommend similar materials for future OSCP-seekers. Coming into the course with little experience related to binary exploitation (nor with lower-level programming, more broadly), the Buffer Overflow sections helped me to deepen my understanding of how applications (and, by extension, computers) work more broadly.</p>
+<p>I completed 100% of the 2022 exercises, making me eligible for bonus points with a sufficient number of lab machines rooted.</p>
+<h4 id="pen200-2022---labs">PEN200 2022 - Labs</h4>
+<p>Before the &ldquo;old&rdquo; labs were retired in mid-April, I managed to complete 47 of the 75 available machines (<em>without</em> doing any of the guided <code>sandbox.local</code> network). Unfortunately, I did not have time to delve into the Development or Administrator subnets.</p>
+<p>When compared with competing offerings (see below), the size and scale of the PEN200 labs are quite significant and commonly understood to represent the lion&rsquo;s share of course&rsquo;s value. My experience was largely consistent with this. In addition to the opportunity to practice a wide variety of enumeration and exploitation techniques, the sheer size of the lab required a lot of preliminary scanning and host identification (which is rarely needed for individual CTF machines and/or small networks) - skills that are difficult to practice in a blind lab setting.</p>
+<p>Throughout my lab experience, I benefitted from the accompanying Discord channel. While I did not always find the Community Mentors to be exceedingly helpful in navigating the lab&rsquo;s idiosyncracies, I did find many of the pinned messages to be useful and support from fellow students (especially when delving into archived messages, found via the channel search function) was valuable and plentiful. Equally, I did not engage much with the now-deprecated forums.</p>
+<blockquote>
+<p><strong>Note:</strong> I have not yet explored HackTheBox&rsquo;s Academy offerings or the associated CPTS certification, which are relatively new. My understadning is that they are popularly regarded as having similar, if not more profound, substantive depth than PEN200/OSCP.</p>
+</blockquote>
+<h4 id="pen200-2023---course">PEN200 2023 - Course</h4>
+<p>The updated &ldquo;2023&rdquo; PEN200 course and labs were released about two months before I would ultimately take the OSCP exam. In addition to a reimagined curriculum, each PEN200 learning module was standardized, providing a linear path from introduction to capstone exercises (successfully completing the latter of these ostensibly indicates that a student is proficient with the entire module.)</p>
+<p>As part of the updated course curriculum&rsquo;s introductory modules, OffSec has included a variety of practical but non-technical topics. While I personally found the treatment of some of the pedagogical themes introduced in the Effective Learning Strategies to have been a bit superficial, I commend OffSec in its decision to develop this subject area, as I agree that it is underdeveloped in the field when considering its potential benefit to students. I found the report writing section to be informative and well developed, if not groundbreaking - I imagine this section is quite useful to anyone who hasn&rsquo;t written a &ldquo;professional&rdquo; penetration test report before taking the course.</p>
+<p>The expansion/disagregation of the Web Application Attacks and Active Directory modules in the updated curriculum is a clear improvement and effectively represents the character of most course updatesm, in terms of increasing the breath and depth of material. While I didn&rsquo;t complete 100% of the updated topic exercises before taking my exam, I did fully complete those associated with modules 7-10 (web application attacks) and 21-23 (Active Directory), while finishing over 80% of modules 12-13 (locating and fixing public exploits) and module 18 (port redirection and SSH tunneling).</p>
+<h4 id="pen200-2023---labs">PEN200 2023 - Labs</h4>
+<p>The 2023 update included a reimagining of the OSCP lab environment that had become notorious in the infosec community. No longer are students be dropped into a network with dozens of hosts, with mysteriously interdependent hosts and Active Directories scattered throughout. Instead, OffSec now provides 6 &ldquo;challenge&rdquo; networks divided into two categories:</p>
+<ul>
+<li>Challenges 1-3 (labled &ldquo;scenarios&rdquo; by OffSec) are compromised of expansive but self-contained Active Directory-based networks, each with an accompanying narrative and character.</li>
+<li>Challenges 4-6 are mock exam networks, each containing a 3-machine Active Directory set and 3 standalone machines.</li>
+</ul>
+<p>Of the first three challenges, I obtained domain administrator access in the first and second networks. Interestingly, I was able to do so by compromising 71% of the flags in the first network and only 41% of the second. The third challenge network is presented as being &ldquo;beyond the scope&rdquo; of the exam, so I chose to skip it, though I am confident that it is worth doing for students looking to maximze their PEN200 experience.</p>
+<p>Unsurprisingly, challenges 4-6 provided the most relelvant practice and preparation for the OSCP exam. As such, I completed each of them. I found  the contents and difficulty of these boxes to be closely comparable to those that I encountered on the exam.</p>
+<h3 id="exam-impressions">Exam Impressions</h3>
+<p>If you have been around the infosec community for any period of time, you are no doubt familiar with the OSCP exam. With its 23:45 duration, the exam is notorious for its mental/emotional difficulty, testing the composure and resilience of those who attempt it. It isn&rsquo;t unheard of for even experienced penetration testers to struggle with their first attempt.</p>
+<p>I was lucky enough to pass on my first attempt without having to (fully) sacrifice my sanity or miss out on any sleep. That is certainly not to say that I did not feel the pressure or experience any anxiety on test day - I absolutely did. However, I believe that the only real antidote is to develop a level of confidence that comes through practice.</p>
+<h3 id="recommendations">Recommendations</h3>
+<p>Success on the OSCP exam is about staving off doubt and creating your own luck. This for me, manifested in two distinct areas: solidifying an understanding of fundamental concepts and gathering sufficient experience with a wide variety of relevant practice boxes. While I have outlined the resources I used to study and practice above, I also want to emphasize the importance of note-taking and the creation of personal reference materials, which allowed me to leverage my experience and understanding within the context of the exam.</p>
+<p>As a relative newcomer to the field, I really relied on the structure and layout of my notes, which I have compiled and structured into a burgeoning methdological reference. To this end, I would strongly recommend the use of a robust notetaking platform/application that allows for entries to be internally linked - wiki-style. This creates the opportunity to cross-reference notes on concepts with those on relevant tools, as well as with examples of when I used those tools to solve boxes. Personally, I use <a href="https://obsidian.md/">Obsidian</a>, though there are many options available.</p>
+
+      </div>
+    </article>
+
+ 
+
+    <div class="post-info">
+      
+    <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
+
+        <span class="tag"><a href="https://robscharf.github.io/tags/certification/">certification</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/oscp/">oscp</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/tags/offsec/">offsec</a></span>
+        
+    </p>
+
+      
+    <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder meta-icon"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+
+        <span class="tag"><a href="https://robscharf.github.io/categories/certifications/">certifications</a></span>
+        <span class="tag"><a href="https://robscharf.github.io/categories/oscp/">OSCP</a></span>
+        
+    </p>
+
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        1467 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        
+          2023-05-16 05:05
+        
+
+         
+          
+        
+      </p>
+    </div>
+
+    
+    <div class="pagination">
+        
+
+        <div class="pagination__buttons">
+            
+
+            
+            <span class="button next">
+                <a href="https://robscharf.github.io/blog/november-28-2022/">
+                    <span class="button__text">I passed the PNPT!</span>
+                    <span class="button__icon">→</span>
+                </a>
+            </span>
+            
+        </div>
+    </div>
+
+
+    
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2023</span>
+            <a href="https://robscharf.github.io//colophon">&#9829;</a>
+            
+        </div>
+    </div>
+    
+    <div class="footer__inner">
+        <div class="footer__content">
+            
+        </div>
+    </div>
+</footer>
+  
+
+            
+        </div>
+
+        
+
+
+
+<script type="text/javascript" src="https://robscharf.github.io/bundle.min.bb2c6bc3ed452ca4759660e4020811f248bc2320081559e8a32d8b0092773852941133639d35e8370d03d3ddaa750b1edd6b343c5bd22a55d5bdeae8f648f49b.js" integrity="sha512-uyxrw&#43;1FLKR1lmDkAggR8ki8IyAIFVnooy2LAJJ3OFKUETNjnTXoNw0D092qdQse3Ws0PFvSKlXVvero9kj0mw=="></script>
+<script></script>  
+
+
+    </body>
+</html>

@@ -468,7 +468,7 @@ root
 ```
 
 ## Lessons Learned
-This round of TJNull boxes provided excellent opportunities for review
+This round of TJNull boxes provided excellent opportunities for review.
 
 * Lame
     * This was my first exposure to CVE-2007-2447.

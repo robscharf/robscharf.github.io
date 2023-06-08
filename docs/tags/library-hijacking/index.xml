@@ -10,10 +10,10 @@
     <lastBuildDate>Fri, 08 Jul 2022 13:04:00 +0000</lastBuildDate><atom:link href="https://robscharf.github.io/tags/library-hijacking/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>THM: Biblioteca -- Write-Up</title>
-      <link>https://robscharf.github.io/writeups/july-8/</link>
+      <link>https://robscharf.github.io/writeups/july-8-2022/</link>
       <pubDate>Fri, 08 Jul 2022 13:04:00 +0000</pubDate>
       
-      <guid>https://robscharf.github.io/writeups/july-8/</guid>
+      <guid>https://robscharf.github.io/writeups/july-8-2022/</guid>
       <description>About Biblioteca is a medium rated CTF room on TryHackMe. Rooting this box involves carrying out a successful SQL injection to obtain a foothold, identifying an opportunity for a &amp;ldquo;lateral privilege escalation&amp;rdquo; via brute-force attack, and further escalation to root via Python library hijacking.
 Note: I have replaced all instances of the virtual machine&amp;rsquo;s ip address with &amp;lt;target-ip&amp;gt; throughout this write-up.
 Enumeration nmap I began by running a standard nmap scan against the target host.</description>
