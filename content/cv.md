@@ -20,7 +20,7 @@ Credential ID: 61516777 ([verify](https://www.credential.net/85c04676-97e9-4abf-
 Issued: June, 2022<br/>
 Credential ID: 6021800 ([verify](https://www.elearnsecurity.com/certification/verify?c=c39650b8-befc-4d54-a493-d5c98fad57b4))
 
-## Training Courses and Learning Paths
+## Training Courses, Learning Paths, and Labs
 ### Offensive Security (OffSec)
 #### PEN-200: Penetration Testing with Kali Linux
 Completed: March, 2023
@@ -57,6 +57,15 @@ Completed: June, 2022
 Completed April, 2023
 #### Linux Privilege Escalation for OSCP & Beyond!
 Completed April, 2023
+
+
+### Labs
+
+#### HackTheBox
+- Dante
+
+#### TryHackMe
+- Wreath
 
 ## Publications and Presentations
 
