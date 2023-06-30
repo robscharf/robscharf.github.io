@@ -13,12 +13,12 @@
     --accent: #9FB3BF;
     --accent-two: #F2D785;
     --inline-code: #F2D785;
-    --links: #769EAA;
+    --links: #F9BF7D;
 
-    --heading-one: #F9BF7D;
-    --heading-four: #769EAA;
+    --heading-one: #E84731;
+    --heading-two: #2E4D59;    
     --heading-three: #69828C;
-    --heading-two: #2E4D59;
+    --heading-four: #769EAA;
     --heading-five: #1A3540;
 }
 
@@ -29,12 +29,12 @@
     --accent: #69828C;
     --accent-two: #465E8C;
     --inline-code: #465E8C;
-    --links: #769EAA;
+    --links: #76B8A3;
 
     --heading-one: #465E8C;
-    --heading-four: #769EAA;
-    --heading-three: #69828C;
     --heading-two: #747C8C;
+    --heading-three: #7C9FC2;
+    --heading-four: #538280;
     --heading-five: #0D0D0D;
 }
 

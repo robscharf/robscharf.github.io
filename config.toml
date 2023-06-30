@@ -130,7 +130,7 @@ disableHugoGeneratorInject = false
 
   [params.logo]
     logoMark     = ">"
-    logoText     = "(virtualtack@github)-[~] $ "
+    logoText     = "(robscharf@github)-[~] $ "
     logoHomeLink = "/"
     # Set true to remove the logo cursor entirely.
     # logoCursorDisabled = false

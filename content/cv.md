@@ -20,7 +20,7 @@ Credential ID: 61516777 ([verify](https://www.credential.net/85c04676-97e9-4abf-
 Issued: June, 2022<br/>
 Credential ID: 6021800 ([verify](https://www.elearnsecurity.com/certification/verify?c=c39650b8-befc-4d54-a493-d5c98fad57b4))
 
-## Training Courses, Learning Paths, and Labs
+## Training Courses and Learning Paths
 ### Offensive Security (OffSec)
 #### PEN-200: Penetration Testing with Kali Linux
 Completed: March, 2023
@@ -59,13 +59,14 @@ Completed April, 2023
 Completed April, 2023
 
 
-### Labs
+## Pro Labs and Lab Networks
 
-#### HackTheBox
-- Dante
+### HackTheBox
+- Dante ([certificate](/images/dante_certificate.pdf))
 
-#### TryHackMe
-- Wreath
+### TryHackMe
+- Wreath ([badge](https://tryhackme.com/virtualtack/badges/wreath))
+- ADversary ([badge](https://tryhackme.com/virtualtack/badges/adversary))
 
 ## Publications and Presentations
 
