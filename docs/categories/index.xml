@@ -6,22 +6,8 @@
     <description>Recent content in Categories on Rob Scharf</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 13 Sep 2024 14:12:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 12 Apr 2024 13:10:00 +0000</lastBuildDate>
     <atom:link href="https://robscharf.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Api</title>
-      <link>https://robscharf.github.io/categories/api/</link>
-      <pubDate>Fri, 13 Sep 2024 14:12:00 +0000</pubDate>
-      <guid>https://robscharf.github.io/categories/api/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Graphql</title>
-      <link>https://robscharf.github.io/categories/graphql/</link>
-      <pubDate>Fri, 13 Sep 2024 14:12:00 +0000</pubDate>
-      <guid>https://robscharf.github.io/categories/graphql/</guid>
-      <description></description>
-    </item>
     <item>
       <title>Certifications</title>
       <link>https://robscharf.github.io/categories/certifications/</link>
@@ -34,6 +20,20 @@
       <link>https://robscharf.github.io/categories/crest/</link>
       <pubDate>Fri, 12 Apr 2024 13:10:00 +0000</pubDate>
       <guid>https://robscharf.github.io/categories/crest/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Api</title>
+      <link>https://robscharf.github.io/categories/api/</link>
+      <pubDate>Wed, 13 Sep 2023 14:12:00 +0000</pubDate>
+      <guid>https://robscharf.github.io/categories/api/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Graphql</title>
+      <link>https://robscharf.github.io/categories/graphql/</link>
+      <pubDate>Wed, 13 Sep 2023 14:12:00 +0000</pubDate>
+      <guid>https://robscharf.github.io/categories/graphql/</guid>
       <description></description>
     </item>
     <item>

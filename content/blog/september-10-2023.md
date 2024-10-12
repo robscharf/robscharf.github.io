@@ -7,7 +7,7 @@ tags = [
     "api",
     "enumeration"
 ]
-date = "2024-09-13T14:12:00"
+date = "2023-09-13T14:12:00"
 categories = [
     "api",
     "graphql",
