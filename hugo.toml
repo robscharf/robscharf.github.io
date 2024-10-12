@@ -20,16 +20,16 @@ style = "github-dark"
 [params]
   author = "Rob Scharf"
   info = "Senior Specialist - Offensive Security"
-  description = "John Doe's personal website"
-  keywords = "blog,developer,personal"
-  avatarurl = "images/avatar.jpg"
+  description = "Rob Scharf - Offensive Cybersecurity Professional"
+  keywords = "cybersecurity, penetration testing, personal"
+  avatarurl = "images/rob.jpg"
   #gravatar = "john.doe@example.com"
 
   faviconSVG = "/img/favicon.svg"
   favicon_32 = "/img/favicon-32x32.png"
   favicon_16 = "/img/favicon-16x16.png"
 
-  since = 2019
+  since = 2020
 
   enableTwemoji = true
 
@@ -49,7 +49,7 @@ style = "github-dark"
 # Social links
 [[params.social]]
     name = "email"
-    url  = "mailto:hi@robinscharf.me"
+    url  = "mailto:hi@robscharf.me"
 
   [[params.social]]
     name = "linkedin"
