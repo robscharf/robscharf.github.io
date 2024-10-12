@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Oscp on Rob Scharf</title>
+    <link>https://robscharf.github.io/tags/oscp/</link>
+    <description>Recent content in Oscp on Rob Scharf</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 16 May 2023 12:05:00 +0000</lastBuildDate>
+    <atom:link href="https://robscharf.github.io/tags/oscp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>I passed the OSCP!</title>
+      <link>https://robscharf.github.io/blog/may-10-2023/</link>
+      <pubDate>Tue, 16 May 2023 12:05:00 +0000</pubDate>
+      <guid>https://robscharf.github.io/blog/may-10-2023/</guid>
+      <description>&lt;p&gt;I am happy to share that I recently passed the the Penetration Testing with Kali Linux certification exam on May 10 (on my first attempt)!&lt;/p&gt;&#xA;&lt;br/&gt;&#xA;&lt;center&gt;&#xA;&lt;img src=&#34;https://robscharf.github.io/images/oscp-cert.png&#34; style=&#34;height:420px&#34;&gt; &#xA;&lt;/center&gt;&#xA;&lt;h2 id=&#34;the-exam&#34;&gt;&#xA;  The Exam&#xA;  &lt;a class=&#34;heading-link&#34; href=&#34;#the-exam&#34;&gt;&#xA;    &lt;i class=&#34;fa-solid fa-link&#34; aria-hidden=&#34;true&#34; title=&#34;Link to heading&#34;&gt;&lt;/i&gt;&#xA;    &lt;span class=&#34;sr-only&#34;&gt;Link to heading&lt;/span&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;According to &lt;a href=&#34;https://www.offsec.com/courses/pen-200/&#34;  class=&#34;external-link&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;OffSec&amp;rsquo;s website&lt;/a&gt;:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;The industry-leading Penetration Testing with Kali Linux (PWK/PEN-200) course introduces penetration testing methodologies, tools and techniques via hands-on experience and is self-paced. Learners who complete the course and pass the exam will earn the OffSec Certified Professional (OSCP) certification which requires holders to successfully attack and penetrate various live machines in a safe lab environment. The OSCP is considered to be more technical than other ethical hacking certifications and is one of the few that requires evidence of practical penetration testing skills.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Certification on Rob Scharf</title>
+    <link>https://robscharf.github.io/tags/certification/</link>
+    <description>Recent content in Certification on Rob Scharf</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 12 Apr 2024 13:10:00 +0000</lastBuildDate>
+    <atom:link href="https://robscharf.github.io/tags/certification/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>I passed the CREST CPSA!</title>
+      <link>https://robscharf.github.io/blog/april-12-2024/</link>
+      <pubDate>Fri, 12 Apr 2024 13:10:00 +0000</pubDate>
+      <guid>https://robscharf.github.io/blog/april-12-2024/</guid>
+      <description>&lt;p&gt;I am happy to share that I recently passed the CREST CPSA exam! As I &lt;a href=&#34;https://robscharf.github.io/blog/may-10-2023&#34; &gt;already have the OffSec Certified Professional (OSCP) certification&lt;/a&gt;, I was able to use &lt;a href=&#34;https://www.crest-approved.org/skills-certifications-careers/certification-equivalency-recognition-programmes/&#34;  class=&#34;external-link&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CREST&amp;rsquo;s Certification Equivalency Recognition Programme&lt;/a&gt; to simultaneously obtain the Registered Penetration Tester (CRT) certifictation.&lt;/p&gt;&#xA;&lt;br/&gt;&#xA;&lt;center&gt;&#xA;&lt;img src=&#34;https://robscharf.github.io/images/cpsa.png&#34; style=&#34;height:420px&#34;&gt; &#xA;&lt;img src=&#34;https://robscharf.github.io/images/crt.png&#34; style=&#34;height:420px&#34;&gt; &#xA;&lt;/center&gt;&#xA;&lt;h2 id=&#34;the-exam&#34;&gt;&#xA;  The Exam&#xA;  &lt;a class=&#34;heading-link&#34; href=&#34;#the-exam&#34;&gt;&#xA;    &lt;i class=&#34;fa-solid fa-link&#34; aria-hidden=&#34;true&#34; title=&#34;Link to heading&#34;&gt;&lt;/i&gt;&#xA;    &lt;span class=&#34;sr-only&#34;&gt;Link to heading&lt;/span&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;According to &lt;a href=&#34;https://www.crest-approved.org/skills-certifications-careers/crest-practitioner-security-analyst/&#34;  class=&#34;external-link&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CREST&amp;rsquo;s website&lt;/a&gt;:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;The CREST Practitioner Security Analyst (CPSA) is an entry level exam that tests a candidate’s knowledge in assessing operating systems and common network services.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>I passed the OSCP!</title>
+      <link>https://robscharf.github.io/blog/may-10-2023/</link>
+      <pubDate>Tue, 16 May 2023 12:05:00 +0000</pubDate>
+      <guid>https://robscharf.github.io/blog/may-10-2023/</guid>
+      <description>&lt;p&gt;I am happy to share that I recently passed the the Penetration Testing with Kali Linux certification exam on May 10 (on my first attempt)!&lt;/p&gt;&#xA;&lt;br/&gt;&#xA;&lt;center&gt;&#xA;&lt;img src=&#34;https://robscharf.github.io/images/oscp-cert.png&#34; style=&#34;height:420px&#34;&gt; &#xA;&lt;/center&gt;&#xA;&lt;h2 id=&#34;the-exam&#34;&gt;&#xA;  The Exam&#xA;  &lt;a class=&#34;heading-link&#34; href=&#34;#the-exam&#34;&gt;&#xA;    &lt;i class=&#34;fa-solid fa-link&#34; aria-hidden=&#34;true&#34; title=&#34;Link to heading&#34;&gt;&lt;/i&gt;&#xA;    &lt;span class=&#34;sr-only&#34;&gt;Link to heading&lt;/span&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;According to &lt;a href=&#34;https://www.offsec.com/courses/pen-200/&#34;  class=&#34;external-link&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;OffSec&amp;rsquo;s website&lt;/a&gt;:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;The industry-leading Penetration Testing with Kali Linux (PWK/PEN-200) course introduces penetration testing methodologies, tools and techniques via hands-on experience and is self-paced. Learners who complete the course and pass the exam will earn the OffSec Certified Professional (OSCP) certification which requires holders to successfully attack and penetrate various live machines in a safe lab environment. The OSCP is considered to be more technical than other ethical hacking certifications and is one of the few that requires evidence of practical penetration testing skills.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>I passed the PNPT!</title>
+      <link>https://robscharf.github.io/blog/november-28-2022/</link>
+      <pubDate>Mon, 28 Nov 2022 11:35:00 +0000</pubDate>
+      <guid>https://robscharf.github.io/blog/november-28-2022/</guid>
+      <description>&lt;p&gt;I am happy to share that I recently passed the Practical Network Penetration Tester certification exam on November 6!&lt;/p&gt;&#xA;&lt;br/&gt;&#xA;&lt;center&gt;&#xA;&lt;img src=&#34;https://robscharf.github.io/images/pnpt-cert.png&#34; style=&#34;height:420px&#34;&gt; &#xA;&lt;/center&gt;&#xA;&lt;h2 id=&#34;the-exam&#34;&gt;&#xA;  The Exam&#xA;  &lt;a class=&#34;heading-link&#34; href=&#34;#the-exam&#34;&gt;&#xA;    &lt;i class=&#34;fa-solid fa-link&#34; aria-hidden=&#34;true&#34; title=&#34;Link to heading&#34;&gt;&lt;/i&gt;&#xA;    &lt;span class=&#34;sr-only&#34;&gt;Link to heading&lt;/span&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;According to &lt;a href=&#34;https://certifications.tcm-sec.com/pnpt/&#34;  class=&#34;external-link&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;TCM&amp;rsquo;s website&lt;/a&gt;:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;The PNPT certification exam is a one-of-a-kind ethical hacking certification exam that assesses a student’s ability to perform an external and internal network penetration test at a professional level.  Students will have five (5) full days to complete the assessment and an additional two (2) days to write a professional report.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>I passed the eJPT!</title>
+      <link>https://robscharf.github.io/blog/june-20-2022/</link>
+      <pubDate>Mon, 20 Jun 2022 11:14:00 +0000</pubDate>
+      <guid>https://robscharf.github.io/blog/june-20-2022/</guid>
+      <description>&lt;p&gt;I am pleased to share that I recently passed the &lt;a href=&#34;https://elearnsecurity.com/product/ejpt-certification/&#34;  class=&#34;external-link&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;eLearnSecurity Junior Penetration Tester&lt;/a&gt; certification exam on June 16!&lt;/p&gt;&#xA;&lt;br/&gt;&#xA;&lt;center&gt;&#xA;&lt;img src=&#34;https://robscharf.github.io/images/ejpt-cert.png&#34; style=&#34;height:420px&#34;&gt; &#xA;&lt;/center&gt;&#xA;&lt;h2 id=&#34;the-exam&#34;&gt;&#xA;  The Exam&#xA;  &lt;a class=&#34;heading-link&#34; href=&#34;#the-exam&#34;&gt;&#xA;    &lt;i class=&#34;fa-solid fa-link&#34; aria-hidden=&#34;true&#34; title=&#34;Link to heading&#34;&gt;&lt;/i&gt;&#xA;    &lt;span class=&#34;sr-only&#34;&gt;Link to heading&lt;/span&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;According to &lt;a href=&#34;https://ine.com/learning/certifications/internal/elearnsecurity-junior-penetration-tester&#34;  class=&#34;external-link&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;INE&amp;rsquo;s website&lt;/a&gt;:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;The eJPT is a three day, 20 question exam, that focuses on challenging you to prove your skillset in penetration testing foundations including programming, networking vulnerabilities, web attack vectors, and a host of other entry level skills&amp;hellip; Covering a host of skills which include entry level web penetration techniques, the eJPT provides you with the confidence and knowledge to begin training for more advanced penetration techniques and specialities.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Api on Rob Scharf</title>
+    <link>https://robscharf.github.io/categories/api/</link>
+    <description>Recent content in Api on Rob Scharf</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 12 Apr 2024 13:10:00 +0000</lastBuildDate>
+    <atom:link href="https://robscharf.github.io/categories/api/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GraphQL APIs and Enumeration Basics</title>
+      <link>https://robscharf.github.io/blog/september-10-2023/</link>
+      <pubDate>Fri, 12 Apr 2024 13:10:00 +0000</pubDate>
+      <guid>https://robscharf.github.io/blog/september-10-2023/</guid>
+      <description>&lt;meta http-equiv=&#34;refresh&#34; content=&#34;0; url=https://blog.cyberadvisors.com/technical-blog/blog/graphql-apis-enumeration-basics&#34;&gt;&#xA;&lt;p&gt;This blog post serves as an introduction to GraphQL. We will shine light on how the query language functions and some basic security considerations, as well as tools and techniques to conduct basic enumeration to discover API endpoints and the underlying data schemas that power them. Let’s dive in!&lt;/p&gt;&#xA;&lt;p&gt;What Is GraphQL?&lt;/p&gt;&#xA;&lt;p&gt;GraphQL is an Application Programming Interface (API) query language that is packaged with a server-side runtime (such as node.js) for executing requests based on a schema defined by the developers of a given application. In 2012, GraphQL began as an in-house project by Facebook to improve newsfeed performance on mobile applications, before being released as a public, open-source language in 2015.&#xA;GraphQL API&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

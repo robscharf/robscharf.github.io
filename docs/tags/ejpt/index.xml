@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ejpt on Rob Scharf</title>
+    <link>https://robscharf.github.io/tags/ejpt/</link>
+    <description>Recent content in Ejpt on Rob Scharf</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 20 Jun 2022 11:14:00 +0000</lastBuildDate>
+    <atom:link href="https://robscharf.github.io/tags/ejpt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>I passed the eJPT!</title>
+      <link>https://robscharf.github.io/blog/june-20-2022/</link>
+      <pubDate>Mon, 20 Jun 2022 11:14:00 +0000</pubDate>
+      <guid>https://robscharf.github.io/blog/june-20-2022/</guid>
+      <description>&lt;p&gt;I am pleased to share that I recently passed the &lt;a href=&#34;https://elearnsecurity.com/product/ejpt-certification/&#34;  class=&#34;external-link&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;eLearnSecurity Junior Penetration Tester&lt;/a&gt; certification exam on June 16!&lt;/p&gt;&#xA;&lt;br/&gt;&#xA;&lt;center&gt;&#xA;&lt;img src=&#34;https://robscharf.github.io/images/ejpt-cert.png&#34; style=&#34;height:420px&#34;&gt; &#xA;&lt;/center&gt;&#xA;&lt;h2 id=&#34;the-exam&#34;&gt;&#xA;  The Exam&#xA;  &lt;a class=&#34;heading-link&#34; href=&#34;#the-exam&#34;&gt;&#xA;    &lt;i class=&#34;fa-solid fa-link&#34; aria-hidden=&#34;true&#34; title=&#34;Link to heading&#34;&gt;&lt;/i&gt;&#xA;    &lt;span class=&#34;sr-only&#34;&gt;Link to heading&lt;/span&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;According to &lt;a href=&#34;https://ine.com/learning/certifications/internal/elearnsecurity-junior-penetration-tester&#34;  class=&#34;external-link&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;INE&amp;rsquo;s website&lt;/a&gt;:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;The eJPT is a three day, 20 question exam, that focuses on challenging you to prove your skillset in penetration testing foundations including programming, networking vulnerabilities, web attack vectors, and a host of other entry level skills&amp;hellip; Covering a host of skills which include entry level web penetration techniques, the eJPT provides you with the confidence and knowledge to begin training for more advanced penetration techniques and specialities.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
