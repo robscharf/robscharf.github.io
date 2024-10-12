@@ -1,0 +1,76 @@
+baseURL = 'https://localhost/'
+languageCode = 'en-us'
+title = 'Rob Scharf'
+
+theme = "hugo-coder"
+languagecode = "en"
+defaultcontentlanguage = "en"
+
+paginate = 20
+
+[services]
+[markup.goldmark.renderer]
+unsafe = true
+
+[markup.highlight]
+style = "github-dark"
+
+[params]
+  author = "Rob Scharf"
+  info = "Senior Specialist - Offensive Security"
+  description = "John Doe's personal website"
+  keywords = "blog,developer,personal"
+  avatarurl = "images/avatar.jpg"
+  #gravatar = "john.doe@example.com"
+
+  faviconSVG = "/img/favicon.svg"
+  favicon_32 = "/img/favicon-32x32.png"
+  favicon_16 = "/img/favicon-16x16.png"
+
+  since = 2019
+
+  enableTwemoji = true
+
+  colorScheme = "auto"
+  hidecolorschemetoggle = false
+
+  # customCSS = ["css/custom.css"]
+  # customSCSS = ["scss/custom.scss"]
+  # customJS = ["js/custom.js"]
+
+[taxonomies]
+  category = "categories"
+  series = "series"
+  tag = "tags"
+  author = "authors"
+
+# Social links
+[[params.social]]
+    name = "email"
+    url  = "mailto:hi@robinscharf.me"
+
+  [[params.social]]
+    name = "linkedin"
+    url  = "https://www.linkedin.com/in/robinscharf/"
+
+  [[params.social]]
+    name = "Hack The Box"
+    url  = "https://app.hackthebox.com/profile/1059427"
+    
+  [[params.social]]
+    name = "TryHackMe"
+    url  = "https://tryhackme.com/r/p/virtualtack"  
+
+  [[params.social]]
+    name = "github"
+    url  = "https://github.com/robscharf"          
+
+# Menu links
+[[menu.main]]
+  name = "Blog"
+  weight = 1
+  url  = "blog/"
+#[[menu.main]]
+#  name = "About"
+#  weight = 2
+#  url = "about/"
