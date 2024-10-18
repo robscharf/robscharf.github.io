@@ -1,5 +1,5 @@
 +++
-title = "I passed the PNPT!"
+title = "I passed the PNPT"
 description = "My thoughts and experiences..."
 type = ["posts","post"]
 tags = [
