@@ -61,11 +61,7 @@ style = "github-dark"
     
   [[params.social]]
     name = "TryHackMe"
-    url  = "https://tryhackme.com/r/p/virtualtack"  
-
-  [[params.social]]
-    name = "github"
-    url  = "https://github.com/robscharf"          
+    url  = "https://tryhackme.com/r/p/virtualtack"         
 
 # Menu links
 [[menu.main]]
